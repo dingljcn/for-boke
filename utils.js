@@ -1,27 +1,14 @@
-/** 读取配置 */
-function readConfig(onSuccess = null, configName = 'dinglj-script-config') {
-    if (onSuccess == null) {
-        alert('readConfig 未传入回调方法');
-        return;
-    }
-    // 非阻塞读取配置, 一定要读取到配置才执行脚本
-    let timer = setInterval(() => {
-        let data = localStorage.getItem(configName);
-        if (data) {
-            let config = JSON.parse(data);
-            // 如果存在要匹配的网址, 则匹配, 匹配成功才进入
-            if (config.matchList) {
-                for (let matchStratege of config.matchList) {
-                    if (matchStratege.test(window.location.href)) {
-                        onSuccess(config);
-                    }
-                }
-            } else {
-                onSuccess(config);
+/** 判断当前网址是否启用脚本 */
+function isMatch(config) {
+    // 如果存在要匹配的网址, 则匹配, 匹配成功才进入
+    if (config.matchList) {
+        for (let stratege of config.matchList) {
+            if (stratege.test(window.location.href)) {
+                return true;
             }
-            clearInterval(timer);
         }
-    }, 10);
+    }
+    return false;
 }
 
 /** 对象转 json 字符串 */
