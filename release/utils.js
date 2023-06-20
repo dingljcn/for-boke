@@ -62,3 +62,32 @@ function copyText(text = '') {
         element.remove();
     }, 3000);
 }
+
+/** 创建一个 html 元素, 并初始化相关属性、样式 */
+function newElement(tag = '', config = {
+    parentNode: undefined,
+    front: false,
+}, props = {}, styles = {}) {
+    if (tag == '') {
+        return null;
+    }
+    let element = document.createElement(tag);
+    // 存在上级目录, 添加到上级目录
+    if (config.parentNode) {
+        // 是不是在前面插入
+        if (config.front) {
+            config.parentNode.insertBefore(element, config.parentNode.children[0]);
+        } else {
+            config.parentNode.appendChild(element);
+        }
+    }
+    // 初始化相关属性
+    for (let key of Object.keys(props)) {
+        element[key] = props[key];
+    }
+    // 初始化相关样式
+    for (let key of Object.keys(styles)) {
+        element.style[key] = styles[key];
+    }
+    return element;
+}
