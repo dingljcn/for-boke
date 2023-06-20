@@ -1,3 +1,11 @@
+class LangItem {
+    en; zh;
+    constructor(en = '', zh = '') {
+        this.en = en;
+        this.zh = zh;
+    }
+}
+
 /** 判断当前网址是否启用脚本 */
 function isMatch(config) {
     if (config.matchList) { // 如果存在要匹配的网址, 则匹配, 匹配成功才进入
