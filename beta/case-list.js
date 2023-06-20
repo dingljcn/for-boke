@@ -58,6 +58,7 @@ function run(config = null) {
                 return;
             }
             await readCases();
+            drawGuide();
         } else {
             console.log('当前网址不符合以下匹配规则:');
             console.log(config.matchList);
@@ -116,4 +117,44 @@ async function readCases(versionName = '-') {
     }
     console.log('解析该版本响应数据之后的列表: ');
     console.log(globalData.forCurrentVersion.caseList);
+}
+
+/** 绘制左侧导航栏 */
+function drawGuide() {
+    document.body.innerHTML = `<div style="display: flex; min-width: 1320px">
+        <div id="dinglj-guide" style="width: 150px; padding: 10px; text-align: left"></div>
+        <div id="dinglj-main" style="flex: 1; padding: 20px"></div>
+    </div>`;
+    let guideBox = document.getElementById('dinglj-guide');
+    for (let moduleName of globalData.modules) {
+        let element = newElement('div', {
+            parentNode: guideBox,
+        }, {
+            id: `dinglj-guide-${ moduleName }`,
+            innerHTML: moduleName
+        }, {
+            padding: '3px',
+            margin: '5px',
+            cursor: 'pointer',
+            borderRadius: '5px',
+            transition: '0.2s',
+            display: 'flex',
+        })
+        element.addEventListener('click', () => {
+            let children = guideBox.children;
+            for (let i = 0; i < children.length; i++) {
+                let moduleDiv = children[i];
+                moduleDiv.style.boxShadow = 'none';
+                moduleDiv.innerHTML = moduleDiv.innerText;
+            }
+            let targetDiv = document.getElementById(`dinglj-guide-${ moduleName }`);
+            targetDiv.style.boxShadow = `0 0 20px 0px ${ config.style.guide.boxShadowColor }`;
+            targetDiv.innerHTML = `<div style="transition: 0.2s; width: 4px; height: 14px; margin-right: 5px; margin-left: 2px; margin-top: 3px; background: ${ config.style.guide.selectIcon }"></div><div>${ moduleName }</div>`
+            globalData.forCurrentVersion.module = moduleName;
+            // drawCases();
+        });
+        if (moduleName == config.defaultModuleName) {
+            globalData.defaultModule = element;
+        }
+    }
 }
