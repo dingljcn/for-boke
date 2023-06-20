@@ -22,6 +22,7 @@ class Case {
     }
 }
 
+/** 用例过滤器 */
 class CaseFilter {
     column; type; value;
     constructor(column, type, value) {
@@ -35,7 +36,8 @@ class CaseFilter {
     }
 }
 
-const globalData = {
+/** 全局数据 */
+const context = {
     modules: [],
     history: [],
     versions: [],
@@ -55,6 +57,15 @@ function run(config = null) {
         alert('未传入配置项, 脚本终止执行');
         return;
     }
+    // 由于这些是内网地址, 故直接写在这里, 也便于更新
+    config.matchList = [
+        /^http:\/\/1.1.11.22:8084\/autowork\/$/
+    ]
+    config.database = {
+        mysql: 'DB_TYPE=MySQL;DB_SERVER=1.1.8.77:3306;DB_USER=root;DB_PASS=123456;DB_NAME=ticket_',
+        oracle: 'DB_TYPE=ORACLE;DB_SERVER=1.1.8.77:1521;DB_NAME=PDBORCL;DB_PASS=123456;DB_USER=ticket_',
+        sql: 'DB_TYPE=SQL;DB_SERVER=1.1.8.77:1433;DB_USER=sa;DB_PASS=P@123456,;DB_NAME=ticket_'
+    }
     // 引入通用脚本
     let utilScript = document.createElement('script');
     utilScript.type = 'text/javascript';
@@ -67,13 +78,13 @@ function run(config = null) {
             await getAllModule(config);
             await readVersions(config);
             // 没有版本, 不继续执行
-            if (!globalData.versions) {
+            if (!context.versions) {
                 return;
             }
             await readCases();
             drawGuide(config);
             drawFilter();
-            globalData.defaultModule.click();
+            context.defaultModule.click();
         } else {
             console.log('当前网址不符合以下匹配规则:');
             console.log(config.matchList);
@@ -87,14 +98,14 @@ async function getAllModule(config) {
     let response = await axios.get(`${ window.location.href }TestCaseServlet?getModule=true`);
     console.log('所有模块: ');
     console.log(response);
-    globalData.modules = response.data.sort((m1, m2) => { //把最关注的模块排在前面
+    context.modules = response.data.sort((m1, m2) => { //把最关注的模块排在前面
         let i1 = config.preferModule.indexOf(m1);
         let i2 = config.preferModule.indexOf(m2);
         i1 = i1 == -1 ? 65535 : i1;
         i2 = i2 == -1 ? 65535 : i2;
         return i1 - i2;
     });
-    globalData.modules.unshift('UNIT'); // 单元测试始终在最前面
+    context.modules.unshift('UNIT'); // 单元测试始终在最前面
 }
 
 /** 读取历史回归测试版本 */
@@ -102,24 +113,24 @@ async function readVersions(config) {
     let response = await axios.get(`${ window.location.href }EVersionServlet`);
     console.log('所有版本: ');
     console.log(response);
-    globalData.history = response.data || [];
-    globalData.versions = globalData.history.map(i => i.erpVersion);
+    context.history = response.data || [];
+    context.versions = context.history.map(i => i.erpVersion);
 }
 
 /** 读取某个版本的回归测试 */
 async function readCases(versionName = '-') {
     // 记录当前版本
-    globalData.forCurrentVersion.versionName = versionName;
+    context.forCurrentVersion.versionName = versionName;
     // 清空要显示的用例集合
-    globalData.forCurrentVersion.caseList = [];
+    context.forCurrentVersion.caseList = [];
     if (versionName == '-') {
         let response = await axios.get(`${ window.location.href }TaskEnvironmentServlet?queryEnvAndTask=true`);
         console.log(`读取版本 ${ versionName }: `);
         console.log(response);
-        globalData.forCurrentVersion.environment = response.data.taskEnvironments[0];
+        context.forCurrentVersion.environment = response.data.taskEnvironments[0];
         for (origin of response.data.testCaseTasks) {
             let myCase = new Case(origin);
-            globalData.forCurrentVersion.caseList.push(myCase);
+            context.forCurrentVersion.caseList.push(myCase);
         }
     } else {
         let response = await axios.get(`${ window.location.href }ReportServlet?queryName=&erpVersion=${ versionName }`);
@@ -127,11 +138,11 @@ async function readCases(versionName = '-') {
         console.log(response);
         for (origin of response.data) {
             let myCase = new Case(origin);
-            globalData.forCurrentVersion.caseList.push(myCase);
+            context.forCurrentVersion.caseList.push(myCase);
         }
     }
     console.log('解析该版本响应数据之后的列表: ');
-    console.log(globalData.forCurrentVersion.caseList);
+    console.log(context.forCurrentVersion.caseList);
 }
 
 /** 绘制左侧导航栏 */
@@ -141,7 +152,7 @@ function drawGuide(config) {
         <div id="dinglj-main" style="flex: 1; padding: 20px"></div>
     </div>`;
     let guideBox = document.getElementById('dinglj-guide');
-    for (let moduleName of globalData.modules) {
+    for (let moduleName of context.modules) {
         let element = newElement('div', {
             parentNode: guideBox,
         }, {
@@ -165,11 +176,11 @@ function drawGuide(config) {
             let targetDiv = document.getElementById(`dinglj-guide-${ moduleName }`);
             targetDiv.style.boxShadow = `0 0 20px 0px ${ config.style.guide.boxShadowColor }`;
             targetDiv.innerHTML = `<div style="transition: 0.2s; width: 4px; height: 14px; margin-right: 5px; margin-left: 2px; margin-top: 3px; background: ${ config.style.guide.selectIcon }"></div><div>${ moduleName }</div>`
-            globalData.forCurrentVersion.module = moduleName;
+            context.forCurrentVersion.module = moduleName;
             drawCases(config);
         });
         if (moduleName == config.defaultModuleName) {
-            globalData.defaultModule = element;
+            context.defaultModule = element;
         }
     }
 }
@@ -178,11 +189,11 @@ function drawGuide(config) {
 async function drawCases(config) {
     // filter, 过滤器
     let filter = [
-        new CaseFilter('module', 'is', globalData.forCurrentVersion.module)
+        new CaseFilter('module', 'is', context.forCurrentVersion.module)
     ]
     // 如果当前要查看的版本和以前load的版本不一致, 需要重新 load
     let version = document.getElementById('dinglj-versions').value;
-    if (version != globalData.forCurrentVersion.versionName) {
+    if (version != context.forCurrentVersion.versionName) {
         await readCases(version);
     }
     // 状态过滤
@@ -198,9 +209,9 @@ async function drawCases(config) {
     // 清空显示在界面上的用例
     document.getElementById('dinglj-case-box').innerHTML = '';
     // 清空动画列表
-    globalData.forCurrentVersion.animates = [];
+    context.forCurrentVersion.animates = [];
     // 清空第一个用例
-    globalData.forCurrentVersion.firstCase = null;
+    context.forCurrentVersion.firstCase = null;
     // 根据过滤规则过滤
     let caseList = findCase(filter);
     // 对用例进行分组
@@ -227,9 +238,9 @@ async function drawCases(config) {
     drawList(config, '正在执行', runningList, successList.length > 0 || ticketList.length > 0);
     drawList(config, '等待启动中', waittingList, runningList.length > 0 || successList.length > 0 || ticketList.length > 0);
     // 执行进度动画
-    globalData.forCurrentVersion.animates.forEach(callback => callback());
+    context.forCurrentVersion.animates.forEach(callback => callback());
     // 点击第一个用例
-    globalData.forCurrentVersion.firstCase.click();
+    context.forCurrentVersion.firstCase.click();
     console.log('当前模块的用例数据: ');
     console.log({
         ticket: ticketList,
@@ -242,7 +253,7 @@ async function drawCases(config) {
 /** 按照查找配置过滤用例 */
 function findCase(filterConfig = []) {
     let result = [];
-    for (let caseData of globalData.forCurrentVersion.caseList) {
+    for (let caseData of context.forCurrentVersion.caseList) {
         let flag = true;
         for (let strategy of filterConfig) {
             if (strategy.column == 'module' && strategy.value == 'UNIT') { // 单元测试特殊处理
@@ -309,17 +320,21 @@ function drawList(config, banner, list = [], hasPrev) {
             document.getElementById('dinglj-info-time-cost').innerText = caseData.timeCost;
             if (caseData.status == 'TICKET') {
                 if (caseData.dbType == 'mysql') {
-                    document.getElementById('dinglj-info-link').innerText = `DB_TYPE=MySQL;DB_SERVER=${ config.database.address.mysql };DB_NAME=ticket_${ caseData.ticketID };DB_USER=root;DB_PASS=123456`;
+                    document.getElementById('dinglj-info-link').innerText = config.database.mysql + caseData.ticketID;
+                } else if (caseData.dbType == 'oracle') {
+                    document.getElementById('dinglj-info-link').innerText = config.database.oracle + caseData.ticketID;
+                } else if (caseData.dbType == 'sql') {
+                    document.getElementById('dinglj-info-link').innerText = config.database.sql + caseData.ticketID;
                 }
             } else {
                 document.getElementById('dinglj-info-link').innerText = '无变更数据库';
             }
         });
-        if (!globalData.forCurrentVersion.firstCase) {
-            globalData.forCurrentVersion.firstCase = caseElement;
+        if (!context.forCurrentVersion.firstCase) {
+            context.forCurrentVersion.firstCase = caseElement;
         }
         caseElement.style.display = 'inline-block';
-        let elementID = 'dinglj-progress-' + globalData.forCurrentVersion.animates.length;
+        let elementID = 'dinglj-progress-' + context.forCurrentVersion.animates.length;
         let ticket = '';
         if (caseData.status == 'TICKET') {
             ticket = `<div style="height: 16px; line-height: 16px; display: flex; font-weight: bold; font-size: 12px; padding: 0 10px; margin-bottom: 5px">
@@ -340,7 +355,7 @@ function drawList(config, banner, list = [], hasPrev) {
                 </div>
                 <span style="padding: 0 5px">${ caseData.totalRow }</span>
             </div>`;
-            globalData.forCurrentVersion.animates.push(() => {
+            context.forCurrentVersion.animates.push(() => {
                 let progress = document.getElementById(elementID);
                 let rowNumber = document.getElementById(elementID + '-row');
                 let pct = document.getElementById(elementID + '-percent');
@@ -415,7 +430,7 @@ function drawFilter() {
         statusOptions += `<option value="${ statusName }">${ statusName || 'ALL' }</option>`;
     }
     let versionOptions = '<option value="-"> 当前轮次 </option>'
-    for (let versionName of globalData.versions) {
+    for (let versionName of context.versions) {
         versionOptions += `<option value="${ versionName }">${ versionName }</option>`;
     }
     main.innerHTML = `<div style="width: 100%; height: 40px; text-align: left">
