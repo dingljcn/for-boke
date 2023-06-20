@@ -17,10 +17,12 @@ class Cell {
 class Ticket {
     cells = []
     findCell(cellKey) {
-        return this.cells.filter(cell => cell.key == cellKey)[0];
+        let result = this.cells.filter(cell => cell.key == cellKey);
+        return result.length == 1 ? result[0] : null;
     }
     get(cellKey) {
-        return this.findCell(cellKey).value;
+        let cell = this.findCell(cellKey);
+        return cell == null ? null : cell.value;
     }
 }
 
@@ -62,12 +64,52 @@ class GroupStratege {
     }
 }
 
+class TabPageStratege {
+    groupName; tabName; tabId; columnKey; expectValue; resolve; list = [];
+    constructor(groupName = '*', tabName = '', columnKey, expectValue = '', resolve = null) {
+        this.groupName = groupName;
+        this.tabName = tabName;
+        this.tabId = uuid('tab-page');
+        this.columnKey = columnKey;
+        this.resolve = resolve;
+        context.tabPathIdMap[tabName] = this.tabId;
+        if (expectValue instanceof Array) {
+            this.expectValue = expectValue;
+        } else {
+            this.expectValue = [ expectValue ];
+        }
+    }
+    /**
+     * 把变更加入这个 tab 页
+     * @param {string} groupName 分组名
+     * @param {Ticket} ticket 变更数据
+     */
+    push(groupName, ticket) {
+        if (this.groupName != '*' && this.groupName != groupName) {
+            if (this.groupName.startsWith('!')) {
+                if (this.groupName.substring(1) == groupName) {
+                    return; // 假设 this.groupName = !A, groupName = A, 那么该 groupName 就不在考虑范围内, 返回
+                }
+            } else {
+                return;
+            }
+        }
+        let cell = ticket.findCell(this.columnKey);
+        let flag1 = cell != null && this.expectValue.includes(cell.value);
+        let flag2 = this.resolve != null && this.resolve(groupName, ticket, cell);
+        if (flag1 || flag2) {
+            this.list.push(ticket);
+        }
+    }
+}
+
 const context = {
     config: {},
     columns: [],
     groups: {},
     groupNames: [],
     groupNameIdMap: {},
+    tabPathIdMap: {},
 }
 
 function onUtils_Js_Load(callback) {
@@ -230,5 +272,20 @@ function drawUI() {
 
 function displayTickets(element) {
     let groupName = element.children[1].innerText;
-    console.log(context.groups[groupName]);
+    let list = context.groups[groupName];
+    dispatchTab(groupName, list);
+    console.log(context.config.stratege.tab);
+}
+
+function dispatchTab(groupName, list = []) {
+    // 先清空原来的
+    for (let stratege of context.config.stratege.tab) {
+        stratege.list = [];
+    }
+    // 再重新分发
+    for (let ticket of list) {
+        for (let stratege of context.config.stratege.tab) {
+            stratege.push(groupName, ticket);
+        }
+    }
 }
