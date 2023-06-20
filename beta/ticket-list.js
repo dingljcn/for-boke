@@ -131,7 +131,7 @@ function readTicketsByClassName(className = '') {
             let cellValue = tdDatas[i];
             let cellKey = context.columns[i - 1];
             let cellName = context.config.columns[cellKey].zh;
-            new Cell(cellKey, cellValue, cellName);
+            new Cell(cellKey, cellValue, cellName, ticket);
         }
         // 按 config.groupBy 分组
         let groupByKey = context.config.groupBy;
