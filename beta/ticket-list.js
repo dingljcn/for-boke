@@ -136,7 +136,7 @@ function readTicketsByClassName(className = '') {
         // 按 config.groupBy 分组
         let groupByKey = context.config.groupBy;
         let cell = ticket.findCell(groupByKey);
-        pushToProp(context.groups, cell.name, ticket);
+        pushToProp(context.groups, cell.value, ticket);
         // 再按分组策略分组
         ticket.cells.forEach(cell => {
             for (let groupStratege of context.config.stratege.group) {
