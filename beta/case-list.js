@@ -151,10 +151,78 @@ function drawGuide() {
             targetDiv.style.boxShadow = `0 0 20px 0px ${ config.style.guide.boxShadowColor }`;
             targetDiv.innerHTML = `<div style="transition: 0.2s; width: 4px; height: 14px; margin-right: 5px; margin-left: 2px; margin-top: 3px; background: ${ config.style.guide.selectIcon }"></div><div>${ moduleName }</div>`
             globalData.forCurrentVersion.module = moduleName;
-            // drawCases();
+            drawCases();
         });
         if (moduleName == config.defaultModuleName) {
             globalData.defaultModule = element;
         }
     }
+}
+
+/** 绘制每个模块的用例 */
+async function drawCases() {
+    let config = [
+        {
+            column: 'module',
+            type: 'is',
+            value: globalData.forCurrentVersion.module
+        }
+    ]
+
+    let version = document.getElementById('dinglj-versions').value;
+
+    if (version != globalData.forCurrentVersion.versionName) {
+        await readCases(version);
+    }
+
+    let status = document.getElementById('dinglj-status').value;
+    if (status) {
+        config.push({
+            column: 'status',
+            type: 'is',
+            value: status
+        })
+    }
+    let keyword = document.getElementById('dinglj-keyword').value;
+    if (keyword) {
+        config.push({
+            column: 'caseName',
+            type: 'like',
+            value: keyword
+        })
+    }
+    document.getElementById('dinglj-case-box').innerHTML = '';
+    globalData.forCurrentVersion.animates = [];
+    globalData.forCurrentVersion.firstCase = null;
+    let caseList = findCase(config);
+    let ticketList = [];
+    let successList = [];
+    let runningList = [];
+    let waittingList = [];
+    for (let caseData of caseList) {
+        if (caseData.status) {
+            if (caseData.status == 'TICKET') {
+                ticketList.push(caseData);
+            } else if (caseData.status == 'SUCCESS') {
+                successList.push(caseData);
+            } else if (caseData.status == 'RUNNING') {
+                runningList.push(caseData);
+            } else if (caseData.status == 'WAITTING') {
+                waittingList.push(caseData);
+            }
+        }
+    }
+    drawList('变更中止', ticketList, false);
+    drawList('测试通过', successList, ticketList.length > 0);
+    drawList('正在执行', runningList, successList.length > 0 || ticketList.length > 0);
+    drawList('等待启动中', waittingList, runningList.length > 0 || successList.length > 0 || ticketList.length > 0);
+    globalData.forCurrentVersion.animates.forEach(callback => callback());
+    globalData.forCurrentVersion.firstCase.click();
+    console.log('current cases: ');
+    console.log({
+        ticket: ticketList,
+        success: successList,
+        running: runningList,
+        waitting: waittingList
+    })
 }
