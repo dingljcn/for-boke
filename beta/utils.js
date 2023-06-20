@@ -173,18 +173,23 @@ function listActiveChange(elements = [], activeStyle = {}, inActiveStyle = {}, o
     // 给每个元素添加点击事件
     for (let element of elements) {
         element.addEventListener('click', event => {
-            // 先把所有样式都设置为未激活
-            for (let item of elements) {
-                for (let styleKey of Object.keys(inActiveStyle)) {
-                    item.style[styleKey] = inActiveStyle[styleKey];
-                }
-            };
-            // 再把点击的当前元素样式设置为激活
-            for (let styleKey of Object.keys(activeStyle)) {
-                element.style[styleKey] = activeStyle[styleKey];
-            }
-            // 最后激活点击事件
+            // 先切换样式
+            toggleStyle(elements, element, activeStyle, inActiveStyle);
+            // 再激活点击事件
             onClick(element, event);
         })
+    }
+}
+
+function toggleStyle(elements = [], element, activeStyle = {}, inActiveStyle = {}) {
+    // 先把所有样式都设置为未激活
+    for (let item of elements) {
+        for (let styleKey of Object.keys(inActiveStyle)) {
+            item.style[styleKey] = inActiveStyle[styleKey];
+        }
+    };
+    // 再把点击的当前元素样式设置为激活
+    for (let styleKey of Object.keys(activeStyle)) {
+        element.style[styleKey] = activeStyle[styleKey];
     }
 }

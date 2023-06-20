@@ -1,7 +1,6 @@
 class Cell {
     key; name; value;
     /**
-     * 
      * @param {string} key 列标识
      * @param {string} name 列名
      * @param {string} value 值
@@ -26,7 +25,7 @@ class Ticket {
 }
 
 class GroupStratege {
-    columnKey; expectValue; groupName; resolve;
+    columnKey; expectValue; groupName; resolve; columnMatched = false; // columnMatched: 表示是否显示了 columnKey 这个字段
     /**
      * @param {string} columnKey 要判断的是哪一列
      * @param {string | Array} expectValue 期待的值是什么
@@ -55,6 +54,7 @@ class GroupStratege {
         if (columnKey != this.columnKey) {
             return false;
         }
+        this.columnMatched = true;
         if (this.resolve != null) {
             return this.resolve(ticket, value);
         }
@@ -98,6 +98,7 @@ function run(config = null) {
             return;
         }
         readTickets();
+        logNotMatchGroup();
         sortGroupNames();
         drawUI();
     } else {
@@ -152,7 +153,15 @@ function readTicketsByClassName(className = '') {
                     pushToProp(context.groups, groupStratege.groupName, ticket);
                 }
             }
-        })
+        });
+    }
+}
+
+function logNotMatchGroup() {
+    for (let groupStratege of context.config.stratege.group) {
+        if (!groupStratege.columnMatched) {
+            console.error(`分组策略 ${ groupStratege.groupName } 中要求匹配的字段是 ${ groupStratege.columnKey }, 但该字段没有被放出来, 所以该分组创建失败`);
+        }
     }
 }
 
@@ -184,30 +193,42 @@ function sortGroupNames() {
 
 /** 绘制UI */
 function drawUI() {
-    getById('main')
     let menus = context.groupNames.map(groupName => {
         let groupId = uuid('group');
         context.groupNameIdMap[groupName] = groupId;
-        return `<div style="padding: 10px; margin: 5px; border-radius: 5px;" class="dinglj-nav-group-item" id=${ groupId }>${ groupName }</div>`
+        return `<div style="transition: 0.4s; padding: 10px; margin: 5px; border-radius: 5px; position: relative; overflow: hidden" class="dinglj-nav-group-item" id=${ groupId }>
+            <div class="dinglj-nav-group-item-background" style="background-color: ${ context.config.style.guide.active.background }; transition: 0.4s; position: absolute; top: 0px; left: 0px; width: 0%; height: 100%"></div>
+            <div style="position: relative; z-index: 999">${ groupName }</div>
+        </div>`
     }).join('');
-    document.getElementById('main').innerHTML = `<div style="display: flex; margin: 30px 0">
+    getById('main').innerHTML = `<div style="display: flex; margin: 30px 0">
         <div id="dinglj-nav-container" style="width: ${ context.config.style.guide.width }; min-width: ${ context.config.style.guide.width }; padding: 10px">
             ${ menus }
         </div>
         <div id="dinglj-view-area" style="flex: 1"></div>
     </div>`;
     let navItems = getByClass('dinglj-nav-group-item');
+    let navItemsBackground = getByClass('dinglj-nav-group-item-background');
     listActiveChange(navItems, {
         boxShadow: '0 0 10px -3px grey',
-        backgroundColor: context.config.style.guide.active.background,
         color: context.config.style.guide.active.color,
         fontWeight: 'bold',
     }, {
         boxShadow: 'none',
-        backgroundColor: context.config.style.guide.inActive.background,
         color: context.config.style.guide.inActive.color,
         fontWeight: 'normal',
     }, (element, event) => {
-        console.log('切换目录: ' + element.innerText);
-    })
+        toggleStyle(navItemsBackground, element.children[0], {
+            width: '100%'
+        }, {
+            width: '0%'
+        })
+        displayTickets(element);
+    });
+    navItems[0].click();
+}
+
+function displayTickets(element) {
+    let groupName = element.children[1].innerText;
+    console.log(context.groups[groupName]);
 }
