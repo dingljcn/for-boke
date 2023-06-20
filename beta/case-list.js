@@ -26,6 +26,15 @@ const globalData = {
     modules: [],
     history: [],
     versions: [],
+    forCurrentVersion: {
+        versionName: '-',
+        caseList: [],
+        module: '',
+        animates: [],
+        firstCase: null,
+        environment: {}
+    },
+    defaultModule: null
 }
 
 function run(config = null) {
@@ -44,6 +53,11 @@ function run(config = null) {
             console.log(config);
             await getAllModule(config);
             await readVersions(config);
+            // 没有版本, 不继续执行
+            if (!globalData.versions) {
+                return;
+            }
+            await readCases();
         } else {
             console.log('当前网址不符合以下匹配规则:');
             console.log(config.matchList);
@@ -67,10 +81,39 @@ async function getAllModule(config) {
     globalData.modules.unshift('UNIT'); // 单元测试始终在最前面
 }
 
+/** 读取历史回归测试版本 */
 async function readVersions(config) {
     let response = await axios.get(`${ window.location.href }EVersionServlet`);
     console.log('所有版本: ');
     console.log(response);
     globalData.history = response.data || [];
     globalData.versions = globalData.history.map(i => i.erpVersion);
+}
+
+/** 读取某个版本的回归测试 */
+async function readCases(versionName = '-') {
+    // 记录当前版本
+    globalData.forCurrentVersion.versionName = versionName;
+    // 清空要显示的用例集合
+    globalData.forCurrentVersion.caseList = [];
+    if (versionName == '-') {
+        let response = await axios.get(`${ window.location.href }TaskEnvironmentServlet?queryEnvAndTask=true`);
+        console.log(`读取版本 ${ versionName }: `);
+        console.log(response);
+        globalData.forCurrentVersion.environment = response.data.taskEnvironments[0];
+        for (origin of response.data.testCaseTasks) {
+            let myCase = new Case(origin);
+            globalData.forCurrentVersion.caseList.push(myCase);
+        }
+    } else {
+        let response = await axios.get(`${ window.location.href }ReportServlet?queryName=&erpVersion=${ versionName }`);
+        console.log(`读取版本 ${ versionName }: `);
+        console.log(response);
+        for (origin of response.data) {
+            let myCase = new Case(origin);
+            globalData.forCurrentVersion.caseList.push(myCase);
+        }
+    }
+    console.log('解析该版本响应数据之后的列表: ');
+    console.log(globalData.forCurrentVersion.caseList);
 }
