@@ -108,6 +108,10 @@ function getColumnsInURL() {
             let value = kv.split('=')[1];
             context.columns.push(value);
         }
+        if (/^group=[A-Za-z0-9]+$/.test(kv)) { // 是 group=value 形式的键值对
+            let groupBy = kv.split('=')[1];
+            context.config.groupBy = context.config.groupBy || groupBy;
+        }
     }
 }
 
@@ -131,7 +135,7 @@ function readTicketsByClassName(className = '') {
             let cellValue = tdDatas[i];
             let cellKey = context.columns[i - 1];
             let cellName = context.config.columns[cellKey].zh;
-            new Cell(cellKey, cellName, cellValue, ticket);
+            new Cell(cellKey, cellName, cellValue.trim(), ticket);
         }
         // 按 config.groupBy 分组
         let groupByKey = context.config.groupBy;
