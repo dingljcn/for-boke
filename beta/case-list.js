@@ -57,7 +57,7 @@ function run(config = null) {
         alert('未传入配置项, 脚本终止执行');
         return;
     }
-    // 由于这些是内网地址, 故直接写在这里, 也便于更新
+    // 由于这些是局域网地址, 故直接写在这里, 也便于更新
     config.matchList = [
         /^http:\/\/1.1.11.22:8084\/autowork\/$/
     ]
