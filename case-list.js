@@ -12,6 +12,9 @@ function run(config = null) {
         if (isMatch(config)) {
             console.log('传入的配置项: ')
             console.log(config);
+        } else {
+            console.log('当前网址不符合以下匹配规则:');
+            console.log(config.matchList);
         }
     };
     document.head.appendChild(utilScript);
