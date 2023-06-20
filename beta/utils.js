@@ -116,6 +116,13 @@ function pushToProp(obj, fieldKey, data) {
     list.push(data);
 }
 
+/**
+ * 在集合中找 prop = expectValue 的对象, 返回其下标
+ * @param {any[]} list 对象集合
+ * @param {string} prop 对象中某个属性的key
+ * @param {any} expectValue 希望对象中某个属性等于的值
+ * @returns 对象的下标
+ */
 function indexOfPropInList(list = [], prop = '', expectValue) {
     for (let i = 0; i < list.length; i++) {
         if (list[i][prop] == expectValue) {
@@ -125,6 +132,59 @@ function indexOfPropInList(list = [], prop = '', expectValue) {
     return -1;
 }
 
+/**
+ * 在集合中找 prop = expectValue 的对象
+ * @param {any[]} list 对象集合
+ * @param {string} prop 对象中某个属性的key
+ * @param {any} expectValue 希望对象中某个属性等于的值
+ * @returns 所有符合条件的集合
+ */
 function findByPropInList(list = [], prop = '', expectValue) {
     return list.filter(obj => obj[prop] == expectValue);
+}
+
+/** 根据 id 获取 html 元素 */
+function getById(id) {
+    return document.getElementById(id);
+}
+
+/** 根据 class 获取 html 元素 */
+function getByClass(className) {
+    return document.getElementsByClassName(className);
+}
+
+/**
+ * 生成 uuid
+ * @param {string} prefix 前缀
+ * @param {number} length 随机数长度
+ */
+function uuid(prefix = '', length = 8) {
+    return `${ prefix }-${ ('' + (Math.random() * 10000000)).replace('.', '').substring(0, length) }`
+}
+
+/**
+ * 适用于目录切换的场景, 某一批 className 一样的元素, 点击其中一个, 为它设置独特的样式, 并触发点击事件
+ * @param {Element[]} elements 元素列表
+ * @param {any} activeStyle 激活时的样式
+ * @param {any} inActiveStyle 未激活时的样式
+ * @param {Function} onClick 点击之后触发的事件
+ */
+function listActiveChange(elements = [], activeStyle = {}, inActiveStyle = {}, onClick = (element, event) => {}) {
+    // 给每个元素添加点击事件
+    for (let element of elements) {
+        element.addEventListener('click', event => {
+            // 先把所有样式都设置为未激活
+            for (let item of elements) {
+                for (let styleKey of Object.keys(inActiveStyle)) {
+                    item.style[styleKey] = inActiveStyle[styleKey];
+                }
+            };
+            // 再把点击的当前元素样式设置为激活
+            for (let styleKey of Object.keys(activeStyle)) {
+                element.style[styleKey] = activeStyle[styleKey];
+            }
+            // 最后激活点击事件
+            onClick(element, event);
+        })
+    }
 }

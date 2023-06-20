@@ -66,7 +66,8 @@ const context = {
     config: {},
     columns: [],
     groups: {},
-    groupNames: []
+    groupNames: [],
+    groupNameIdMap: {},
 }
 
 function onUtils_Js_Load(callback) {
@@ -98,6 +99,7 @@ function run(config = null) {
         }
         readTickets();
         sortGroupNames();
+        drawUI();
     } else {
         console.log('当前网址不符合以下匹配规则:');
         console.log(context.config.matchList);
@@ -158,9 +160,9 @@ function sortGroupNames() {
     context.groupNames = Object.keys(context.groups);
     context.groupNames.sort((i1, i2) => {
         // 先按分组策略来, 即自定义分组策略的排在最前面
-        let idx1 = indexOfPropInList(context.config.stratege.group, groupName, i1);
+        let idx1 = indexOfPropInList(context.config.stratege.group, 'groupName', i1);
         idx1 = idx1 == -1 ? 999999 : idx1;
-        let idx2 = indexOfPropInList(context.config.stratege.group, groupName, i2);
+        let idx2 = indexOfPropInList(context.config.stratege.group, 'groupName', i2);
         idx2 = idx2 == -1 ? 999999 : idx2;
         if (idx1 != idx2) { // 分组策略 list 中肯定有先后顺序, 其他全为 -1 (999999)
             return idx1 - idx2;
@@ -177,5 +179,35 @@ function sortGroupNames() {
         }
         // 最后按 ASCII 码排
         return i1 < i2;
+    })
+}
+
+/** 绘制UI */
+function drawUI() {
+    getById('main')
+    let menus = context.groupNames.map(groupName => {
+        let groupId = uuid('group');
+        context.groupNameIdMap[groupName] = groupId;
+        return `<div style="padding: 10px; margin: 5px; border-radius: 5px;" class="dinglj-nav-group-item" id=${ groupId }>${ groupName }</div>`
+    }).join('');
+    document.getElementById('main').innerHTML = `<div style="display: flex; margin: 30px 0">
+        <div id="dinglj-nav-container" style="width: ${ context.config.style.guide.width }; min-width: ${ context.config.style.guide.width }; padding: 10px">
+            ${ menus }
+        </div>
+        <div id="dinglj-view-area" style="flex: 1"></div>
+    </div>`;
+    let navItems = getByClass('dinglj-nav-group-item');
+    listActiveChange(navItems, {
+        boxShadow: '0 0 10px -3px grey',
+        backgroundColor: context.config.style.guide.active.background,
+        color: context.config.style.guide.active.color,
+        fontWeight: 'bold',
+    }, {
+        boxShadow: 'none',
+        backgroundColor: context.config.style.guide.inActive.background,
+        color: context.config.style.guide.inActive.color,
+        fontWeight: 'normal',
+    }, (element, event) => {
+        console.log('切换目录: ' + element.innerText);
     })
 }
