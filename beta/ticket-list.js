@@ -92,7 +92,7 @@ function run(config = null) {
         getColumnsInURL();
         if (!context.columns.includes(context.config.groupBy)) {
             let groupColumn = context.config.columns[context.config.groupBy];
-            alert(`当前显示的列中没有分组列: ${ groupColumn.en } - ${ groupColumn.zh }`);
+            alert(`当前显示的列中没有分组列: ${ groupColumn.en } - ${ groupColumn.zh }, 你需要将该列放出来, 或者修改脚本中的 config.groupBy 为你想要的分组列`);
             return;
         }
         readTickets();
@@ -131,7 +131,7 @@ function readTicketsByClassName(className = '') {
             let cellValue = tdDatas[i];
             let cellKey = context.columns[i - 1];
             let cellName = context.config.columns[cellKey].zh;
-            new Cell(cellKey, cellValue, cellName, ticket);
+            new Cell(cellKey, cellName, cellValue, ticket);
         }
         // 按 config.groupBy 分组
         let groupByKey = context.config.groupBy;
