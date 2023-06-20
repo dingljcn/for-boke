@@ -99,3 +99,19 @@ function newElement(tag = '', config = {
     }
     return element;
 }
+
+/**
+ * 向 obj 中添加一个名为 fieldKey 的数组, 并将 data 添加到该数组
+ * @param {any} obj 被赋值的对象
+ * @param {string} fieldKey 字段名/属性名
+ * @param {any} data 要赋值的值
+ */
+function pushToProp(obj, fieldKey, data) {
+    let list = obj[fieldKey];
+    if (!list) {
+        // 不存在, 创建
+        list = [];
+        obj[fieldKey] = list;
+    }
+    list.push(data);
+}
