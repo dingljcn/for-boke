@@ -66,6 +66,7 @@ const context = {
     config: {},
     columns: [],
     groups: {},
+    groupNames: []
 }
 
 function onUtils_Js_Load(callback) {
@@ -96,6 +97,7 @@ function run(config = null) {
             return;
         }
         readTickets();
+        sortGroupNames();
     } else {
         console.log('当前网址不符合以下匹配规则:');
         console.log(context.config.matchList);
@@ -150,4 +152,30 @@ function readTicketsByClassName(className = '') {
             }
         })
     }
+}
+
+function sortGroupNames() {
+    context.groupNames = Object.keys(context.groups);
+    context.groupNames.sort((i1, i2) => {
+        // 先按分组策略来, 即自定义分组策略的排在最前面
+        let idx1 = indexOfPropInList(context.config.stratege.group, groupName, i1);
+        idx1 = idx1 == -1 ? 999999 : idx1;
+        let idx2 = indexOfPropInList(context.config.stratege.group, groupName, i2);
+        idx2 = idx2 == -1 ? 999999 : idx2;
+        if (idx1 != idx2) { // 分组策略 list 中肯定有先后顺序, 其他全为 -1 (999999)
+            return idx1 - idx2;
+        }
+        // 其次按 preferGroups 排序, 不过 perferGroups 只是个可选配置, 所以得判断下到底存不存在
+        if (context.config.preferGroups) {
+            let idx1 = context.config.preferGroups.indexOf(i1);
+            idx1 = idx1 == -1 ? 999999 : idx1;
+            let idx2 = context.config.preferGroups.indexOf(i2);
+            idx2 = idx2 == -1 ? 999999 : idx2;
+            if (idx1 != idx2) {
+                return idx1 - idx2;
+            }
+        }
+        // 最后按 ASCII 码排
+        return i1 < i2;
+    })
 }

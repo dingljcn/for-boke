@@ -115,3 +115,16 @@ function pushToProp(obj, fieldKey, data) {
     }
     list.push(data);
 }
+
+function indexOfPropInList(list = [], prop = '', expectValue) {
+    for (let i = 0; i < list.length; i++) {
+        if (list[i][prop] == expectValue) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+function findByPropInList(list = [], prop = '', expectValue) {
+    return list.filter(obj => obj[prop] == expectValue);
+}
