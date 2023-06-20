@@ -83,7 +83,7 @@ function run(config = null) {
             }
             await readCases();
             drawGuide(config);
-            drawFilter();
+            drawFilter(config);
             context.defaultModule.click();
         } else {
             console.log('当前网址不符合以下匹配规则:');
@@ -141,8 +141,12 @@ async function readCases(versionName = '-') {
             context.forCurrentVersion.caseList.push(myCase);
         }
     }
-    console.log('解析该版本响应数据之后的列表: ');
-    console.log(context.forCurrentVersion.caseList);
+    if (context.forCurrentVersion.caseList.length == 0) {
+        alert('当前版本没有用例数据, 可能是未启动回归测试');
+    } else {
+        console.log('解析该版本响应数据之后的列表: ');
+        console.log(context.forCurrentVersion.caseList);
+    }
 }
 
 /** 绘制左侧导航栏 */
@@ -240,7 +244,9 @@ async function drawCases(config) {
     // 执行进度动画
     context.forCurrentVersion.animates.forEach(callback => callback());
     // 点击第一个用例
-    context.forCurrentVersion.firstCase.click();
+    if (context.forCurrentVersion.firstCase) {
+        context.forCurrentVersion.firstCase.click();
+    }
     console.log('当前模块的用例数据: ');
     console.log({
         ticket: ticketList,
@@ -421,7 +427,7 @@ function pickColor(percent) {
 }
 
 /** 绘制过滤器 */
-function drawFilter() {
+function drawFilter(config) {
     let main = document.getElementById('dinglj-main');
     main.style.display = 'flex';
     main.style.flexDirection = 'column';
@@ -482,6 +488,6 @@ function drawFilter() {
         copyText(htmlElement.innerText);
     })
     document.getElementById("dinglj-update").addEventListener('click', () => {
-        drawCases();
+        drawCases(config);
     });
 }
