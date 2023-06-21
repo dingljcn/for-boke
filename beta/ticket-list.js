@@ -437,7 +437,7 @@ function genTBody(groupName, containerWidth, stratege) {
                     break;
                 }
             }
-            return ignoreRow ? '' : `<td class="dinglj-column-data-${ cell.key }" style="text-align: center; padding: 0 5px; line-height: 30px">${ cell.value }</td>`;
+            return ignoreRow ? '' : `<td class="dinglj-column-data-${ cell.key }" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; text-align: center; padding: 0 5px; line-height: 30px">${ cell.value }</td>`;
         }).join('');
         return `<tr class="dinglj-table-tr dinglj-${ (++count) % 2 == 0 ? 'even' : 'odd' }" style="padding: 5px 0;">${ tdList }</tr>`
     }).join('');
