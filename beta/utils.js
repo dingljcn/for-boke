@@ -224,10 +224,12 @@ function setStyleByClassName(className, key, value) {
     }
 }
 
-function setMultiStyleToMultiClass(className = [], style) {
-    for (let element of getByClass(className)) {
-        for (let key of Object.keys(style)) {
-            element[key] = style[key];
+function setMultiStyleToMultiClass(classNames = [], style) {
+    for (let className of classNames) {
+        for (let element of getByClass(className)) {
+            for (let key of Object.keys(style)) {
+                element[key] = style[key];
+            }
         }
     }
 }
