@@ -205,3 +205,15 @@ function mouseIOEvent(elements = [], mouseIn, mouseOut) {
         });
     }
 }
+
+function getChildrenByClassName(parent, className) {
+    let result = [];
+    if (parent) {
+        for (let element of parent.children) {
+            if (element.classList.contains(className)) {
+                result.push(element);
+            }
+        }
+    }
+    return result;
+}

@@ -388,7 +388,7 @@ function drawTabHead(groupName) {
         }
         getById('dinglj-ticket-view').style.left = `${ -1 * idx * containerWidth }px`;
     });
-    return list[0];
+    list[0].click();
 }
 
 /** 绘制 */
@@ -397,7 +397,7 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
     getById('dinglj-ticket-view').style.width = `${ containerWidth * tabStrateges.length }px`;
     let views = tabStrateges.map(stratege => {
         return `<div class="dinglj-ticket-list" style="transition: 0.4s; width: ${ containerWidth }px; display: inline-block; opacity: 0; vertical-align: top;">
-            <table>
+            <table cellspacing="0">
                 <thead>${ genTHead(groupName, containerWidth, stratege) }</thead>
                 <tbody>${ genTBody(groupName, containerWidth, stratege) }</tbody>
             </table>
@@ -405,6 +405,7 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
     }).join('');
     getById('dinglj-ticket-view').innerHTML = views;
     fixStyle();
+    fixTicketHref();
 }
 
 function genTHead(groupName, containerWidth, stratege) {
@@ -419,7 +420,7 @@ function genTHead(groupName, containerWidth, stratege) {
         return `<td style="padding: 0 5px; line-height: 30px" class="dinglj-col-${ cell.key }">${ cell.name }</td>`
     }).join('');
     context.ignoreColumns = Object.keys(ignore);
-    return `<tr style="padding: 5px 0; ">${ tdList }</tr>`;
+    return `<tr class="dinglj-table-head" style="padding: 5px 0; ">${ tdList }</tr>`;
 }
 
 function genTBody(groupName, containerWidth, stratege) {
@@ -436,9 +437,9 @@ function genTBody(groupName, containerWidth, stratege) {
                     break;
                 }
             }
-            return ignoreRow ? '' : `<td style="padding: 0 5px; line-height: 30px">${ cell.value }</td>`;
+            return ignoreRow ? '' : `<td class="dinglj-column-data-${ cell.key }" style="padding: 0 5px; line-height: 30px">${ cell.value }</td>`;
         }).join('');
-        return `<tr class="dinglj-table-tr dinglj-${ (++count) % 2 == 0 ? 'even' : 'odd' }" style="padding: 5px 0; border-top: 1px solid rgba(0, 0, 0, 0.1)">${ tdList }</tr>`
+        return `<tr class="dinglj-table-tr dinglj-${ (++count) % 2 == 0 ? 'even' : 'odd' }" style="padding: 5px 0;">${ tdList }</tr>`
     }).join('');
 }
 
@@ -450,9 +451,17 @@ function fixStyle() {
     mouseIOEvent(list, (element, event) => {
         element.style.background = context.config.style.table.row.current.background;
         element.style.color = context.config.style.table.row.current.color;
+        let ticketElement = getChildrenByClassName(element, `dinglj-column-data-${ context.config.columns.id.en }`)[0];
+        ticketElement.children[1].style.color = context.config.style.table.row.current.color;
     }, (element, event) => {
+        ticketElement.children[1].style.color = context.config.style.table.row.ticketIdColor;
         setTrStyle(element);
-    })
+    });
+    for (let head of getByClass('dinglj-table-head')) {
+        head.style.background = context.config.style.table.head.background;
+        head.style.color = context.config.style.table.head.color;
+    }
+
 }
 
 /**
@@ -466,5 +475,17 @@ function setTrStyle(element) {
     } else if (element.classList.contains('dinglj-odd')) {
         element.style.background = context.config.style.table.row.odd.background;
         element.style.color = context.config.style.table.row.odd.color;
+    }
+}
+
+function fixTicketHref() {
+    for (let ticketIdElement of getByClass(`dinglj-column-data-${ context.config.columns.id.en }`)) {
+        let origin = ticketIdElement.innerText;
+        let ticketId = origin.replace('#', '');
+        ticketIdElement.innerHTML = `<input type="checkbox" id="dinglj-is-view-${ ticketId }" style="margin-right: 5px"/><span style="color: #3485fb">${ origin }</span>`;
+        ticketIdElement.addEventListener('click', () => {
+            getById(`dinglj-is-view-${ ticketId }`).checked = true;
+            window.open(`${ context.config.ticketURL }/${ ticketId }`);
+        })
     }
 }
