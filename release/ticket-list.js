@@ -198,7 +198,7 @@ function onUtils_Js_Load(callback) {
     // 引入通用脚本
     let utilScript = document.createElement('script');
     utilScript.type = 'text/javascript';
-    utilScript.src = 'https://dingljcn.github.io/for-boke/beta/utils.js?' + Math.random();
+    utilScript.src = 'https://dingljcn.github.io/for-boke/release/utils.js?' + Math.random();
     // 脚本加载完成之后读取开始读配置, 启动脚本
     utilScript.onload = async function() {
         callback();

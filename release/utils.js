@@ -1,3 +1,11 @@
+class LangItem {
+    en; zh;
+    constructor(en = '', zh = '') {
+        this.en = en;
+        this.zh = zh;
+    }
+}
+
 /** 判断当前网址是否启用脚本 */
 function isMatch(config) {
     if (config.matchList) { // 如果存在要匹配的网址, 则匹配, 匹配成功才进入
@@ -90,4 +98,155 @@ function newElement(tag = '', config = {
         element.style[key] = styles[key];
     }
     return element;
+}
+
+/**
+ * 向 obj 中添加一个名为 fieldKey 的数组, 并将 data 添加到该数组
+ * @param {any} obj 被赋值的对象
+ * @param {string} fieldKey 字段名/属性名
+ * @param {any} data 要赋值的值
+ */
+function pushToProp(obj, fieldKey, data) {
+    let list = obj[fieldKey];
+    if (!list) {
+        // 不存在, 创建
+        list = [];
+        obj[fieldKey] = list;
+    }
+    list.push(data);
+}
+
+/**
+ * 在集合中找 prop = expectValue 的对象, 返回其下标
+ * @param {any[]} list 对象集合
+ * @param {string} prop 对象中某个属性的key
+ * @param {any} expectValue 希望对象中某个属性等于的值
+ * @returns 对象的下标
+ */
+function indexOfPropInList(list = [], prop = '', expectValue) {
+    for (let i = 0; i < list.length; i++) {
+        if (list[i][prop] == expectValue) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/**
+ * 在集合中找 prop = expectValue 的对象
+ * @param {any[]} list 对象集合
+ * @param {string} prop 对象中某个属性的key
+ * @param {any} expectValue 希望对象中某个属性等于的值
+ * @returns 所有符合条件的集合
+ */
+function findByPropInList(list = [], prop = '', expectValue) {
+    return list.filter(obj => obj[prop] == expectValue);
+}
+
+/** 根据 id 获取 html 元素 */
+function getById(id) {
+    return document.getElementById(id);
+}
+
+/** 根据 class 获取 html 元素 */
+function getByClass(className) {
+    return document.getElementsByClassName(className);
+}
+
+/**
+ * 生成 uuid
+ * @param {string} prefix 前缀
+ * @param {number} length 随机数长度
+ */
+function uuid(prefix = '', length = 8) {
+    return `${ prefix }-${ ('' + (Math.random() * 10000000)).replace('.', '').substring(0, length) }`
+}
+
+/**
+ * 适用于目录切换的场景, 某一批 className 一样的元素, 点击其中一个, 为它设置独特的样式, 并触发点击事件
+ * @param {Element[]} elements 元素列表
+ * @param {any} activeStyle 激活时的样式
+ * @param {any} inActiveStyle 未激活时的样式
+ * @param {Function} onClick 点击之后触发的事件
+ */
+function listActiveChange(elements = [], activeStyle = {}, inActiveStyle = {}, onClick = (element, event) => {}) {
+    // 给每个元素添加点击事件
+    for (let element of elements) {
+        element.addEventListener('click', event => {
+            // 先切换样式
+            toggleStyle(elements, element, activeStyle, inActiveStyle);
+            // 再激活点击事件
+            onClick(element, event);
+        })
+    }
+}
+
+function toggleStyle(elements = [], element, activeStyle = {}, inActiveStyle = {}) {
+    // 先把所有样式都设置为未激活
+    for (let item of elements) {
+        for (let styleKey of Object.keys(inActiveStyle)) {
+            item.style[styleKey] = inActiveStyle[styleKey];
+        }
+    };
+    // 再把点击的当前元素样式设置为激活
+    for (let styleKey of Object.keys(activeStyle)) {
+        element.style[styleKey] = activeStyle[styleKey];
+    }
+}
+
+/** 设置一对鼠标事件: 移入/移出 */
+function mouseIOEvent(elements = [], mouseIn, mouseOut) {
+    for (let element of elements) {
+        element.addEventListener('mouseover', event => {
+            mouseIn(element, event);
+        });
+        element.addEventListener('mouseout', event => {
+            mouseOut(element, event);
+        });
+    }
+}
+
+function getChildrenByClassName(parent, className) {
+    let result = [];
+    if (parent) {
+        for (let element of parent.children) {
+            if (element.classList.contains(className)) {
+                result.push(element);
+            }
+        }
+    }
+    return result;
+}
+
+function setStyleByClassName(className, key, value) {
+    for (let element of getByClass(className)) {
+        element.style[key] = value;
+    }
+}
+
+function setMultiStyleToMultiClass(classNames = [], style) {
+    for (let className of classNames) {
+        for (let element of getByClass(className)) {
+            for (let key of Object.keys(style)) {
+                element.style[key] = style[key];
+            }
+        }
+    }
+}
+
+/**
+ * 从原单位转为分钟
+ * @param {number} number 数量
+ * @param {sec|min|hour|day|week|month|year} originUnit 原单位
+ */
+function toSecond(number = 0, originUnit = 'hour') {
+    switch(originUnit) {
+        case 'year': return number * 60 * 60 * 24 * 365; // 一年 365 天
+        case 'month': return number * 60 * 60 * 24 * 30;  // 一个月 30 天
+        case 'week': return number * 60 * 60 * 24 * 7; // 一周 7 天
+        case 'day': return number * 60 * 60 * 24; // 一天 24 小时
+        case 'hour': return number * 60 * 60; // 一小时 60 分钟
+        case 'min': return number * 60; // 一分钟 60 秒
+        case 'sec': return number;
+    }
 }
