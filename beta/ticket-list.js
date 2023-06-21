@@ -482,7 +482,7 @@ function fixTicketHref() {
     for (let ticketIdElement of getByClass(`dinglj-column-data-${ context.config.columns.id.en }`)) {
         let origin = ticketIdElement.innerText;
         let ticketId = origin.replace('#', '');
-        ticketIdElement.innerHTML = `<input type="checkbox" id="dinglj-is-view-${ ticketId }" style="margin-right: 5px"/><span style="color: #3485fb">${ origin }</span>`;
+        ticketIdElement.innerHTML = `<input type="checkbox" id="dinglj-is-view-${ ticketId }" style="margin-right: 5px"/><span style="color: ${ context.config.style.table.row.ticketIdColor }">${ origin }</span>`;
         ticketIdElement.addEventListener('click', () => {
             getById(`dinglj-is-view-${ ticketId }`).checked = true;
             window.open(`${ context.config.ticketURL }/${ ticketId }`);
