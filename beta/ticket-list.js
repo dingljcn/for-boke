@@ -417,7 +417,7 @@ function genTHead(groupName, containerWidth, stratege) {
                 return '';
             }
         }
-        return `<td style="min-width: 80px; text-align: center; font-weight: bold; padding: 0 5px; line-height: 30px" class="dinglj-col-${ cell.key }">${ cell.name }</td>`
+        return `<td style="min-width: 80px; max-width: 80px; text-align: center; font-weight: bold; padding: 0 5px; line-height: 30px" class="dinglj-col-${ cell.key }">${ cell.name }</td>`
     }).join('');
     context.ignoreColumns = Object.keys(ignore);
     return `<tr class="dinglj-table-head" style="padding: 5px 0; ">${ tdList }</tr>`;
@@ -437,7 +437,7 @@ function genTBody(groupName, containerWidth, stratege) {
                     break;
                 }
             }
-            return ignoreRow ? '' : `<td class="dinglj-column-data-${ cell.key }" style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; text-align: center; padding: 0 5px; line-height: 30px">${ cell.value }</td>`;
+            return ignoreRow ? '' : `<td class="dinglj-column-data-${ cell.key }" style="min-width: 80px; max-width: 80px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; text-align: center; padding: 0 5px; line-height: 30px">${ cell.value }</td>`;
         }).join('');
         return `<tr class="dinglj-table-tr dinglj-${ (++count) % 2 == 0 ? 'even' : 'odd' }" style="padding: 5px 0;">${ tdList }</tr>`
     }).join('');
