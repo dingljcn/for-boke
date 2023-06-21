@@ -129,7 +129,7 @@ class Filter {
             if (this.resolve == null) {
                 if (cell.key == this.columnKey) {
                     let cellValue = ticket.get(this.columnKey);
-                    return this.expectValue.includes(cell.cellValue)
+                    return this.expectValue.includes(cellValue)
                 }
                 return false;
             } else {
@@ -383,6 +383,7 @@ function drawTabHead(groupName) {
         let idx = indexOfPropInList(tabStrateges, 'tabName', element.innerHTML);
         getById('dinglj-ticket-view').style.left = `${ -1 * idx * containerWidth }px`;
     });
+    list[0].click();
 }
 
 /** 绘制 */
@@ -392,7 +393,7 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
     let views = tabStrateges.map(stratege => {
         return `<div style="width: ${ containerWidth }px; display: inline-block">
             <table>
-                <thead><tr>${ genTHead(groupName, containerWidth, stratege) }</tr></thead>
+                <thead>${ genTHead(groupName, containerWidth, stratege) }</thead>
                 <tbody>${ genTBody(groupName, containerWidth, stratege) }</tbody>
             </table>
         </div>`;
@@ -401,15 +402,18 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
 }
 
 function genTHead(groupName, containerWidth, stratege) {
-    return stratege.list[0].cells.map(cell => {
+    let ignore = {};
+    let tdList = stratege.list[0].cells.map(cell => {
         for (let filter of context.config.filter.column) {
             if (filter.condition(groupName, stratege.tabName, stratege.list, stratege.list[0], cell)) {
-                context.ignoreColumns.push(cell.key);
+                ignore[cell.key] = '';
                 return '';
             }
         }
         return `<td class="dinglj-col-${ cell.key }">${ cell.name }</td>`
     }).join('');
+    context.ignoreColumns = Object.keys(ignore);
+    return `<td>${ tdList }</td>`;
 }
 
 function genTBody(groupName, containerWidth, stratege) {
