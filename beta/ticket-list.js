@@ -103,6 +103,49 @@ class TabPageStratege {
     }
 }
 
+class Filter {
+    groupName; tabName; columnKey; expectValue; resolve;
+    constructor(groupName = '*', tabName = '*', columnKey, expectValue, resolve = null) {
+        this.groupName = groupName;
+        this.tabName = tabName;
+        this.columnKey = columnKey;
+        this.resolve = resolve;
+        if (expectValue instanceof Array) {
+            this.expectValue = expectValue;
+        } else {
+            this.expectValue = [ expectValue ];
+        }
+    }
+    /**
+     * 如果 groupName 和 tabName 匹配, 且 ticket.columnKey 的值包含在 expectValue 中, 返回 true (当然, 也可自定义逻辑 resolve)
+     * @param {string} groupName 分组
+     * @param {string} tabName tab
+     * @param {Ticket[]} list 该 tab 页下所有变更
+     * @param {Ticket} ticket 变更
+     */
+    condition(groupName, tabName, list = [], ticket) {
+        if (isValid(this.groupName, groupName) && isValid(this.tabName, tabName)) {
+            if (this.resolve == null) {
+                let cell = ticket.findCell(this.columnKey);
+                return cell != null && this.expectValue.includes(cell.value);
+            } else {
+                return this.resolve(groupName, tabName, list, ticket);
+            }
+        }
+        return false;
+    }
+}
+
+function isValid(expect, value) {
+    if (expect == '*') {
+        return true;
+    }
+    if (expect.startsWith('!')) {
+        return expect.substring(1) != value;
+    }
+    return expect == value;
+}
+
 const context = {
     config: {},
     columns: [],
@@ -110,6 +153,7 @@ const context = {
     groupNames: [],
     groupNameIdMap: {},
     tabPathIdMap: {},
+    ignoreColumns: []
 }
 
 function onUtils_Js_Load(callback) {
@@ -332,8 +376,8 @@ function drawTabHead(groupName) {
         let left = element.offsetLeft - margin;
         underLine.style.width = `${ width }px`;
         underLine.style.left = `${ left }px`;
-        let idx = indexOfPropInList(tabStrateges, tabName, element.innerHTML);
-        getById('dinglj-ticket-view').style.left = `${ -1 * idx * tabStrateges.length }px`;
+        let idx = indexOfPropInList(tabStrateges, 'tabName', element.innerHTML);
+        getById('dinglj-ticket-view').style.left = `${ -1 * idx * containerWidth }px`;
     });
 }
 
@@ -342,7 +386,28 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
     // 根据要显示的 tab 页数量设置容器宽度
     getById('dinglj-ticket-view').style.width = `${ containerWidth * tabStrateges.length }px`;
     let views = tabStrateges.map(stratege => {
-        return `<div style="width: ${ containerWidth }px; display: inline-block">${ stratege.tabName }</div>`;
+        return `<div style="width: ${ containerWidth }px; display: inline-block">
+            <table>
+                <thead>${ genTHead(groupName, containerWidth, stratege) }</thead>
+                <tbody>${ genTBody(groupName, containerWidth, stratege) }</tbody>
+            </table>
+        </div>`;
     }).join('');
     getById('dinglj-ticket-view').innerHTML = views;
+}
+
+function genTHead(groupName, containerWidth, stratege) {
+    return stratege.list[0].cell.map(cell => {
+        for (let filter of context.config.filter.column) {
+            if (filter.condition(groupName, stratege.tabName, stratege.list, stratege.list[0])) {
+                context.ignoreColumns.push(cell.key);
+                return '';
+            }
+        }
+        return `<td class="dinglj-col-${ cell.key }">${ cell.name }</td>`
+    }).join('');
+}
+
+function genTBody(groupName, containerWidth, stratege) {
+    
 }
