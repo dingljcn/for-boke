@@ -217,8 +217,12 @@ function run(config = null) {
         console.log(context.config);
         getColumnsInURL();
         if (!context.columns.includes(context.config.groupBy)) {
-            let groupColumn = context.config.columns[context.config.groupBy];
-            alert(`当前显示的列中没有分组列: ${ groupColumn.en } - ${ groupColumn.zh }, 你需要将该列放出来, 或者修改脚本中的 config.groupBy 为你想要的分组列`);
+            if (context.config.groupBy == '') {
+                alert('无分组字段, 请在脚本中指定 config.groupBy, 或者在界面上选择按什么分组');
+            } else {
+                let groupColumn = context.config.columns[context.config.groupBy];
+                alert(`当前显示的列中没有分组列: ${ groupColumn.en } - ${ groupColumn.zh }, 你需要将该列放出来, 或者修改脚本中的 config.groupBy 为你想要的分组列`);
+            }
             return;
         }
         readTickets();
@@ -325,13 +329,15 @@ function drawUI() {
             <div style="position: relative; z-index: 999">${ groupName }</div>
         </div>`
     }).join('');
-    getById('main').innerHTML = `<div style="display: flex; margin: 30px 0">
+    let mainElement = getById('main');
+    mainElement.style.height = 'calc(100vh - 160px)';
+    mainElement.innerHTML = `<div style="display: flex; margin: 30px 0; height: 100%">
         <div id="dinglj-nav-container" style="width: ${ context.config.style.guide.width }; min-width: ${ context.config.style.guide.width }; padding: 10px">
             ${ menus }
         </div>
-        <div id="dinglj-view-area" style="padding: 10px;flex: 1">
+        <div id="dinglj-view-area" style="padding: 10px; flex: 1; height: 100%; display: flex; flex-direction: column;">
             <div id="dinglj-tab-name" style="position: relative; display: flex; margin: 5px 0;"></div>
-            <div id="dinglj-tab-view" style="overflow-x: hidden; position: relative; height: 100%;">
+            <div id="dinglj-tab-view" style="overflow-x: hidden; position: relative; flex: 1;">
                 <div id="dinglj-ticket-view" style="position: absolute; top: 20px; left: 0; transition: 0.4s"></div>
             </div>
         </div>
@@ -528,6 +534,7 @@ function fixStyle() {
     }
     let summaryClassNames = [ 'dinglj-column-data-' + context.config.columns.summary.en, 'dinglj-col-' + context.config.columns.summary.en ];
     setMultiStyleToMultiClass(summaryClassNames, summaryFinalStyle);
+    getById('footer').remove();
 }
 
 /**
