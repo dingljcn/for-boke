@@ -330,7 +330,7 @@ function drawUI() {
         </div>`
     }).join('');
     let mainElement = getById('main');
-    mainElement.style.height = 'calc(100vh - 160px)';
+    mainElement.style.height = 'calc(100vh - 165px)';
     mainElement.innerHTML = `<div style="display: flex; margin: 30px 0; height: 100%">
         <div id="dinglj-nav-container" style="width: ${ context.config.style.guide.width }; min-width: ${ context.config.style.guide.width }; padding: 10px">
             ${ menus }
@@ -338,7 +338,7 @@ function drawUI() {
         <div id="dinglj-view-area" style="padding: 10px; flex: 1; height: 100%; display: flex; flex-direction: column;">
             <div id="dinglj-tab-name" style="position: relative; display: flex; margin: 5px 0;"></div>
             <div id="dinglj-tab-view" style="overflow-x: hidden; position: relative; flex: 1;">
-                <div id="dinglj-ticket-view" style="position: absolute; top: 20px; left: 0; transition: 0.4s"></div>
+                <div id="dinglj-ticket-view" style="position: absolute; top: 20px; left: 0; transition: 0.4s; calc(100% - 20px)"></div>
             </div>
         </div>
     </div>`;
@@ -436,10 +436,12 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
     // 根据要显示的 tab 页数量设置容器宽度
     getById('dinglj-ticket-view').style.width = `${ containerWidth * tabStrateges.length }px`;
     let views = tabStrateges.map(stratege => {
-        return `<div class="dinglj-ticket-list" style="transition: 0.4s; width: ${ containerWidth }px; display: inline-block; opacity: 0; vertical-align: top;">
-            <div style="width: 100%">
+        return `<div class="dinglj-ticket-list" style="height: 100%; transition: 0.4s; width: ${ containerWidth }px; display: inline-block; opacity: 0; vertical-align: top;">
+            <div style="width: 100%; display: flex; flex-direction: column; height: 100%">
                 ${ genTHead(groupName, stratege) }
-                ${ genTBody(groupName, stratege) }
+                <div style="flex: 1; overflow-y: scroll">
+                    ${ genTBody(groupName, stratege) }
+                </div>
             </div>
         </div>`;
     }).join('');
