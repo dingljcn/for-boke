@@ -233,3 +233,19 @@ function setMultiStyleToMultiClass(classNames = [], style) {
         }
     }
 }
+
+/**
+ * 从原单位转为分钟
+ * @param {number} number 数量
+ * @param {min|hour|day|week|month|year} originUnit 原单位
+ */
+function toMinute(number = 0, originUnit = 'hour') {
+    switch(originUnit) {
+        case 'year': return number * 60 * 24 * 365;
+        case 'month': return number * 60 * 24 * 30; 
+        case 'week': return number * 60 * 24 * 7;
+        case 'day': return number * 60 * 24;
+        case 'hour': return number * 60;
+        case 'min': return number;
+    }
+}

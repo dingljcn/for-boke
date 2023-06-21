@@ -467,8 +467,8 @@ function genTBody(groupName, stratege) {
             }
         }
         // 所有策略都没比较出大小, 最后就按变更号顺序排
-        let id1 = parseInt(ticket1.get(context.columns.id.en).substring(1));
-        let id2 = parseInt(ticket2.get(context.columns.id.en).substring(1));
+        let id1 = parseInt(ticket1.get(context.config.columns.id.en).substring(1));
+        let id2 = parseInt(ticket2.get(context.config.columns.id.en).substring(1));
         return id1 - id2;
     })
     return stratege.list.map(ticket => {
@@ -554,5 +554,29 @@ function fixTicketHref() {
             getById(`dinglj-is-view-${ ticketId }`).checked = true;
             window.open(`${ context.config.ticketURL }/${ ticketId }`);
         })
+    }
+}
+
+function parseToMinute(text) {
+    if (/\d+年 ago/.test(text)) {
+        let number = parseInt(text.replace('年 ago', ''));
+        return toMinute(number, 'year');
+    } else if (/\d+个月 ago/.test(text)) {
+        let number = parseInt(text.replace('个月 ago', ''));
+        return toMinute(number, 'month');
+    } else if (/\d+周 ago/.test(text)) {
+        let number = parseInt(text.replace('周 ago', ''));
+        return toMinute(number, 'week');
+    } else if (/\d+天 ago/.test(text)) {
+        let number = parseInt(text.replace('天 ago', ''));
+        return toMinute(number, 'day');
+    } else if (/\d+小时 ago/.test(text)) {
+        let number = parseInt(text.replace('小时 ago', ''));
+        return toMinute(number, 'hour');
+    } else if (/\d+分钟 ago/.test(text)) {
+        let number = parseInt(text.replace('分钟 ago', ''));
+        return toMinute(number, 'min');
+    } else {
+        return 0;
     }
 }
