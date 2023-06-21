@@ -103,6 +103,40 @@ class TabPageStratege {
     }
 }
 
+class OrderStratege {
+    columnKey; order; resolve;
+    constructor(columnKey = '', order, resolve = null) {
+        this.columnKey = columnKey;
+        this.resolve = resolve;
+        if (order instanceof Array) {
+            this.order = order;
+        } else {
+            this.order = [ order ];
+        }
+    }
+    /**
+     * 根据 order 数组顺序比较变更中的 columnKey 字段值, 当然, 如果维护了 reoslve, 则以 resolve 为主
+     * @param {Ticket} ticket1 变更1
+     * @param {Ticket} ticket2 变更2
+     */
+    compare(ticket1, ticket2) {
+        if (this.resolve == null) {
+            let n1 = ticket1.get(this.columnKey);
+            let n2 = ticket2.get(this.columnKey);
+            if (n1 == null || n2 == null) {
+                return 0;
+            }
+            let idx1 = this.order.indexOf(n1);
+            idx1 = idx1 == -1 ? 999999 : idx1;
+            let idx2 = this.order.indexOf(n2);
+            idx2 = idx2 == -1 ? 999999 : idx2;
+            return idx1 - idx2;
+        } else {
+            return this.resolve(ticket1, ticket2, this.columnKey);
+        }
+    }
+}
+
 class Filter {
     groupName; tabName; columnKey; expectValue; resolve;
     constructor(groupName = '*', tabName = '*', columnKey, expectValue, resolve = null) {
@@ -286,7 +320,7 @@ function drawUI() {
     let menus = context.groupNames.map(groupName => {
         let groupId = uuid('group');
         context.groupNameIdMap[groupName] = groupId;
-        return `<div style="transition: 0.4s; padding: 10px; margin: 5px; border-radius: 5px; position: relative; overflow: hidden" class="dinglj-nav-group-item" id=${ groupId }>
+        return `<div style="cursor: pointer; transition: 0.4s; padding: 10px; margin: 5px; border-radius: 5px; position: relative; overflow: hidden" class="dinglj-nav-group-item" id=${ groupId }>
             <div class="dinglj-nav-group-item-background" style="background-color: ${ context.config.style.guide.active.background }; transition: 0.4s; position: absolute; top: 0px; left: 0px; width: 0%; height: 100%"></div>
             <div style="position: relative; z-index: 999">${ groupName }</div>
         </div>`
@@ -398,8 +432,8 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
     let views = tabStrateges.map(stratege => {
         return `<div class="dinglj-ticket-list" style="transition: 0.4s; width: ${ containerWidth }px; display: inline-block; opacity: 0; vertical-align: top;">
             <div style="width: 100%">
-                ${ genTHead(groupName, containerWidth, stratege) }
-                ${ genTBody(groupName, containerWidth, stratege) }
+                ${ genTHead(groupName, stratege) }
+                ${ genTBody(groupName, stratege) }
             </div>
         </div>`;
     }).join('');
@@ -408,7 +442,7 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
     fixTicketHref();
 }
 
-function genTHead(groupName, containerWidth, stratege) {
+function genTHead(groupName, stratege) {
     let ignore = {};
     let tdList = stratege.list[0].cells.map(cell => {
         for (let filter of context.config.filter.column) {
@@ -423,8 +457,20 @@ function genTHead(groupName, containerWidth, stratege) {
     return `<div class="dinglj-table-head" style="padding: 5px 0; display: flex">${ tdList }</div>`;
 }
 
-function genTBody(groupName, containerWidth, stratege) {
+function genTBody(groupName, stratege) {
     let count = 0;
+    stratege.list.sort((ticket1, ticket2) => {
+        for (let orderStratege of context.config.stratege.order) { // 按下标顺序遍历所有排序策略, 如果比较出了先后则返回结果, 否则进入下一个策略, 直到所有策略都走一遍
+            let result = orderStratege.compare(ticket1, ticket2);
+            if (result != 0) {
+                return result;
+            }
+        }
+        // 所有策略都没比较出大小, 最后就按变更号顺序排
+        let id1 = parseInt(ticket1.get(context.columns.id.en).substring(1));
+        let id2 = parseInt(ticket2.get(context.columns.id.en).substring(1));
+        return id1 - id2;
+    })
     return stratege.list.map(ticket => {
         let tdList = ticket.cells.map(cell => {
             if (context.ignoreColumns.includes(cell.key)) {

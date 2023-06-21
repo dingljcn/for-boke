@@ -228,7 +228,7 @@ function setMultiStyleToMultiClass(classNames = [], style) {
     for (let className of classNames) {
         for (let element of getByClass(className)) {
             for (let key of Object.keys(style)) {
-                element[key] = style[key];
+                element.style[key] = style[key];
             }
         }
     }
