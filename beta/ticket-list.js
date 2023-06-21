@@ -249,8 +249,8 @@ function drawUI() {
         </div>
         <div id="dinglj-view-area" style="padding: 10px;flex: 1">
             <div id="dinglj-tab-name" style="position: relative; display: flex; margin: 5px 0;"></div>
-            <div id="dinglj-tab-view" style="overflow-x: hidden">
-                <div id="dinglj-ticket-view"></div>
+            <div id="dinglj-tab-view" style="overflow-x: hidden; position: relative; height: 100%;">
+                <div id="dinglj-ticket-view" style="position: absolute; top: 0; left: 0; transition: 0.4s"></div>
             </div>
         </div>
     </div>`;
@@ -309,8 +309,10 @@ function drawTabHead(groupName) {
     if (list.length == 0) {
         return;
     }
-    // 显示变更区域的宽度
-    let containerWidth = getById('dinglj-tab-view').offsetWidth;
+    // 获取并固定显示变更区域的宽度
+    let container = getById('dinglj-tab-view');
+    let containerWidth = container.offsetWidth;
+    container.style.maxWidth = `${ containerWidth }px`;
     // 显示变更再界面上
     drawTabPage(groupName, containerWidth, tabStrateges);
     // 把下划线设置为第一个 tabName 的长度
@@ -330,10 +332,17 @@ function drawTabHead(groupName) {
         let left = element.offsetLeft - margin;
         underLine.style.width = `${ width }px`;
         underLine.style.left = `${ left }px`;
+        let idx = indexOfPropInList(tabStrateges, tabName, element.innerHTML);
+        getById('dinglj-ticket-view').style.left = `${ -1 * idx * tabStrateges.length }px`;
     });
 }
 
 /** 绘制 */
 function drawTabPage(groupName, containerWidth, tabStrateges) {
-
+    // 根据要显示的 tab 页数量设置容器宽度
+    getById('dinglj-ticket-view').style.width = `${ containerWidth * tabStrateges.length }px`;
+    let views = tabStrateges.map(stratege => {
+        return `<div style="width: ${ containerWidth }px; display: inline-block">${ stratege.tabName }</div>`;
+    }).join('');
+    getById('dinglj-ticket-view').innerHTML = views;
 }
