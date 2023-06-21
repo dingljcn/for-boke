@@ -217,11 +217,11 @@ function run(config = null) {
         console.log(context.config);
         getColumnsInURL();
         if (!context.columns.includes(context.config.groupBy)) {
-            if (context.config.groupBy == '') {
-                alert('无分组字段, 请在脚本中指定 config.groupBy, 或者在界面上选择按什么分组');
-            } else {
-                let groupColumn = context.config.columns[context.config.groupBy];
+            let groupColumn = context.config.columns[context.config.groupBy];
+            if (groupColumn && groupColumn.en && groupColumn.zh) {
                 alert(`当前显示的列中没有分组列: ${ groupColumn.en } - ${ groupColumn.zh }, 你需要将该列放出来, 或者修改脚本中的 config.groupBy 为你想要的分组列`);
+            } else {
+                alert('无分组字段, 请在脚本中指定 config.groupBy, 或者在界面上选择按什么分组');
             }
             return;
         }
