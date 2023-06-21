@@ -381,6 +381,7 @@ function drawTabHead(groupName) {
         underLine.style.width = `${ width }px`;
         underLine.style.left = `${ left }px`;
         let idx = indexOfPropInList(tabStrateges, 'tabName', element.innerHTML);
+        getById('dinglj-ticket-list').style.opacity = 1;
         getById('dinglj-ticket-view').style.left = `${ -1 * idx * containerWidth }px`;
     });
     list[0].click();
@@ -391,7 +392,7 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
     // 根据要显示的 tab 页数量设置容器宽度
     getById('dinglj-ticket-view').style.width = `${ containerWidth * tabStrateges.length }px`;
     let views = tabStrateges.map(stratege => {
-        return `<div style="width: ${ containerWidth }px; display: inline-block; vertical-align: top;">
+        return `<div style="width: ${ containerWidth }px; display: inline-block; opacity: 0; vertical-align: top;">
             <table>
                 <thead>${ genTHead(groupName, containerWidth, stratege) }</thead>
                 <tbody>${ genTBody(groupName, containerWidth, stratege) }</tbody>
@@ -410,7 +411,7 @@ function genTHead(groupName, containerWidth, stratege) {
                 return '';
             }
         }
-        return `<td class="dinglj-col-${ cell.key }">${ cell.name }</td>`
+        return `<td style="padding: 0 5px; line-height: 30px" class="dinglj-col-${ cell.key }">${ cell.name }</td>`
     }).join('');
     context.ignoreColumns = Object.keys(ignore);
     return `<tr>${ tdList }</tr>`;
@@ -429,8 +430,8 @@ function genTBody(groupName, containerWidth, stratege) {
                     break;
                 }
             }
-            return ignoreRow ? '' : `<td>${ cell.value }</td>`;
+            return ignoreRow ? '' : `<td style="padding: 0 5px; line-height: 30px">${ cell.value }</td>`;
         }).join('');
-        return `<tr>${ tdList }</tr>`
+        return `<tr style="border-top: 1px solid rgba(0, 0, 0, 0.3)">${ tdList }</tr>`
     }).join('');
 }
