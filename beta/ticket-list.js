@@ -417,5 +417,20 @@ function genTHead(groupName, containerWidth, stratege) {
 }
 
 function genTBody(groupName, containerWidth, stratege) {
-    return 'tbody';
+    return stratege.list.map(ticket => {
+        let tdList = ticket.cells.map(cell => {
+            if (context.ignoreColumns.includes(cell.key)) {
+                return '';
+            }
+            let ignoreRow = false;
+            for (let filter of context.config.filter.row) {
+                if (filter.condition(groupName, stratege.tabName, stratege.list, ticket, cell)) {
+                    ignoreRow = true;
+                    break;
+                }
+            }
+            return ignoreRow ? '' : `<td>${ cell.value }</td>`;
+        }).join('');
+        return `<tr>${ tdList }</tr>`
+    }).join('');
 }
