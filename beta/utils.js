@@ -217,3 +217,9 @@ function getChildrenByClassName(parent, className) {
     }
     return result;
 }
+
+function setStyleByClassName(className, key, value) {
+    for (let element of getByClass(className)) {
+        element.style[key] = value;
+    }
+}

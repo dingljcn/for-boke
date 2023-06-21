@@ -454,6 +454,7 @@ function fixStyle() {
         let ticketElement = getChildrenByClassName(element, `dinglj-column-data-${ context.config.columns.id.en }`)[0];
         ticketElement.children[1].style.color = context.config.style.table.row.current.color;
     }, (element, event) => {
+        let ticketElement = getChildrenByClassName(element, `dinglj-column-data-${ context.config.columns.id.en }`)[0];
         ticketElement.children[1].style.color = context.config.style.table.row.ticketIdColor;
         setTrStyle(element);
     });
@@ -461,7 +462,17 @@ function fixStyle() {
         head.style.background = context.config.style.table.head.background;
         head.style.color = context.config.style.table.head.color;
     }
-
+    // 取第一行即可, 遍历每一列, 设置其属性
+    for (let cell of list[0].children) {
+        let columnKey = cell.className.replace('dinglj-col-', '').replace('dinglj-column-data-', '');
+        let styleConfig = context.config.style.table.column[columnKey];
+        if (styleConfig) {
+            for (let styleKey of Object.keys(styleConfig)) {
+                setStyleByClassName('dinglj-col-' + columnKey, styleKey, styleConfig[styleKey]);
+                setStyleByClassName('dinglj-column-data-' + columnKey, styleKey, styleConfig[styleKey]);
+            }
+        }
+    }
 }
 
 /**
