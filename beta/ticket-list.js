@@ -417,7 +417,7 @@ function genTHead(groupName, containerWidth, stratege) {
                 return '';
             }
         }
-        return `<td style="text-align: center; font-weight: bold; padding: 0 5px; line-height: 30px" class="dinglj-col-${ cell.key }">${ cell.name }</td>`
+        return `<td style="min-width: 80px; text-align: center; font-weight: bold; padding: 0 5px; line-height: 30px" class="dinglj-col-${ cell.key }">${ cell.name }</td>`
     }).join('');
     context.ignoreColumns = Object.keys(ignore);
     return `<tr class="dinglj-table-head" style="padding: 5px 0; ">${ tdList }</tr>`;
