@@ -198,7 +198,7 @@ function onUtils_Js_Load(callback) {
     // 引入通用脚本
     let utilScript = document.createElement('script');
     utilScript.type = 'text/javascript';
-    utilScript.src = 'https://dingljcn.github.io/for-boke/release/utils.js?' + Math.random();
+    utilScript.src = 'https://dingljcn.github.io/for-boke/beta/utils.js?' + Math.random();
     // 脚本加载完成之后读取开始读配置, 启动脚本
     utilScript.onload = async function() {
         callback();
@@ -217,14 +217,19 @@ function run(config = null) {
         console.log(context.config);
         getColumnsInURL();
         if (!context.columns.includes(context.config.groupBy)) {
-            let groupColumn = context.config.columns[context.config.groupBy];
-            alert(`当前显示的列中没有分组列: ${ groupColumn.en } - ${ groupColumn.zh }, 你需要将该列放出来, 或者修改脚本中的 config.groupBy 为你想要的分组列`);
+            if (context.config.groupBy == '') {
+                alert('无分组字段, 请在脚本中指定 config.groupBy, 或者在界面上选择按什么分组');
+            } else {
+                let groupColumn = context.config.columns[context.config.groupBy];
+                alert(`当前显示的列中没有分组列: ${ groupColumn.en } - ${ groupColumn.zh }, 你需要将该列放出来, 或者修改脚本中的 config.groupBy 为你想要的分组列`);
+            }
             return;
         }
         readTickets();
         logNotMatchGroup();
         sortGroupNames();
         drawUI();
+        getById('footer') ? getById('footer').remove() : '';
     } else {
         console.log('当前网址不符合以下匹配规则:');
         console.log(context.config.matchList);
@@ -325,14 +330,16 @@ function drawUI() {
             <div style="position: relative; z-index: 999">${ groupName }</div>
         </div>`
     }).join('');
-    getById('main').innerHTML = `<div style="display: flex; margin: 30px 0">
+    let mainElement = getById('main');
+    mainElement.style.height = 'calc(100vh - 165px)';
+    mainElement.innerHTML = `<div style="display: flex; margin: 30px 0; height: 100%">
         <div id="dinglj-nav-container" style="width: ${ context.config.style.guide.width }; min-width: ${ context.config.style.guide.width }; padding: 10px">
             ${ menus }
         </div>
-        <div id="dinglj-view-area" style="padding: 10px;flex: 1">
+        <div id="dinglj-view-area" style="padding: 10px; flex: 1; height: 100%; display: flex; flex-direction: column;">
             <div id="dinglj-tab-name" style="position: relative; display: flex; margin: 5px 0;"></div>
-            <div id="dinglj-tab-view" style="overflow-x: hidden; position: relative; height: 100%;">
-                <div id="dinglj-ticket-view" style="position: absolute; top: 20px; left: 0; transition: 0.4s"></div>
+            <div id="dinglj-tab-view" style="overflow-x: hidden; position: relative; flex: 1;">
+                <div id="dinglj-ticket-view" style="position: absolute; top: 20px; left: 0; transition: 0.4s; height: calc(100% - 20px)"></div>
             </div>
         </div>
     </div>`;
@@ -430,10 +437,12 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
     // 根据要显示的 tab 页数量设置容器宽度
     getById('dinglj-ticket-view').style.width = `${ containerWidth * tabStrateges.length }px`;
     let views = tabStrateges.map(stratege => {
-        return `<div class="dinglj-ticket-list" style="transition: 0.4s; width: ${ containerWidth }px; display: inline-block; opacity: 0; vertical-align: top;">
-            <div style="width: 100%">
+        return `<div class="dinglj-ticket-list" style="height: 100%; transition: 0.4s; width: ${ containerWidth }px; display: inline-block; opacity: 0; vertical-align: top;">
+            <div style="width: 100%; display: flex; flex-direction: column; height: 100%">
                 ${ genTHead(groupName, stratege) }
-                ${ genTBody(groupName, stratege) }
+                <div style="flex: 1; overflow-y: scroll">
+                    ${ genTBody(groupName, stratege) }
+                </div>
             </div>
         </div>`;
     }).join('');
