@@ -413,7 +413,7 @@ function genTHead(groupName, containerWidth, stratege) {
         return `<td class="dinglj-col-${ cell.key }">${ cell.name }</td>`
     }).join('');
     context.ignoreColumns = Object.keys(ignore);
-    return `<td>${ tdList }</td>`;
+    return `<tr>${ tdList }</tr>`;
 }
 
 function genTBody(groupName, containerWidth, stratege) {
