@@ -133,7 +133,7 @@ class Filter {
                 }
                 return false;
             } else {
-                return this.resolve(groupName, tabName, list, ticket);
+                return this.resolve(groupName, tabName, list, ticket, cell);
             }
         }
         return false;
@@ -391,7 +391,7 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
     // 根据要显示的 tab 页数量设置容器宽度
     getById('dinglj-ticket-view').style.width = `${ containerWidth * tabStrateges.length }px`;
     let views = tabStrateges.map(stratege => {
-        return `<div style="width: ${ containerWidth }px; display: inline-block">
+        return `<div style="width: ${ containerWidth }px; display: inline-block; vertical-align: top;">
             <table>
                 <thead>${ genTHead(groupName, containerWidth, stratege) }</thead>
                 <tbody>${ genTBody(groupName, containerWidth, stratege) }</tbody>
