@@ -193,3 +193,15 @@ function toggleStyle(elements = [], element, activeStyle = {}, inActiveStyle = {
         element.style[styleKey] = activeStyle[styleKey];
     }
 }
+
+/** 设置一对鼠标事件: 移入/移出 */
+function mouseIOEvent(elements = [], mouseIn, mouseOut) {
+    for (let element of elements) {
+        element.addEventListener('mouseover', event => {
+            mouseIn(element, event);
+        });
+        element.addEventListener('mouseout', event => {
+            mouseOut(element, event);
+        });
+    }
+}

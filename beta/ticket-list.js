@@ -381,10 +381,14 @@ function drawTabHead(groupName) {
         underLine.style.width = `${ width }px`;
         underLine.style.left = `${ left }px`;
         let idx = indexOfPropInList(tabStrateges, 'tabName', element.innerHTML);
-        getById('dinglj-ticket-list').style.opacity = 1;
+        for (let item of getByClass('dinglj-ticket-list')) {
+            setTimeout(() => {
+                item.style.opacity = 1;
+            }, 400)
+        }
         getById('dinglj-ticket-view').style.left = `${ -1 * idx * containerWidth }px`;
     });
-    list[0].click();
+    return list[0];
 }
 
 /** 绘制 */
@@ -392,7 +396,7 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
     // 根据要显示的 tab 页数量设置容器宽度
     getById('dinglj-ticket-view').style.width = `${ containerWidth * tabStrateges.length }px`;
     let views = tabStrateges.map(stratege => {
-        return `<div style="width: ${ containerWidth }px; display: inline-block; opacity: 0; vertical-align: top;">
+        return `<div class="dinglj-ticket-list" style="transition: 0.4s; width: ${ containerWidth }px; display: inline-block; opacity: 0; vertical-align: top;">
             <table>
                 <thead>${ genTHead(groupName, containerWidth, stratege) }</thead>
                 <tbody>${ genTBody(groupName, containerWidth, stratege) }</tbody>
@@ -400,6 +404,7 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
         </div>`;
     }).join('');
     getById('dinglj-ticket-view').innerHTML = views;
+    fixStyle();
 }
 
 function genTHead(groupName, containerWidth, stratege) {
@@ -414,10 +419,11 @@ function genTHead(groupName, containerWidth, stratege) {
         return `<td style="padding: 0 5px; line-height: 30px" class="dinglj-col-${ cell.key }">${ cell.name }</td>`
     }).join('');
     context.ignoreColumns = Object.keys(ignore);
-    return `<tr>${ tdList }</tr>`;
+    return `<tr style="padding: 5px 0; ">${ tdList }</tr>`;
 }
 
 function genTBody(groupName, containerWidth, stratege) {
+    let count = 0;
     return stratege.list.map(ticket => {
         let tdList = ticket.cells.map(cell => {
             if (context.ignoreColumns.includes(cell.key)) {
@@ -432,6 +438,33 @@ function genTBody(groupName, containerWidth, stratege) {
             }
             return ignoreRow ? '' : `<td style="padding: 0 5px; line-height: 30px">${ cell.value }</td>`;
         }).join('');
-        return `<tr style="border-top: 1px solid rgba(0, 0, 0, 0.3)">${ tdList }</tr>`
+        return `<tr class="dinglj-table-tr dinglj-${ (++count) % 2 == 0 ? 'even' : 'odd' }" style="padding: 5px 0; border-top: 1px solid rgba(0, 0, 0, 0.1)">${ tdList }</tr>`
     }).join('');
+}
+
+function fixStyle() {
+    let list = getByClass('dinglj-table-tr');
+    for (let tr of list) {
+        setTrStyle(tr);
+    }
+    mouseIOEvent(list, (element, event) => {
+        element.style.background = context.config.style.table.row.current.background;
+        element.style.color = context.config.style.table.row.current.color;
+    }, (element, event) => {
+        setTrStyle(element);
+    })
+}
+
+/**
+ * 设置行本应具有的样式
+ * @param {Element} element <tr/>
+ */
+function setTrStyle(element) {
+    if (element.classList.contains('dinglj-even')) {
+        element.style.background = context.config.style.table.row.even.background;
+        element.style.color = context.config.style.table.row.even.color;
+    } else if (element.classList.contains('dinglj-odd')) {
+        element.style.background = context.config.style.table.row.odd.background;
+        element.style.color = context.config.style.table.row.odd.color;
+    }
 }
