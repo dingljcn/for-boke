@@ -122,12 +122,16 @@ class Filter {
      * @param {string} tabName tab
      * @param {Ticket[]} list 该 tab 页下所有变更
      * @param {Ticket} ticket 变更
+     * @param {Cell} cell 列
      */
-    condition(groupName, tabName, list = [], ticket) {
+    condition(groupName, tabName, list = [], ticket, cell) {
         if (isValid(this.groupName, groupName) && isValid(this.tabName, tabName)) {
             if (this.resolve == null) {
-                let cell = ticket.findCell(this.columnKey);
-                return cell != null && this.expectValue.includes(cell.value);
+                if (cell.key == this.columnKey) {
+                    let cellValue = ticket.get(this.columnKey);
+                    return this.expectValue.includes(cell.cellValue)
+                }
+                return false;
             } else {
                 return this.resolve(groupName, tabName, list, ticket);
             }
@@ -388,7 +392,7 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
     let views = tabStrateges.map(stratege => {
         return `<div style="width: ${ containerWidth }px; display: inline-block">
             <table>
-                <thead>${ genTHead(groupName, containerWidth, stratege) }</thead>
+                <thead><tr>${ genTHead(groupName, containerWidth, stratege) }</tr></thead>
                 <tbody>${ genTBody(groupName, containerWidth, stratege) }</tbody>
             </table>
         </div>`;
@@ -397,9 +401,9 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
 }
 
 function genTHead(groupName, containerWidth, stratege) {
-    return stratege.list[0].cell.map(cell => {
+    return stratege.list[0].cells.map(cell => {
         for (let filter of context.config.filter.column) {
-            if (filter.condition(groupName, stratege.tabName, stratege.list, stratege.list[0])) {
+            if (filter.condition(groupName, stratege.tabName, stratege.list, stratege.list[0], cell)) {
                 context.ignoreColumns.push(cell.key);
                 return '';
             }
@@ -409,5 +413,5 @@ function genTHead(groupName, containerWidth, stratege) {
 }
 
 function genTBody(groupName, containerWidth, stratege) {
-    
+    return 'tbody';
 }
