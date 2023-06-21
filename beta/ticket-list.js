@@ -298,7 +298,7 @@ function drawUI() {
         <div id="dinglj-view-area" style="padding: 10px;flex: 1">
             <div id="dinglj-tab-name" style="position: relative; display: flex; margin: 5px 0;"></div>
             <div id="dinglj-tab-view" style="overflow-x: hidden; position: relative; height: 100%;">
-                <div id="dinglj-ticket-view" style="position: absolute; top: 0; left: 0; transition: 0.4s"></div>
+                <div id="dinglj-ticket-view" style="position: absolute; top: 20px; left: 0; transition: 0.4s"></div>
             </div>
         </div>
     </div>`;
@@ -397,7 +397,7 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
     getById('dinglj-ticket-view').style.width = `${ containerWidth * tabStrateges.length }px`;
     let views = tabStrateges.map(stratege => {
         return `<div class="dinglj-ticket-list" style="transition: 0.4s; width: ${ containerWidth }px; display: inline-block; opacity: 0; vertical-align: top;">
-            <table cellspacing="0">
+            <table cellspacing="0" style="width: 100%">
                 <thead>${ genTHead(groupName, containerWidth, stratege) }</thead>
                 <tbody>${ genTBody(groupName, containerWidth, stratege) }</tbody>
             </table>
@@ -417,7 +417,7 @@ function genTHead(groupName, containerWidth, stratege) {
                 return '';
             }
         }
-        return `<td style="padding: 0 5px; line-height: 30px" class="dinglj-col-${ cell.key }">${ cell.name }</td>`
+        return `<td style="text-align: center; font-weight: bold; padding: 0 5px; line-height: 30px" class="dinglj-col-${ cell.key }">${ cell.name }</td>`
     }).join('');
     context.ignoreColumns = Object.keys(ignore);
     return `<tr class="dinglj-table-head" style="padding: 5px 0; ">${ tdList }</tr>`;
@@ -437,7 +437,7 @@ function genTBody(groupName, containerWidth, stratege) {
                     break;
                 }
             }
-            return ignoreRow ? '' : `<td class="dinglj-column-data-${ cell.key }" style="padding: 0 5px; line-height: 30px">${ cell.value }</td>`;
+            return ignoreRow ? '' : `<td class="dinglj-column-data-${ cell.key }" style="text-align: center; padding: 0 5px; line-height: 30px">${ cell.value }</td>`;
         }).join('');
         return `<tr class="dinglj-table-tr dinglj-${ (++count) % 2 == 0 ? 'even' : 'odd' }" style="padding: 5px 0;">${ tdList }</tr>`
     }).join('');
@@ -491,6 +491,7 @@ function setTrStyle(element) {
 
 function fixTicketHref() {
     for (let ticketIdElement of getByClass(`dinglj-column-data-${ context.config.columns.id.en }`)) {
+        ticketIdElement.style.cursor = 'pointer';
         let origin = ticketIdElement.innerText;
         let ticketId = origin.replace('#', '');
         ticketIdElement.innerHTML = `<input type="checkbox" id="dinglj-is-view-${ ticketId }" style="margin-right: 5px"/><span style="color: ${ context.config.style.table.row.ticketIdColor }">${ origin }</span>`;
