@@ -229,6 +229,7 @@ function run(config = null) {
         logNotMatchGroup();
         sortGroupNames();
         drawUI();
+        getById('footer') ? getById('footer').remove() : '';
     } else {
         console.log('当前网址不符合以下匹配规则:');
         console.log(context.config.matchList);
@@ -536,7 +537,6 @@ function fixStyle() {
     }
     let summaryClassNames = [ 'dinglj-column-data-' + context.config.columns.summary.en, 'dinglj-col-' + context.config.columns.summary.en ];
     setMultiStyleToMultiClass(summaryClassNames, summaryFinalStyle);
-    getById('footer').remove();
 }
 
 /**
