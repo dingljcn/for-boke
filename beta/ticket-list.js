@@ -339,7 +339,7 @@ function drawUI() {
         <div id="dinglj-view-area" style="padding: 10px; flex: 1; height: 100%; display: flex; flex-direction: column;">
             <div id="dinglj-tab-name" style="position: relative; display: flex; margin: 5px 0;"></div>
             <div id="dinglj-tab-view" style="overflow-x: hidden; position: relative; flex: 1;">
-                <div id="dinglj-ticket-view" style="position: absolute; top: 20px; left: 0; transition: 0.4s; calc(100% - 20px)"></div>
+                <div id="dinglj-ticket-view" style="position: absolute; top: 20px; left: 0; transition: 0.4s; height: calc(100% - 20px)"></div>
             </div>
         </div>
     </div>`;
