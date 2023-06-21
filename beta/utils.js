@@ -223,3 +223,11 @@ function setStyleByClassName(className, key, value) {
         element.style[key] = value;
     }
 }
+
+function setMultiStyleToMultiClass(className = [], style) {
+    for (let element of getByClass(className)) {
+        for (let key of Object.keys(style)) {
+            element[key] = style[key];
+        }
+    }
+}

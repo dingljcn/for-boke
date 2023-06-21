@@ -474,7 +474,14 @@ function fixStyle() {
         }
     }
     // 概述列, 永远自适应宽度
-    setStyleByClassName('dinglj-column-data' + context.config.columns.summary.en, 'flex', 1);
+    let summaryFinalStyle = {
+        flex: 1,
+        width: '',
+        maxWidth: '',
+        minWidth: '',
+    }
+    let summaryClassNames = [ 'dinglj-column-data-' + context.config.columns.summary.en, 'dinglj-col-' + context.config.columns.summary.en ];
+    setMultiStyleToMultiClass(summaryClassNames, summaryFinalStyle);
 }
 
 /**
