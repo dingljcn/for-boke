@@ -397,10 +397,10 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
     getById('dinglj-ticket-view').style.width = `${ containerWidth * tabStrateges.length }px`;
     let views = tabStrateges.map(stratege => {
         return `<div class="dinglj-ticket-list" style="transition: 0.4s; width: ${ containerWidth }px; display: inline-block; opacity: 0; vertical-align: top;">
-            <table cellspacing="0" style="width: 100%">
-                <thead>${ genTHead(groupName, containerWidth, stratege) }</thead>
-                <tbody>${ genTBody(groupName, containerWidth, stratege) }</tbody>
-            </table>
+            <div style="width: 100%">
+                ${ genTHead(groupName, containerWidth, stratege) }
+                ${ genTBody(groupName, containerWidth, stratege) }
+            </div>
         </div>`;
     }).join('');
     getById('dinglj-ticket-view').innerHTML = views;
@@ -417,10 +417,10 @@ function genTHead(groupName, containerWidth, stratege) {
                 return '';
             }
         }
-        return `<td style="min-width: 80px; max-width: 80px; text-align: center; font-weight: bold; padding: 0 5px; line-height: 30px" class="dinglj-col-${ cell.key }">${ cell.name }</td>`
+        return `<div style="min-width: 80px; max-width: 80px; text-align: center; font-weight: bold; padding: 0 5px; line-height: 30px" class="dinglj-col-${ cell.key }">${ cell.name }</td>`
     }).join('');
     context.ignoreColumns = Object.keys(ignore);
-    return `<tr class="dinglj-table-head" style="padding: 5px 0; ">${ tdList }</tr>`;
+    return `<div class="dinglj-table-head" style="padding: 5px 0; display: flex">${ tdList }</div>`;
 }
 
 function genTBody(groupName, containerWidth, stratege) {
@@ -437,9 +437,9 @@ function genTBody(groupName, containerWidth, stratege) {
                     break;
                 }
             }
-            return ignoreRow ? '' : `<td class="dinglj-column-data-${ cell.key }" style="min-width: 80px; max-width: 80px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; text-align: center; padding: 0 5px; line-height: 30px">${ cell.value }</td>`;
+            return ignoreRow ? '' : `<div class="dinglj-column-data-${ cell.key }" style="min-width: 80px; max-width: 80px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; text-align: center; padding: 0 5px; line-height: 30px">${ cell.value }</td>`;
         }).join('');
-        return `<tr class="dinglj-table-tr dinglj-${ (++count) % 2 == 0 ? 'even' : 'odd' }" style="padding: 5px 0;">${ tdList }</tr>`
+        return `<div class="dinglj-table-tr dinglj-${ (++count) % 2 == 0 ? 'even' : 'odd' }" style="display: flex; padding: 5px 0;">${ tdList }</tr>`
     }).join('');
 }
 
@@ -473,11 +473,13 @@ function fixStyle() {
             }
         }
     }
+    // 概述列, 永远自适应宽度
+    setStyleByClassName('dinglj-column-data' + context.config.columns.summary.en, 'flex', 1);
 }
 
 /**
  * 设置行本应具有的样式
- * @param {Element} element <tr/>
+ * @param {Element} element <div/>
  */
 function setTrStyle(element) {
     if (element.classList.contains('dinglj-even')) {
