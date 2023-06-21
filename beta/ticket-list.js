@@ -247,7 +247,12 @@ function drawUI() {
         <div id="dinglj-nav-container" style="width: ${ context.config.style.guide.width }; min-width: ${ context.config.style.guide.width }; padding: 10px">
             ${ menus }
         </div>
-        <div id="dinglj-view-area" style="flex: 1"></div>
+        <div id="dinglj-view-area" style="padding: 10px;flex: 1">
+            <div id="dinglj-tab-name" style="position: relative; display: flex; margin: 5px 0;"></div>
+            <div id="dinglj-tab-view" style="overflow-x: hidden">
+                <div id="dinglj-ticket-view"></div>
+            </div>
+        </div>
     </div>`;
     let navItems = getByClass('dinglj-nav-group-item');
     let navItemsBackground = getByClass('dinglj-nav-group-item-background');
@@ -274,6 +279,7 @@ function displayTickets(element) {
     let groupName = element.children[1].innerText;
     let list = context.groups[groupName];
     dispatchTab(groupName, list);
+    drawTabHead(groupName);
     console.log(context.config.stratege.tab);
 }
 
@@ -288,4 +294,46 @@ function dispatchTab(groupName, list = []) {
             stratege.push(groupName, ticket);
         }
     }
+}
+
+/** 绘制 tab 头 */
+function drawTabHead(groupName) {
+    const margin = 5;
+    // 只显示有变更的 tab 页
+    let tabStrateges = context.config.stratege.tab.filter(stratege => stratege.list.length > 0);
+    let tabHTML = tabStrateges.map(stratege => {
+        return `<div class="tab-name-item" id="${ stratege.tagId }" style="cursor: pointer; transition: 0.4s; padding: 5px; margin: ${ margin }px">${ stratege.tabName }</div>`;
+    }).join('');
+    getById('dinglj-tab-name').innerHTML = `${ tabHTML }<div id="tab-name-underline" style="height: 3px; width: 60px; transition: 0.4s; background: ${ context.config.style.tab.underlineColor }; position: absolute; bottom: 0px; left: 0px"></div>`;
+    let list = getByClass('tab-name-item');
+    if (list.length == 0) {
+        return;
+    }
+    // 显示变更区域的宽度
+    let containerWidth = getById('dinglj-tab-view').offsetWidth;
+    // 显示变更再界面上
+    drawTabPage(groupName, containerWidth, tabStrateges);
+    // 把下划线设置为第一个 tabName 的长度
+    let firstTabPage = getByClass('tab-name-item')[0];
+    let width = firstTabPage.offsetWidth + (margin * 2);
+    let underLine = getById('tab-name-underline');
+    underLine.style.width = `${ width }px`;
+    // 切换 tab 页时
+    listActiveChange(list, {
+        fontWeight: 'bold',
+        color: context.config.style.tab.activeColor
+    }, {
+        fontWeight: 'normal',
+        color: 'black'
+    }, (element, event) => {
+        let width = element.offsetWidth + margin * 2;
+        let left = element.offsetLeft - margin;
+        underLine.style.width = `${ width }px`;
+        underLine.style.left = `${ left }px`;
+    });
+}
+
+/** 绘制 */
+function drawTabPage(groupName, containerWidth, tabStrateges) {
+
 }
