@@ -95,11 +95,12 @@ async function drawLineNumber() {
         let container = getById('dinglj-line-number-container');
         let data = dljCtx001.lineNumbers.map(n => `<div class="line-number-item" id="line-number-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
         container.innerHTML = data;
-    }, 500);
+    }, 150);
 }
 
 /** 绑定各种切换事件 */
 function bindClickEvent() {
+    console.log('bind');
     onLineNumberChange();
     onStepChange();
     onHistoryChange();
@@ -119,7 +120,7 @@ function onLineNumberChange() {
             let container = getById('dinglj-steps-container');
             let data = dljCtx001.lineNumbers[element.innerText].map(n => `<div class="step-item" id="step-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
             container.innerHTML = data;
-        }, 500);
+        }, 150);
     });
 }
 
