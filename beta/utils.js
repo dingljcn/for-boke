@@ -250,3 +250,19 @@ function toSecond(number = 0, originUnit = 'hour') {
         case 'sec': return number;
     }
 }
+
+/**
+ * 简单的 get 请求
+ * @param {string} path 完整地址或相对地址
+ * @param {Function} callback 回调函数
+ */
+function get(path = '', callback = res => {}) {
+    const http = new XMLHttpRequest();
+    http.open('GET', path);
+    http.send();
+    http.onreadystatechange = res => {
+        if (http.readyState == 4 && http.status == 200) {
+            callback(http.responseText);
+        }
+    }
+}
