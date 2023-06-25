@@ -1,5 +1,3 @@
-let config = {};
-
 const dljCtx001 = {};
 
 function run(callback) {
@@ -26,15 +24,16 @@ function appendScript(callback, url) {
 }
 
 function onUtilLoad(callback) {
-    config = callback();
+    dljCtx001.config = callback();
     console.log('传入的配置: ');
-    console.log(config);
-    if (!isMatch(config)) {
+    console.log(dljCtx001.config);
+    if (!isMatch(dljCtx001.config)) {
         console.error('不符合以下地址匹配规则');
-        console.error(config.matchList);
+        console.error(dljCtx001.config.matchList);
         return;
     }
     initLayout();
+    bindClickEvent();
 }
 
 function initLayout() {
@@ -61,7 +60,7 @@ function initLayout() {
         <div style="height: 100%; flex: 1; display: flex; flex-direction: column">
             <div id="dinglj-this-picture-info-conatiner" style="min-height: 40px; max-height: 40px"></div>
             <div style="flex: 1; position: relative">
-                <img id="dinglj-this-picture" src="1/5/0_重启.png" style="box-shadow: 0 0 10px -3px grey; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 5px;max-width: 98%; max-height: 98%">
+                <img id="dinglj-this-picture" src="1/7/0_重启.png" style="box-shadow: 0 0 10px -3px grey; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 5px;max-width: 98%; max-height: 98%">
             </div>
             <div id="dinglj-this-picture-operate-container" style="min-height: 50px; max-height: 50px"></div>
         </div>
@@ -72,4 +71,32 @@ function initLayout() {
             </div>
         </div>
     </div>`;
+}
+
+/** 绑定各种切换事件 */
+function bindClickEvent() {
+    onLineNumberChange();
+    onStepChange();
+    onHistoryChange();
+    onStarChange();
+}
+
+/** 切换行时 */
+function onLineNumberChange() {
+
+}
+
+/** 切换步骤时 */
+function onStepChange() {
+
+}
+
+/** 切换历史图片时 */
+function onHistoryChange() {
+
+}
+
+/** 切换重点图片 */
+function onStarChange() {
+
 }
