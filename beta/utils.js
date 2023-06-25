@@ -256,7 +256,7 @@ function toSecond(number = 0, originUnit = 'hour') {
  * @param {string} path 完整地址或相对地址
  * @param {Function} callback 回调函数
  */
-function get(path = '', callback = res => {}) {
+async function get(path = '', callback = res => {}) {
     const http = new XMLHttpRequest();
     http.open('GET', path);
     http.send();
