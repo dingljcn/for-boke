@@ -54,8 +54,8 @@ function initLayout() {
     </div>
     <div style="flex: 1; display: flex; position: relative">
         <div style="height: 100%; max-width: 250px; min-width: 250px; display: flex">
-            <div id="dinglj-line-number-container" style="max-width: 80px; min-width: 80px"></div>
-            <div id="dinglj-steps-container" style="flex: 1"></div>
+            <div id="dinglj-line-number-container" style="max-width: 80px; min-width: 80px; overflow-y: scroll"></div>
+            <div id="dinglj-steps-container" style="flex: 1; overflow-y: scroll"></div>
         </div>
         <div style="height: 100%; flex: 1; display: flex; flex-direction: column">
             <div id="dinglj-this-picture-info-conatiner" style="min-height: 40px; max-height: 40px"></div>
@@ -71,6 +71,9 @@ function initLayout() {
             </div>
         </div>
     </div>`;
+    let maxHeight = getById('dinglj-line-number-container').offsetHeight + 'px';
+    getById('dinglj-line-number-container').maxHeight = maxHeight;
+    getById('dinglj-steps-container').maxHeight = maxHeight;
 }
 
 /** 绑定各种切换事件 */
@@ -82,8 +85,26 @@ function bindClickEvent() {
 }
 
 /** 切换行时 */
-function onLineNumberChange() {
+async function onLineNumberChange() {
+    await getLineNumbers();
+    drawLineNumber();
+}
 
+/** 读取行号 */
+async function getLineNumbers() {
+    let reg = /.*<a href="([0-9]+\/)".*/;
+    await get('1', res => {
+        dljCtx001.lineNumbers = res.split('\n')
+            .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
+            .filter(href => href != '')
+            .map(href => href.substring(0, href.length - 1));
+    });
+}
+
+function drawLineNumber() {
+    let container = getById('dinglj-line-number-container');
+    let data = dljCtx001.lineNumbers.map(n => `<div class="line-number-item" id="line-number-${n}">${n}</div>`).join('');
+    container.innerHTML = data;
 }
 
 /** 切换步骤时 */
