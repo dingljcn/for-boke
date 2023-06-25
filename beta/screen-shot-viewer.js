@@ -104,16 +104,20 @@ function bindClickEvent() {
     onStepChange();
     onHistoryChange();
     onStarChange();
+    let list = getByClass('line-number-item');
+    if (list.length > 0) {
+        list[0].click();
+    }
 }
 
 /** 切换行时 */
 function onLineNumberChange() {
     let list = getByClass('line-number-item');
-    listActiveChange(list, dljCtx001.config.style.menu.activeStyle, dljCtx001.config.style.menu.activeStyle, (element, event) => {
+    listActiveChange(list, dljCtx001.config.style.menu.activeStyle, dljCtx001.config.style.menu.inActiveStyle, (element, event) => {
         getSteps(element.innerText);
         setTimeout(() => {
             let container = getById('dinglj-steps-container');
-            let data = dljCtx001.lineNumbers.map(n => `<div class="step-item" id="step-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
+            let data = dljCtx001.lineNumbers[element.innerText].map(n => `<div class="step-item" id="step-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
             container.innerHTML = data;
         }, 500);
     });
