@@ -492,9 +492,10 @@ function genTBody(groupName, stratege) {
                     break;
                 }
             }
-            return ignoreRow ? '' : `<div class="dinglj-column-data-${ cell.key }" style="min-width: 80px; max-width: 80px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; text-align: center; padding: 0 5px; line-height: 30px">${ cell.value }</div>`;
+            return ignoreRow ? 'DINGLJ_IGNORE_THIS_ROW_DINGLJ' : `<div class="dinglj-column-data-${ cell.key }" style="min-width: 80px; max-width: 80px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; text-align: center; padding: 0 5px; line-height: 30px">${ cell.value }</div>`;
         }).join('');
-        return `<div class="dinglj-table-tr dinglj-${ (++count) % 2 == 0 ? 'even' : 'odd' }" style="display: flex; padding: 5px 0;">${ tdList }</div>`
+        let ignore = tdList.includes('DINGLJ_IGNORE_THIS_ROW_DINGLJ');
+        return ignore ? '' : `<div class="dinglj-table-tr dinglj-${ (++count) % 2 == 0 ? 'even' : 'odd' }" style="display: flex; padding: 5px 0;">${ tdList }</div>`
     }).join('');
 }
 
