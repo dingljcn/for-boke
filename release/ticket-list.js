@@ -463,7 +463,7 @@ function genTHead(groupName, stratege) {
         return `<div style="min-width: 80px; max-width: 80px; text-align: center; font-weight: bold; padding: 0 5px; line-height: 30px" class="dinglj-col-${ cell.key }">${ cell.name }</div>`
     }).join('');
     context.ignoreColumns = Object.keys(ignore);
-    return `<div class="dinglj-table-head" style="padding: 5px 0; display: flex">${ tdList }</div>`;
+    return `<div class="dinglj-table-head" style="padding: 5px 0; display: flex; margin-right: 15px">${ tdList }</div>`;
 }
 
 function genTBody(groupName, stratege) {
