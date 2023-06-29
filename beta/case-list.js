@@ -18,7 +18,7 @@ class Case {
         this.module = origin.module;
         this.caseName = origin.testcaseName || origin.testCaseName;
         this.clevel = origin.clevel || origin.level;
-        this.row = this.status = 'SUCCESS' ? origin.totalRow : origin.currentRow;
+        this.row = (this.status == 'SUCCESS') ? origin.totalRow : origin.currentRow;
         this.totalRow = origin.totalRow;
         this.dbType = origin.dbType;
         this.timeCost = origin.timeCost || '-';
