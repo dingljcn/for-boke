@@ -59,7 +59,8 @@ function run(config = null) {
     }
     // 由于这些是局域网地址, 故直接写在这里, 也便于更新
     config.matchList = [
-        /^http:\/\/1.1.11.22:8084\/autowork\/$/
+        /^http:\/\/1.1.11.22:8084\/autowork\/$/,
+        /^http:\/\/1.1.11.22:8888\/autowork\/$/,
     ]
     config.database = {
         mysql: 'DB_TYPE=MySQL;DB_SERVER=1.1.8.77:3306;DB_USER=root;DB_PASS=123456;DB_NAME=ticket_',
