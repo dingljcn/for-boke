@@ -132,15 +132,21 @@ async function readCases(versionName = '-') {
         let response;
         if (/^http:\/\/1.1.11.22:8084\/autowork\/$/.test(window.location.href)) {
             response = await axios.get(`${ window.location.href }TaskEnvironmentServlet?queryEnvAndTask=true`);
+            console.log(`读取版本 ${ versionName }: `);
+            console.log(response);
+            context.forCurrentVersion.environment = response.data.taskEnvironments[0];
+            for (origin of response.data.testCaseTasks) {
+                let myCase = new Case(origin);
+                context.forCurrentVersion.caseList.push(myCase);
+            }
         } else if (/^http:\/\/1.1.11.22:8888\/autowork\/$/.test(window.location.href)) { // 兼容 8888 端口
             response = await axios.get(`${ window.location.href }TestCaseServlet`);
-        }
-        console.log(`读取版本 ${ versionName }: `);
-        console.log(response);
-        context.forCurrentVersion.environment = response.data.taskEnvironments[0];
-        for (origin of response.data.testCaseTasks) {
-            let myCase = new Case(origin);
-            context.forCurrentVersion.caseList.push(myCase);
+            console.log(`读取版本 ${ versionName }: `);
+            console.log(response);
+            for (origin of response.data) {
+                let myCase = new Case(origin);
+                context.forCurrentVersion.caseList.push(myCase);
+            }
         }
     } else {
         let response = await axios.get(`${ window.location.href }ReportServlet?queryName=&erpVersion=${ versionName }`);
