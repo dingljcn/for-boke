@@ -5,16 +5,20 @@ class Case {
     constructor(origin) {
         this.status = origin.result;
         if (!this.status) { //状态不为空, 则把中文转英文
-            if (origin.stats == '执行中') {
+            if (origin.stats) {
+                if (origin.stats == '执行中') {
+                    this.status = 'RUNNING';
+                } else if (origin.stats == '已发送') {
+                    this.status = 'WAITTING';
+                }
+            } else if (origin.result != 'SUCESS' && origin.result != 'TICKET' && origin.currentRow == 0) { // 兼容 8888 端口
                 this.status = 'RUNNING';
-            } else if (origin.stats == '已发送') {
-                this.status = 'WAITTING';
             }
         }
         this.module = origin.module;
         this.caseName = origin.testcaseName || origin.testCaseName;
         this.clevel = origin.clevel || origin.level;
-        this.row = origin.currentRow;
+        this.row = (this.status == 'SUCCESS') ? origin.totalRow : origin.currentRow;
         this.totalRow = origin.totalRow;
         this.dbType = origin.dbType;
         this.timeCost = origin.timeCost || '-';
@@ -59,7 +63,8 @@ function run(config = null) {
     }
     // 由于这些是局域网地址, 故直接写在这里, 也便于更新
     config.matchList = [
-        /^http:\/\/1.1.11.22:8084\/autowork\/$/
+        /^http:\/\/1.1.11.22:8084\/autowork\/$/,
+        /^http:\/\/1.1.11.22:8888\/autowork\/$/,
     ]
     config.database = {
         mysql: 'DB_TYPE=MySQL;DB_SERVER=1.1.8.77:3306;DB_USER=root;DB_PASS=123456;DB_NAME=ticket_',
@@ -124,13 +129,24 @@ async function readCases(versionName = '-') {
     // 清空要显示的用例集合
     context.forCurrentVersion.caseList = [];
     if (versionName == '-') {
-        let response = await axios.get(`${ window.location.href }TaskEnvironmentServlet?queryEnvAndTask=true`);
-        console.log(`读取版本 ${ versionName }: `);
-        console.log(response);
-        context.forCurrentVersion.environment = response.data.taskEnvironments[0];
-        for (origin of response.data.testCaseTasks) {
-            let myCase = new Case(origin);
-            context.forCurrentVersion.caseList.push(myCase);
+        let response;
+        if (/^http:\/\/1.1.11.22:8084\/autowork\/$/.test(window.location.href)) {
+            response = await axios.get(`${ window.location.href }TaskEnvironmentServlet?queryEnvAndTask=true`);
+            console.log(`读取版本 ${ versionName }: `);
+            console.log(response);
+            context.forCurrentVersion.environment = response.data.taskEnvironments[0];
+            for (origin of response.data.testCaseTasks) {
+                let myCase = new Case(origin);
+                context.forCurrentVersion.caseList.push(myCase);
+            }
+        } else if (/^http:\/\/1.1.11.22:8888\/autowork\/$/.test(window.location.href)) { // 兼容 8888 端口
+            response = await axios.get(`${ window.location.href }TestCaseServlet`);
+            console.log(`读取版本 ${ versionName }: `);
+            console.log(response);
+            for (origin of response.data) {
+                let myCase = new Case(origin);
+                context.forCurrentVersion.caseList.push(myCase);
+            }
         }
     } else {
         let response = await axios.get(`${ window.location.href }ReportServlet?queryName=&erpVersion=${ versionName }`);
