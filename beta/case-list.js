@@ -5,10 +5,14 @@ class Case {
     constructor(origin) {
         this.status = origin.result;
         if (!this.status) { //状态不为空, 则把中文转英文
-            if (origin.stats == '执行中') {
+            if (origin.stats) {
+                if (origin.stats == '执行中') {
+                    this.status = 'RUNNING';
+                } else if (origin.stats == '已发送') {
+                    this.status = 'WAITTING';
+                }
+            } else if (origin.result != 'SUCESS' && origin.result != 'TICKET' && origin.currentRow == 0) { // 兼容 8888 端口
                 this.status = 'RUNNING';
-            } else if (origin.stats == '已发送') {
-                this.status = 'WAITTING';
             }
         }
         this.module = origin.module;
@@ -125,7 +129,12 @@ async function readCases(versionName = '-') {
     // 清空要显示的用例集合
     context.forCurrentVersion.caseList = [];
     if (versionName == '-') {
-        let response = await axios.get(`${ window.location.href }TaskEnvironmentServlet?queryEnvAndTask=true`);
+        let response;
+        if (/^http:\/\/1.1.11.22:8084\/autowork\/$/.test(window.location.href)) {
+            response = await axios.get(`${ window.location.href }TaskEnvironmentServlet?queryEnvAndTask=true`);
+        } else if (/^http:\/\/1.1.11.22:8888\/autowork\/$/.test(window.location.href)) { // 兼容 8888 端口
+            response = await axios.get(`${ window.location.href }TestCaseServlet`);
+        }
         console.log(`读取版本 ${ versionName }: `);
         console.log(response);
         context.forCurrentVersion.environment = response.data.taskEnvironments[0];
