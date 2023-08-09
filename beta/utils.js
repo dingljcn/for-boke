@@ -6,6 +6,27 @@ class LangItem {
     }
 }
 
+/** 新脚本 onload 函数格式 */
+function onload_xxx(callback) {
+    // 引入通用脚本
+    let utilScript = document.createElement('script');
+    utilScript.type = 'text/javascript';
+    utilScript.src = 'https://dingljcn.github.io/for-boke/beta/utils.js?' + Math.random();
+    // 成功
+    utilScript.onload = async function() {
+        localStorage.setItem(`dinglj-script-???`, utilScript.src); // 缓存本次成功 load 的 url
+        callback();
+    }
+    // 失败
+    utilScript.onerror = () => {
+        let lastURL = localStorage.getItem(`dinglj-script-???`);
+        console.error(`${ utilScript.src } 拉取失败, 拉取上次成功的地址 ${ lastURL }`);
+        utilScript.remove();
+        appendScript(callback);
+    }
+    document.head.appendChild(utilScript);
+}
+
 /** 判断当前网址是否启用脚本 */
 function isMatch(config) {
     if (config.matchList) { // 如果存在要匹配的网址, 则匹配, 匹配成功才进入
@@ -14,10 +35,10 @@ function isMatch(config) {
                 return true;
             }
         }
+        return config.matchList.length == 0; // 长度为 0, 返回 true, 反之返回 false
     } else { // 如果没有要匹配的网址, 默认是允许执行脚本
         return true;
     }
-    return false; // 到这里说明存在要匹配的网址, 但匹配失败, 返回 false
 }
 
 /** 对象转 json 字符串 */
@@ -264,5 +285,15 @@ async function get(path = '', callback = res => {}) {
         if (http.readyState == 4 && http.status == 200) {
             callback(http.responseText);
         }
+    }
+}
+
+function log(obj) {
+    console.log(obj);
+}
+
+function logln() {
+    for (let i = 0; i < arguments.length; i++) {
+        console.log(arguments[i]);
     }
 }

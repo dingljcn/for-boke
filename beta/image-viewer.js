@@ -1,43 +1,47 @@
-const dljCtx001 = {};
+const context_001 = {
+    imageList: []
+};
 
-function run(callback) {
-    appendScript(callback, `https://dingljcn.github.io/for-boke/beta/utils.js?${ Math.random() }`);
-}
-
-function appendScript(callback, url) {
-    let remoteScript = document.createElement('script');
-    remoteScript.type = 'text/javascript';
-    remoteScript.src = url;
-    document.head.appendChild(remoteScript);
-    // 脚本加载成功, 缓存 url
-    remoteScript.onload = () => {
-        localStorage.setItem('dinglj-script-screen-shot-viewer-util', url);
-        onUtilLoad(callback);
-    };
-    // 脚本读取失败, 读取上一次成功缓存的 url
-    remoteScript.onerror = () => {
-        let src = localStorage.getItem('dinglj-script-screen-shot-viewer-util');
-        console.error(`${ url } 拉取失败, 拉取上次成功的地址 ${ src }`);
-        remoteScript.remove();
-        appendScript(src);
+function onload_001(callback) {
+    // 引入通用脚本
+    let utilScript = document.createElement('script');
+    utilScript.type = 'text/javascript';
+    utilScript.src = 'https://dingljcn.github.io/for-boke/beta/utils.js?' + Math.random();
+    // 成功
+    utilScript.onload = async function() {
+        localStorage.setItem(`dinglj-script-001`, utilScript.src); // 缓存本次成功 load 的 url
+        callback();
     }
+    // 失败
+    utilScript.onerror = () => {
+        let lastURL = localStorage.getItem(`dinglj-script-001`);
+        console.error(`${ utilScript.src } 拉取失败, 拉取上次成功的地址 ${ lastURL }`);
+        utilScript.remove();
+        appendScript(callback);
+    }
+    document.head.appendChild(utilScript);
 }
 
-function onUtilLoad(callback) {
-    dljCtx001.config = callback();
-    console.log('传入的配置: ');
-    console.log(dljCtx001.config);
-    if (!isMatch(dljCtx001.config)) {
+function run_001(config) {
+    // 检验配置
+    context_001.config = config;
+    logln('传入的配置: ', context_001.config);
+    if (!isMatch(context_001.config)) {
         console.error('不符合以下地址匹配规则');
-        console.error(dljCtx001.config.matchList);
+        console.error(context_001.config.matchList);
         return;
     }
-    initLayout();
-    drawLineNumber();
-    bindClickEvent();
+    // 正式开始独立的逻辑
+    exec_001();
 }
 
-function initLayout() {
+function exec_001() {
+    initLayout_001();
+    drawLineNumber_001();
+    bindClickEvent_001();
+}
+
+function initLayout_001() {
     document.body.style.margin = '0px';
     document.body.style.display = 'flex';
     document.body.style.height = '100%';
@@ -61,7 +65,7 @@ function initLayout() {
         <div style="height: 100%; flex: 1; display: flex; flex-direction: column">
             <div id="dinglj-this-picture-info-conatiner" style="min-height: 40px; max-height: 40px"></div>
             <div style="flex: 1; position: relative">
-                <img id="dinglj-this-picture" src="1/7/0_重启.png" style="box-shadow: 0 0 10px -3px grey; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 5px;max-width: 98%; max-height: 98%">
+                <img id="dinglj-this-picture" src="1/10/6_点击.png" style="box-shadow: 0 0 10px -3px grey; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 5px;max-width: 98%; max-height: 98%">
             </div>
             <div id="dinglj-this-picture-operate-container" style="min-height: 50px; max-height: 50px"></div>
         </div>
@@ -78,10 +82,10 @@ function initLayout() {
 }
 
 /** 读取行号 */
-async function getLineNumbers() {
+async function getLineNumbers_001() {
     let reg = /.*<a href="([0-9]+\/)".*/;
     await get('1', res => {
-        dljCtx001.lineNumbers = res.split('\n')
+        context_001.lineNumbers = res.split('\n')
             .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
             .filter(href => href != '')
             .map(href => href.substring(0, href.length - 1));
@@ -89,22 +93,22 @@ async function getLineNumbers() {
 }
 
 /** 绘制行号 */
-async function drawLineNumber() {
-    await getLineNumbers();
+async function drawLineNumber_001() {
+    await getLineNumbers_001();
     setTimeout(() => {
         let container = getById('dinglj-line-number-container');
-        let data = dljCtx001.lineNumbers.map(n => `<div class="line-number-item" id="line-number-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
+        let data = context_001.lineNumbers.map(n => `<div class="line-number-item" id="line-number-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
         container.innerHTML = data;
     }, 150);
 }
 
 /** 绑定各种切换事件 */
-function bindClickEvent() {
+function bindClickEvent_001() {
     console.log('bind');
-    onLineNumberChange();
-    onStepChange();
-    onHistoryChange();
-    onStarChange();
+    onLineNumberChange_001();
+    onStepChange_001();
+    onHistoryChange_001();
+    onStarChange_001();
     let list = getByClass('line-number-item');
     if (list.length > 0) {
         list[0].click();
@@ -112,39 +116,39 @@ function bindClickEvent() {
 }
 
 /** 切换行时 */
-function onLineNumberChange() {
+function onLineNumberChange_001() {
     let list = getByClass('line-number-item');
-    listActiveChange(list, dljCtx001.config.style.menu.activeStyle, dljCtx001.config.style.menu.inActiveStyle, (element, event) => {
-        getSteps(element.innerText);
+    listActiveChange(list, context_001.config.style.menu.activeStyle, context_001.config.style.menu.inActiveStyle, (element, event) => {
+        getSteps_001(element.innerText);
         setTimeout(() => {
             let container = getById('dinglj-steps-container');
-            let data = dljCtx001.lineNumbers[element.innerText].map(n => `<div class="step-item" id="step-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
+            let data = context_001.lineNumbers[element.innerText].map(n => `<div class="step-item" id="step-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
             container.innerHTML = data;
         }, 150);
     });
 }
 
 /** 读取行号 */
-async function getSteps(lineNumber) {
+async function getSteps_001(lineNumber) {
     let reg = /.*\.png">(.*.png)<\/a>.*/;
     await get(`1/${lineNumber}/`, res => {
-        dljCtx001.lineNumbers[lineNumber] = res.split('\n')
+        context_001.lineNumbers[lineNumber] = res.split('\n')
             .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
             .filter(href => href != '')
     });
 }
 
 /** 切换步骤时 */
-function onStepChange() {
+function onStepChange_001() {
 
 }
 
 /** 切换历史图片时 */
-function onHistoryChange() {
+function onHistoryChange_001() {
 
 }
 
 /** 切换重点图片 */
-function onStarChange() {
+function onStarChange_001() {
 
 }
