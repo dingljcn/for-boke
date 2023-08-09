@@ -143,6 +143,7 @@ function changeToStep_001(lineNumber, imageName) {
     let key = `1/${ lineNumber }/${ imageName }`;
     log(`点击第${ lineNumber }行的图片 ${ imageName }`);
     getById('dinglj-this-picture').src = key;
+    addToHistory(lineNumber, imageName, key);
 }
 
 function addToHistory(lineNumber, imageName, key) {
