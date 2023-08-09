@@ -1,5 +1,6 @@
 const context_001 = {
-    imageList: []
+    imageList: [],
+    focus: 'step', // line, step, his, star
 };
 
 function onload_001(callback) {
@@ -38,6 +39,7 @@ function run_001(config) {
 function exec_001() {
     initLayout_001();
     drawLineNumber_001();
+    bindKeyboardEvent_001();
 }
 
 function initLayout_001() {
@@ -89,7 +91,7 @@ async function drawLineNumber_001() {
             .filter(href => href != '')
             .map(href => href.substring(0, href.length - 1));
         let container = getById('dinglj-line-number-container');
-        let data = context_001.lineNumbers.map(n => `<div class="line-number-item" id="line-number-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
+        let data = context_001.lineNumbers.map(n => `<div class="line-number-item active-line" id="line-number-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
         container.innerHTML = data;
         bindClickEvent_001();
     });
@@ -125,9 +127,13 @@ function changeToLine_001(lineNumber) {
             .filter(href => href != '');
         // 绘制
         let container = getById('dinglj-steps-container');
-        let data = context_001.lineNumbers[lineNumber].map(n => `<div class="step-item" id="step-${n}" style="margin: 2px 0; cursor: pointer; font-size: 14px; padding: 3px 0">${n}</div>`).join('');
+        let data = context_001.lineNumbers[lineNumber].map(n => `<div class="step-item active-step" id="step-${n}" style="margin: 2px 0; cursor: pointer; font-size: 14px; padding: 3px 0">${n}</div>`).join('');
         container.innerHTML = data;
         bindStepChangeEvent_001(lineNumber);
+        let stepList = getByClass('step-item');
+        if (stepList.length > 0) {
+            stepList[0].click();
+        }
     });
 }
 
@@ -135,30 +141,38 @@ function changeToLine_001(lineNumber) {
 function bindStepChangeEvent_001(lineNumber) {
     let list = getByClass('step-item');
     listActiveChange(list, context_001.config.style.menu.activeStyle, context_001.config.style.menu.inActiveStyle, (element, event) => {
-        changeToStep_001(lineNumber, element.innerText);
+        changeToStep_001(element, lineNumber, element.innerText);
     });
 }
 
-function changeToStep_001(lineNumber, imageName) {
+function changeToStep_001(element, lineNumber, imageName) {
     let key = `1/${ lineNumber }/${ imageName }`;
     log(`点击第${ lineNumber }行的图片 ${ imageName }`);
     getById('dinglj-this-picture').src = key;
-    addToHistory(lineNumber, imageName, key);
+    addToHistory_001(lineNumber, imageName, key);
+    let lastActive = getByClass('active-step');
+    if (lastActive) {
+        lastActive.classList.remove('active-step');
+        lastActive.classList.add('last-active-step');
+    }
+    element.classList.add('active-step');
 }
 
-function addToHistory(lineNumber, imageName, key) {
+
+
+function addToHistory_001(lineNumber, imageName, key) {
     if (!context_001.history) {
         context_001.history = [];
     }
     if (context_001.history.includes(key)) {
         context_001.history.push(key);
         if (context_001.config.persist) {
-            saveCache('history', lineNumber, imageName)
+            saveCache_001('history', lineNumber, imageName)
         }
     }
 }
 
-function readCache(propName = 'history') {
+function readCache_001(propName = 'history') {
     let str = localStorage.getItem('dinglj-001-cache');
     let json = {};
     if (str) {
@@ -171,7 +185,7 @@ function readCache(propName = 'history') {
     return [];
 }
 
-function saveCache(propName = 'history', lineNumber, imageName) {
+function saveCache_001(propName = 'history', lineNumber, imageName) {
     let str = localStorage.getItem('dinglj-001-cache');
     let json = {};
     if (str) {
@@ -199,5 +213,9 @@ function onHistoryChange_001() {
 
 /** 切换重点图片 */
 function onStarChange_001() {
+
+}
+
+function bindKeyboardEvent_001() {
 
 }
