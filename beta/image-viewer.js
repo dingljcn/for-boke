@@ -133,6 +133,14 @@ function changeToLine_001(lineNumber) {
 
 /** 切换步骤事件 */
 function bindStepChangeEvent_001(lineNumber) {
+    let list = getByClass('step-item');
+    listActiveChange(list, context_001.config.style.menu.activeStyle, context_001.config.style.menu.inActiveStyle, (element, event) => {
+        changeToLine_001(lineNumber, element.innerText);
+    });
+}
+
+function changeToLine_001(lineNumber, imageName) {
+    getById('dinglj-this-picture').src = `1/${ lineNumber }/${ imageName }`;
 }
 
 /** 切换历史图片时 */
