@@ -135,11 +135,11 @@ function changeToLine_001(lineNumber) {
 function bindStepChangeEvent_001(lineNumber) {
     let list = getByClass('step-item');
     listActiveChange(list, context_001.config.style.menu.activeStyle, context_001.config.style.menu.inActiveStyle, (element, event) => {
-        changeToLine_001(lineNumber, element.innerText);
+        changeToStep_001(lineNumber, element.innerText);
     });
 }
 
-function changeToLine_001(lineNumber, imageName) {
+function changeToStep_001(lineNumber, imageName) {
     getById('dinglj-this-picture').src = `1/${ lineNumber }/${ imageName }`;
 }
 
