@@ -91,7 +91,7 @@ async function drawLineNumber_001() {
             .filter(href => href != '')
             .map(href => href.substring(0, href.length - 1));
         let container = getById('dinglj-line-number-container');
-        let data = context_001.lineNumbers.map(n => `<div class="line-number-item active-line" id="line-number-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
+        let data = context_001.lineNumbers.map(n => `<div class="line-number-item" id="line-number-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
         container.innerHTML = data;
         bindClickEvent_001();
     });
@@ -127,7 +127,7 @@ function changeToLine_001(lineNumber) {
             .filter(href => href != '');
         // 绘制
         let container = getById('dinglj-steps-container');
-        let data = context_001.lineNumbers[lineNumber].map(n => `<div class="step-item active-step" id="step-${n}" style="margin: 2px 0; cursor: pointer; font-size: 14px; padding: 3px 0">${n}</div>`).join('');
+        let data = context_001.lineNumbers[lineNumber].map(n => `<div class="step-item" id="step-${n}" style="margin: 2px 0; cursor: pointer; font-size: 14px; padding: 3px 0">${n}</div>`).join('');
         container.innerHTML = data;
         bindStepChangeEvent_001(lineNumber);
         let stepList = getByClass('step-item');
@@ -150,10 +150,14 @@ function changeToStep_001(element, lineNumber, imageName) {
     log(`点击第${ lineNumber }行的图片 ${ imageName }`);
     getById('dinglj-this-picture').src = key;
     addToHistory_001(lineNumber, imageName, key);
-    let lastActiveList = getByClass('active-step') || [];
+    let lastActiveList = getByClass('last-active-step') || [];
     for (let lastActive of lastActiveList) {
         lastActive.classList.remove('active-step');
-        lastActive.classList.add('last-active-step');
+    }
+    let activeList = getByClass('active-step') || [];
+    for (let active of activeList) {
+        active.classList.remove('active-step');
+        active.classList.add('last-active-step');
     }
     element.classList.add('active-step');
 }
