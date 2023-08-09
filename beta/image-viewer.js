@@ -150,8 +150,8 @@ function changeToStep_001(element, lineNumber, imageName) {
     log(`点击第${ lineNumber }行的图片 ${ imageName }`);
     getById('dinglj-this-picture').src = key;
     addToHistory_001(lineNumber, imageName, key);
-    let lastActive = getByClass('active-step');
-    if (lastActive) {
+    let lastActiveList = getByClass('active-step') || [];
+    for (let lastActive of lastActiveList) {
         lastActive.classList.remove('active-step');
         lastActive.classList.add('last-active-step');
     }
