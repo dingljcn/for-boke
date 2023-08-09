@@ -81,25 +81,18 @@ function initLayout_001() {
     getById('dinglj-steps-container').style.maxHeight = maxHeight;
 }
 
-/** 读取行号 */
-async function getLineNumbers_001() {
+/** 绘制行号 */
+async function drawLineNumber_001() {
     let reg = /.*<a href="([0-9]+\/)".*/;
     await get('1', res => {
         context_001.lineNumbers = res.split('\n')
             .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
             .filter(href => href != '')
             .map(href => href.substring(0, href.length - 1));
-    });
-}
-
-/** 绘制行号 */
-async function drawLineNumber_001() {
-    await getLineNumbers_001();
-    setTimeout(() => {
         let container = getById('dinglj-line-number-container');
         let data = context_001.lineNumbers.map(n => `<div class="line-number-item" id="line-number-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
         container.innerHTML = data;
-    }, 150);
+    });
 }
 
 /** 绑定各种切换事件 */
