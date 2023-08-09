@@ -125,7 +125,7 @@ function changeToLine_001(lineNumber) {
             .filter(href => href != '');
         // 绘制
         let container = getById('dinglj-steps-container');
-        let data = context_001.lineNumbers[lineNumber].map(n => `<div class="step-item" id="step-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
+        let data = context_001.lineNumbers[lineNumber].map(n => `<div class="step-item" id="step-${n}" style="margin: 2px 0; cursor: pointer; font-size: 14px; padding: 3px 0">${n}</div>`).join('');
         container.innerHTML = data;
         bindStepChangeEvent_001(lineNumber);
     });
@@ -140,7 +140,55 @@ function bindStepChangeEvent_001(lineNumber) {
 }
 
 function changeToStep_001(lineNumber, imageName) {
-    getById('dinglj-this-picture').src = `1/${ lineNumber }/${ imageName }`;
+    let key = `1/${ lineNumber }/${ imageName }`;
+    log(`点击第${ lineNumber }行的图片 ${ imageName }`);
+    getById('dinglj-this-picture').src = key;
+}
+
+function addToHistory(lineNumber, imageName, key) {
+    if (!context_001.history) {
+        context_001.history = [];
+    }
+    if (context_001.history.includes(key)) {
+        context_001.history.push(key);
+        if (context_001.config.persist) {
+            saveCache('history', lineNumber, imageName)
+        }
+    }
+}
+
+function readCache(prop = 'history') {
+    let str = localStorage.getItem('dinglj-001-cache');
+    let json = {};
+    if (str) {
+        json = JSON.parse(str);
+    }
+    let prop = json[prop];
+    if (prop) { // history 或 star 存在才继续, 不存在则返回空数组
+        return prop[window.location.href] || [];
+    }
+    return [];
+}
+
+function saveCache(propName = 'history', lineNumber, imageName) {
+    let str = localStorage.getItem('dinglj-001-cache');
+    let json = {};
+    if (str) {
+        json = JSON.parse(str);
+    }
+    let prop = {};
+    if (json[propName]) {
+        prop = json[propName];
+    } else {
+        json[propName] = prop;
+    }
+    let array = [];
+    if (prop[window.location.href]) {
+        array = prop[window.location.href];
+    } else {
+        prop[window.location.href] = array;
+    }
+    array.push(`1/${ lineNumber }/${ imageName }`);
 }
 
 /** 切换历史图片时 */
