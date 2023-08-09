@@ -157,13 +157,13 @@ function addToHistory(lineNumber, imageName, key) {
     }
 }
 
-function readCache(prop = 'history') {
+function readCache(propName = 'history') {
     let str = localStorage.getItem('dinglj-001-cache');
     let json = {};
     if (str) {
         json = JSON.parse(str);
     }
-    let prop = json[prop];
+    let prop = json[propName];
     if (prop) { // history 或 star 存在才继续, 不存在则返回空数组
         return prop[window.location.href] || [];
     }
