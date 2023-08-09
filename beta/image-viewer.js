@@ -38,7 +38,6 @@ function run_001(config) {
 function exec_001() {
     initLayout_001();
     drawLineNumber_001();
-    bindClickEvent_001();
 }
 
 function initLayout_001() {
@@ -92,14 +91,13 @@ async function drawLineNumber_001() {
         let container = getById('dinglj-line-number-container');
         let data = context_001.lineNumbers.map(n => `<div class="line-number-item" id="line-number-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
         container.innerHTML = data;
+        bindClickEvent_001();
     });
 }
 
 /** 绑定各种切换事件 */
 function bindClickEvent_001() {
-    console.log('bind');
-    onLineNumberChange_001();
-    onStepChange_001();
+    bindLineChangeEvent_001();
     onHistoryChange_001();
     onStarChange_001();
     let list = getByClass('line-number-item');
@@ -108,32 +106,33 @@ function bindClickEvent_001() {
     }
 }
 
-/** 切换行时 */
-function onLineNumberChange_001() {
+/** 切换行事件 */
+function bindLineChangeEvent_001() {
     let list = getByClass('line-number-item');
     listActiveChange(list, context_001.config.style.menu.activeStyle, context_001.config.style.menu.inActiveStyle, (element, event) => {
-        getSteps_001(element.innerText);
-        setTimeout(() => {
-            let container = getById('dinglj-steps-container');
-            let data = context_001.lineNumbers[element.innerText].map(n => `<div class="step-item" id="step-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
-            container.innerHTML = data;
-        }, 150);
+        changeToLine_001(element.innerText);
     });
 }
 
-/** 读取行号 */
-async function getSteps_001(lineNumber) {
+/** 绘制行号 */
+function changeToLine_001(lineNumber) {
+    log(`点击第${ lineNumber }行`);
     let reg = /.*\.png">(.*.png)<\/a>.*/;
-    await get(`1/${lineNumber}/`, res => {
+    get(`1/${ lineNumber }/`, res => {
+        // 整理
         context_001.lineNumbers[lineNumber] = res.split('\n')
             .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
-            .filter(href => href != '')
+            .filter(href => href != '');
+        // 绘制
+        let container = getById('dinglj-steps-container');
+        let data = context_001.lineNumbers[lineNumber].map(n => `<div class="step-item" id="step-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
+        container.innerHTML = data;
+        bindStepChangeEvent_001(lineNumber);
     });
 }
 
-/** 切换步骤时 */
-function onStepChange_001() {
-
+/** 切换步骤事件 */
+function bindStepChangeEvent_001(lineNumber) {
 }
 
 /** 切换历史图片时 */
