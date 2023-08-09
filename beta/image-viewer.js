@@ -152,7 +152,7 @@ function changeToStep_001(element, lineNumber, imageName) {
     addToHistory_001(lineNumber, imageName, key);
     let lastActiveList = getByClass('last-active-step') || [];
     for (let lastActive of lastActiveList) {
-        lastActive.classList.remove('active-step');
+        lastActive.classList.remove('last-active-step');
     }
     let activeList = getByClass('active-step') || [];
     for (let active of activeList) {
