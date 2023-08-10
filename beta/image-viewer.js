@@ -256,24 +256,30 @@ function bindUp_Down_001() {
 function keyToPrev() {
     if (context_001.focus == 'step') {
         let active = getByClass('active-step')[0];
-        let num = parseInt(/step-(\d+)+_/.exec(active.id)[1]);
         if (active.previousElementSibling == null) {
             // 跳到前一行
         } else {
             active.previousElementSibling.click();
         }
     } else if (context_001.focus == 'line') {
-        let active = getByClass('')
+        let active = getByClass('active-line')[0];
+        if (active.previousElementSibling != null) {
+            active.previousElementSibling.click();
+        }
     }
 }
 
 function keyToNext() {
     if (context_001.focus == 'step') {
         let active = getByClass('active-step')[0];
-        let num = parseInt(/step-(\d+)+_/.exec(active.id)[1]);
         if (active.nextElementSibling == null) {
             // 跳到下一行
         } else {
+            active.nextElementSibling.click();
+        }
+    } else if (context_001.focus == 'line') {
+        let active = getByClass('active-line')[0];
+        if (active.nextElementSibling != null) {
             active.nextElementSibling.click();
         }
     }
