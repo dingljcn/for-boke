@@ -1,6 +1,7 @@
 const context_001 = {
     imageList: [],
     focus: 'step', // line, step, his, star
+    layout: ['line', 'step', 'his', 'star'],
 };
 
 function onload_001(callback) {
@@ -112,12 +113,12 @@ function bindClickEvent_001() {
 function bindLineChangeEvent_001() {
     let list = getByClass('line-number-item');
     listActiveChange(list, context_001.config.style.menu.activeStyle, context_001.config.style.menu.inActiveStyle, (element, event) => {
-        changeToLine_001(element.innerText);
+        changeToLine_001(element, element.innerText);
     });
 }
 
 /** 绘制行号 */
-function changeToLine_001(lineNumber) {
+function changeToLine_001(element, lineNumber) {
     log(`点击第${ lineNumber }行`);
     let reg = /.*\.png">(.*.png)<\/a>.*/;
     get(`1/${ lineNumber }/`, res => {
@@ -135,6 +136,20 @@ function changeToLine_001(lineNumber) {
             stepList[0].click();
         }
     });
+    let lastActiveList = getByClass('last-active-line') || [];
+    for (let lastActive of lastActiveList) {
+        if (lastActive != element) {
+            lastActive.classList.remove('last-active-line');
+        }
+    }
+    let activeList = getByClass('active-line') || [];
+    for (let active of activeList) {
+        if (active != element) {
+            active.classList.remove('active-line');
+            active.classList.add('last-active-line');
+        }
+    }
+    element.classList.add('active-line');
 }
 
 /** 切换步骤事件 */
@@ -152,12 +167,16 @@ function changeToStep_001(element, lineNumber, imageName) {
     addToHistory_001(lineNumber, imageName, key);
     let lastActiveList = getByClass('last-active-step') || [];
     for (let lastActive of lastActiveList) {
-        lastActive.classList.remove('last-active-step');
+        if (lastActive != element) {
+            lastActive.classList.remove('last-active-step');
+        }
     }
     let activeList = getByClass('active-step') || [];
     for (let active of activeList) {
-        active.classList.remove('active-step');
-        active.classList.add('last-active-step');
+        if (active != element) {
+            active.classList.remove('active-step');
+            active.classList.add('last-active-step');
+        }
     }
     element.classList.add('active-step');
 }
@@ -168,7 +187,7 @@ function addToHistory_001(lineNumber, imageName, key) {
     if (!context_001.history) {
         context_001.history = [];
     }
-    if (context_001.history.includes(key)) {
+    if (!context_001.history.includes(key)) {
         context_001.history.push(key);
         if (context_001.config.persist) {
             saveCache_001('history', lineNumber, imageName)
@@ -221,5 +240,41 @@ function onStarChange_001() {
 }
 
 function bindKeyboardEvent_001() {
+    bindUp_Down_001();
+}
 
+function bindUp_Down_001() {
+    window.addEventListener('keyup', e => {
+        if (e.key == 'ArrowUp') {
+            keyToPrev();
+        } else if (e.key == 'ArrowDown') {
+            keyToNext();
+        }
+    });
+}
+
+function keyToPrev() {
+    if (context_001.focus == 'step') {
+        let active = getByClass('active-step')[0];
+        let num = parseInt(/step-(\d+)+_/.exec(active.id)[1]);
+        if (active.previousElementSibling == null) {
+            // 跳到前一行
+        } else {
+            active.previousElementSibling.click();
+        }
+    } else if (context_001.focus == 'line') {
+        let active = getByClass('')
+    }
+}
+
+function keyToNext() {
+    if (context_001.focus == 'step') {
+        let active = getByClass('active-step')[0];
+        let num = parseInt(/step-(\d+)+_/.exec(active.id)[1]);
+        if (active.nextElementSibling == null) {
+            // 跳到下一行
+        } else {
+            active.nextElementSibling.click();
+        }
+    }
 }
