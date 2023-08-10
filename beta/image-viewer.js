@@ -239,25 +239,29 @@ function onStarChange_001() {
 
 }
 
+/** 绑定键盘事件 */
 function bindKeyboardEvent_001() {
     bindUp_Down_001();
+    bindLeft_Right_001();
 }
 
+/** 绑定上下键 */
 function bindUp_Down_001() {
     window.addEventListener('keyup', e => {
         if (e.key == 'ArrowUp') {
-            keyToPrev(context_001.focus);
+            ToPrev_001(context_001.focus);
         } else if (e.key == 'ArrowDown') {
-            keyToNext(context_001.focus);
+            ToNext_001(context_001.focus);
         }
     });
 }
 
-function keyToPrev(scope = 'step') {
+/** 向上移动 */
+function ToPrev_001(scope = 'step') {
     if (scope == 'step') {
         let active = getByClass('active-step')[0];
         if (active.previousElementSibling == null) {
-            keyToPrev('line');
+            ToPrev_001('line'); // 已经没有上一步, 则移动到上一行
         } else {
             active.previousElementSibling.click();
         }
@@ -269,11 +273,12 @@ function keyToPrev(scope = 'step') {
     }
 }
 
-function keyToNext(scope = 'step') {
+/** 向下移动 */
+function ToNext_001(scope = 'step') {
     if (scope == 'step') {
         let active = getByClass('active-step')[0];
         if (active.nextElementSibling == null) {
-            keyToNext('line');
+            ToNext_001('line');
         } else {
             active.nextElementSibling.click();
         }
@@ -283,4 +288,19 @@ function keyToNext(scope = 'step') {
             active.nextElementSibling.click();
         }
     }
+}
+
+function bindLeft_Right_001() {
+    window.addEventListener('keyup', e => {
+        let scope = context_001.focus;
+        let next = '';
+        let len = context_001.length;
+        let i = context_001.layout.indexOf(scope);
+        if (e.key == 'ArrowRight') {
+            next = context_001[(len + i) % len];
+        } else if (e.key == 'ArrowLeft') {
+            next = context_001[(len - i) % len];
+        }
+        context_001.focus = scope;
+    });
 }
