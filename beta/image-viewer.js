@@ -290,6 +290,7 @@ function ToNext_001(scope = 'step') {
     }
 }
 
+/** 绑定左右键 */
 function bindLeft_Right_001() {
     window.addEventListener('keyup', e => {
         let scope = context_001.focus;
