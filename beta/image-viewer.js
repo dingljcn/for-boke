@@ -295,7 +295,7 @@ function bindLeft_Right_001() {
     window.addEventListener('keyup', e => {
         let scope = context_001.focus;
         let next = '';
-        let len = context_001.length;
+        let len = context_001.layout.length;
         let i = context_001.layout.indexOf(scope);
         if (e.key == 'ArrowRight') {
             next = context_001.layout[(len + i) % len];
