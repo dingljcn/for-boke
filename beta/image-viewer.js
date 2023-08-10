@@ -246,22 +246,22 @@ function bindKeyboardEvent_001() {
 function bindUp_Down_001() {
     window.addEventListener('keyup', e => {
         if (e.key == 'ArrowUp') {
-            keyToPrev();
+            keyToPrev(context_001.focus);
         } else if (e.key == 'ArrowDown') {
-            keyToNext();
+            keyToNext(context_001.focus);
         }
     });
 }
 
-function keyToPrev() {
-    if (context_001.focus == 'step') {
+function keyToPrev(scope = 'step') {
+    if (scope == 'step') {
         let active = getByClass('active-step')[0];
         if (active.previousElementSibling == null) {
-            // 跳到前一行
+            keyToPrev('line');
         } else {
             active.previousElementSibling.click();
         }
-    } else if (context_001.focus == 'line') {
+    } else if (scope == 'line') {
         let active = getByClass('active-line')[0];
         if (active.previousElementSibling != null) {
             active.previousElementSibling.click();
@@ -269,15 +269,15 @@ function keyToPrev() {
     }
 }
 
-function keyToNext() {
-    if (context_001.focus == 'step') {
+function keyToNext(scope = 'step') {
+    if (scope == 'step') {
         let active = getByClass('active-step')[0];
         if (active.nextElementSibling == null) {
-            // 跳到下一行
+            keyToNext('line');
         } else {
             active.nextElementSibling.click();
         }
-    } else if (context_001.focus == 'line') {
+    } else if (scope == 'line') {
         let active = getByClass('active-line')[0];
         if (active.nextElementSibling != null) {
             active.nextElementSibling.click();
