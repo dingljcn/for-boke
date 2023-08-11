@@ -183,7 +183,12 @@ const css_001 = `body {
     color: white;
     border-radius: 5px;
     font-weight: bolder;
-}`;
+}
+.last {
+    background: #EEE;
+    border-radius: 5px;
+}
+`;
 
 
 function initLayout_001() {
@@ -249,10 +254,10 @@ function drawLineNumber_001() {
     context_001.lineNumbers = res.split('\n')
         .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
         .filter(href => href != '')
-        .map(href => href.substring(0, href.length - 1))
+        .map(href => href.substring(0, href.length - 1));
+    getById('dinglj-lines').innerHTML = context_001.lineNumbers
         .map(number => `<div class="line-item dinglj-item" id="line-${ number }">${ number }</div>`)
         .join('');
-    getById('dinglj-lines').innerHTML = context_001.lineNumbers;
     bindLineEvent_001();
 }
 
@@ -261,6 +266,7 @@ function bindLineEvent_001() {
     for (let element of list) {
         element.addEventListener('click', e => {
             e.stopPropagation();
+            log(`点击第${ element.innerText }行`);
             toLine_001(context_001.focus, 'line', element);
             context_001.focus = 'line';
         })
@@ -269,6 +275,7 @@ function bindLineEvent_001() {
 
 function toLine_001(oldScope, newScope, element, order = 'head', callback = () => {}) {
     toItem_001(oldScope, newScope, element, order, callback);
+    drawSteps(element);
 }
 
 function toItem_001(oldScope, newScope, element, order, callback) {
@@ -280,8 +287,21 @@ function toItem_001(oldScope, newScope, element, order, callback) {
     // 把旧作用域的 active 标记为 last
     let activeElements = getByClass(`active ${ oldScope }-item`);
     for (let activeElement of activeElements) {
+        activeElement.classList.remove('active');
         activeElement.classList.add('last');
     }
     // 把当前元素标记为 active
     element.classList.add('active');
+}
+
+function drawSteps(element) {
+    const lineNumber = element.innerText;
+    let reg = /.*\.png">(.*.png)<\/a>.*/;
+    let res = get(`1/${ lineNumber }`);
+    context_001.lineNumbers[lineNumber] = res.split('\n')
+            .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
+            .filter(href => href != '');
+    getById('dinglj-steps').innerHTML = context_001.lineNumbers[lineNumber]
+        .map(n => `<div class="step-item dinglj-item" id="step-${n}">${n}</div>`)
+        .join('');
 }
