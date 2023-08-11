@@ -249,6 +249,7 @@ function bindKeyboardEvent_001() {
 /** 绑定上下键 */
 function bindUp_Down_001() {
     window.addEventListener('keyup', e => {
+        e.preventDefault();
         if (e.key == 'ArrowUp') {
             ToPrev_001(context_001.focus);
         } else if (e.key == 'ArrowDown') {
