@@ -227,6 +227,7 @@ function saveCache_001(propName = 'history', lineNumber, imageName) {
         prop[window.location.href] = array;
     }
     array.push(`1/${ lineNumber }/${ imageName }`);
+    localStorage.setItem('dinglj-001-cache', JSON.stringify(json));
 }
 
 /** 切换历史图片时 */
@@ -293,8 +294,7 @@ function ToNext_001(scope = 'step') {
 function activeItem_001(element, containerID, direction = 1) {
     element.click();
     let container = getById(containerID);
-    let height = element.offsetHeight + (parseInt(element.style.marginTop) * 2) + (parseInt(element.style.marginBottom) * 2);
-    container.scrollTop += (height * direction);
+    container.scrollTop += (element.offsetHeight * direction);
 }
 
 /** 绑定左右键 */
