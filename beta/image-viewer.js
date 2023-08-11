@@ -263,18 +263,12 @@ function ToPrev_001(scope = 'step') {
         if (active.previousElementSibling == null) {
             ToPrev_001('line'); // 已经没有上一步, 则移动到上一行
         } else {
-            active.previousElementSibling.click();
-            let container = getById('dinglj-line-number-container');
-            let height = active.offsetHeight + parseInt(active.style.marginTop) + parseInt(active.style.marginBottom);
-            container.scrollTop -= height;
+            activeItem_001(active.previousElementSibling, 'dinglj-steps-container', -1);
         }
     } else if (scope == 'line') {
         let active = getByClass('active-line')[0];
         if (active.previousElementSibling != null) {
-            active.previousElementSibling.click();
-            let container = getById('dinglj-steps-container');
-            let height = active.offsetHeight + parseInt(active.style.marginTop) + parseInt(active.style.marginBottom);
-            container.scrollTop -= height;
+            activeItem_001(active.previousElementSibling, 'dinglj-line-number-container', -1);
         }
     }
 }
@@ -286,20 +280,21 @@ function ToNext_001(scope = 'step') {
         if (active.nextElementSibling == null) {
             ToNext_001('line');
         } else {
-            active.nextElementSibling.click();
-            let container = getById('dinglj-steps-container');
-            let height = active.offsetHeight + parseInt(active.style.marginTop) + parseInt(active.style.marginBottom);
-            container.scrollTop += height;
+            activeItem_001(active.nextElementSibling, 'dinglj-steps-container');
         }
     } else if (scope == 'line') {
         let active = getByClass('active-line')[0];
         if (active.nextElementSibling != null) {
-            active.nextElementSibling.click();
-            let container = getById('dinglj-line-number-container');
-            let height = active.offsetHeight + parseInt(active.style.marginTop) + parseInt(active.style.marginBottom);
-            container.scrollTop += height;
+            activeItem_001(active.nextElementSibling, 'dinglj-line-number-container');
         }
     }
+}
+
+function activeItem_001(element, containerID, direction = 1) {
+    element.click();
+    let container = getById(containerID);
+    let height = element.offsetHeight + (parseInt(element.style.marginTop) * 2) + (parseInt(element.style.marginBottom) * 2);
+    container.scrollTop += (height * direction);
 }
 
 /** 绑定左右键 */
