@@ -264,11 +264,17 @@ function ToPrev_001(scope = 'step') {
             ToPrev_001('line'); // 已经没有上一步, 则移动到上一行
         } else {
             active.previousElementSibling.click();
+            let container = getById('dinglj-line-number-container');
+            let height = active.offsetHeight + parseInt(active.style.marginTop) + parseInt(active.style.marginBottom);
+            container.scrollTop -= height;
         }
     } else if (scope == 'line') {
         let active = getByClass('active-line')[0];
         if (active.previousElementSibling != null) {
             active.previousElementSibling.click();
+            let container = getById('dinglj-steps-container');
+            let height = active.offsetHeight + parseInt(active.style.marginTop) + parseInt(active.style.marginBottom);
+            container.scrollTop -= height;
         }
     }
 }
@@ -281,11 +287,17 @@ function ToNext_001(scope = 'step') {
             ToNext_001('line');
         } else {
             active.nextElementSibling.click();
+            let container = getById('dinglj-steps-container');
+            let height = active.offsetHeight + parseInt(active.style.marginTop) + parseInt(active.style.marginBottom);
+            container.scrollTop += height;
         }
     } else if (scope == 'line') {
         let active = getByClass('active-line')[0];
         if (active.nextElementSibling != null) {
             active.nextElementSibling.click();
+            let container = getById('dinglj-line-number-container');
+            let height = active.offsetHeight + parseInt(active.style.marginTop) + parseInt(active.style.marginBottom);
+            container.scrollTop += height;
         }
     }
 }
