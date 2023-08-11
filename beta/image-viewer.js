@@ -298,9 +298,9 @@ function bindLeft_Right_001() {
         let len = context_001.layout.length;
         let i = context_001.layout.indexOf(scope);
         if (e.key == 'ArrowRight') {
-            next = context_001.layout[(len + 1) % len];
+            next = context_001.layout[(len + i + 1) % len];
         } else if (e.key == 'ArrowLeft') {
-            next = context_001.layout[(len - 1) % len];
+            next = context_001.layout[(len + i - 1) % len];
         }
         context_001.focus = next;
     });
