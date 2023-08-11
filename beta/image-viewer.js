@@ -202,98 +202,11 @@ function initLayout_001() {
             <div id="dinglj-left-guide">
                 <div id="dinglj-line-container">
                     <div id="dinglj-line-title">行数</div>
-                    <div id="dinglj-lines" click="alert('容器')">
-                    </div>
+                    <div id="dinglj-lines"></div>
                 </div>
                 <div id="dinglj-step-container">
                     <div id="dinglj-step-title">步数</div>
-                    <div id="dinglj-steps">
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-1">1_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-2">2_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-3">3_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-4">4_查看.png</div>
-                    <div class="step-item dinglj-item" id="step-item-5">5_查看.png</div>
-                    </div>
+                    <div id="dinglj-steps"></div>
                 </div>
             </div>
             <div id="dinglj-image-area">
@@ -345,10 +258,30 @@ function drawLineNumber_001() {
 
 function bindLineEvent_001() {
     let list = getByClass('line-item');
-    for (let elememt of list) {
-        elememt.addEventListener('click', e => {
+    for (let element of list) {
+        element.addEventListener('click', e => {
             e.stopPropagation();
-            alert('步骤' + elememt.innerHTML);
+            toLine_001(context_001.focus, 'line', element);
+            context_001.focus = 'line';
         })
     }
+}
+
+function toLine_001(oldScope, newScope, element, order = 'head', callback = () => {}) {
+    toItem_001(oldScope, newScope, element, order, callback);
+}
+
+function toItem_001(oldScope, newScope, element, order, callback) {
+    // 把旧作用域的 last 清除
+    let lastElements = getByClass(`last ${ oldScope }-item`);
+    for (let lastElement of lastElements) {
+        lastElement.classList.remove('last');
+    }
+    // 把旧作用域的 active 标记为 last
+    let activeElements = getByClass(`active ${ oldScope }-item`);
+    for (let activeElement of activeElements) {
+        activeElement.classList.add('last');
+    }
+    // 把当前元素标记为 active
+    element.classList.add('active');
 }
