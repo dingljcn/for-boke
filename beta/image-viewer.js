@@ -39,6 +39,7 @@ function run_001(config) {
 
 function exec_001() {
     initLayout_001();
+    drawLineNumber_001();
 }
 
 
@@ -201,12 +202,7 @@ function initLayout_001() {
             <div id="dinglj-left-guide">
                 <div id="dinglj-line-container">
                     <div id="dinglj-line-title">行数</div>
-                    <div id="dinglj-lines">
-                        <div class="line-item dinglj-item active" id="line-item-1">1</div>
-                        <div class="line-item dinglj-item" id="line-item-2">2</div>
-                        <div class="line-item dinglj-item" id="line-item-3">3</div>
-                        <div class="line-item dinglj-item" id="line-item-4">4</div>
-                        <div class="line-item dinglj-item" id="line-item-5">5</div>
+                    <div id="dinglj-lines" click="alert('容器')">
                     </div>
                 </div>
                 <div id="dinglj-step-container">
@@ -331,4 +327,28 @@ function initLayout_001() {
             </div>
         </div>
     </div>`;
+}
+
+/** 绘制行号 */
+function drawLineNumber_001() {
+    let res = get('1');
+    let reg = /.*<a href="([0-9]+\/)".*/;
+    context_001.lineNumbers = res.split('\n')
+        .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
+        .filter(href => href != '')
+        .map(href => href.substring(0, href.length - 1))
+        .map(number => `<div class="line-item dinglj-item" id="line-${ number }">${ number }</div>`)
+        .join('');
+    getById('dinglj-lines').innerHTML = context_001.lineNumbers;
+    bindLineEvent_001();
+}
+
+function bindLineEvent_001() {
+    let list = getByClass('line-item');
+    for (let elememt of list) {
+        elememt.addEventListener('click', e => {
+            e.stopPropagation();
+            alert('步骤' + elememt.innerHTML);
+        })
+    }
 }
