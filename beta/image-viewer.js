@@ -295,7 +295,7 @@ function ToNext_001(scope = 'step') {
 function activeItem_001(lastElement, element, containerID, direction = 1) {
     element.click();
     let container = getById(containerID);
-    let margin = (element.style.marginTop + element.style.marginBottom) / 2;
+    let margin = (parseInt(element.style.marginTop) + parseInt(element.style.marginBottom)) / 2;
     container.scrollTop += ((element.offsetHeight + margin) * direction);
 }
 
