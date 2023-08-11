@@ -92,7 +92,7 @@ async function drawLineNumber_001() {
             .filter(href => href != '')
             .map(href => href.substring(0, href.length - 1));
         let container = getById('dinglj-line-number-container');
-        let data = context_001.lineNumbers.map(n => `<div class="line-number-item" id="line-number-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
+        let data = context_001.lineNumbers.map(n => `<div class="dinglj-line-item" id="line-number-${n}" style="margin: 2px 0; cursor: pointer">${n}</div>`).join('');
         container.innerHTML = data;
         bindClickEvent_001();
     });
@@ -103,7 +103,7 @@ function bindClickEvent_001() {
     bindLineChangeEvent_001();
     onHistoryChange_001();
     onStarChange_001();
-    let list = getByClass('line-number-item');
+    let list = getByClass('dinglj-line-item');
     if (list.length > 0) {
         list[0].click();
     }
@@ -111,7 +111,7 @@ function bindClickEvent_001() {
 
 /** 切换行事件 */
 function bindLineChangeEvent_001() {
-    let list = getByClass('line-number-item');
+    let list = getByClass('dinglj-line-item');
     listActiveChange(list, context_001.config.style.menu.activeStyle, context_001.config.style.menu.inActiveStyle, (element, event) => {
         changeToLine_001(element, element.innerText);
     });
@@ -128,10 +128,10 @@ function changeToLine_001(element, lineNumber) {
             .filter(href => href != '');
         // 绘制
         let container = getById('dinglj-steps-container');
-        let data = context_001.lineNumbers[lineNumber].map(n => `<div class="step-item" id="step-${n}" style="margin: 2px 0; cursor: pointer; font-size: 14px; padding: 3px 0">${n}</div>`).join('');
+        let data = context_001.lineNumbers[lineNumber].map(n => `<div class="dinglj-step-item" id="step-${n}" style="margin: 2px 0; cursor: pointer; font-size: 14px; padding: 3px 0">${n}</div>`).join('');
         container.innerHTML = data;
         bindStepChangeEvent_001(lineNumber);
-        let stepList = getByClass('step-item');
+        let stepList = getByClass('dinglj-step-item');
         if (stepList.length > 0) {
             stepList[0].click();
         }
@@ -154,7 +154,7 @@ function changeToLine_001(element, lineNumber) {
 
 /** 切换步骤事件 */
 function bindStepChangeEvent_001(lineNumber) {
-    let list = getByClass('step-item');
+    let list = getByClass('dinglj-step-item');
     listActiveChange(list, context_001.config.style.menu.activeStyle, context_001.config.style.menu.inActiveStyle, (element, event) => {
         changeToStep_001(element, lineNumber, element.innerText);
     });
@@ -265,12 +265,12 @@ function ToPrev_001(scope = 'step') {
         if (active.previousElementSibling == null) {
             ToPrev_001('line'); // 已经没有上一步, 则移动到上一行
         } else {
-            activeItem_001(active.previousElementSibling, 'dinglj-steps-container', -1);
+            activeItem_001(active, active.previousElementSibling, 'dinglj-steps-container', -1);
         }
     } else if (scope == 'line') {
         let active = getByClass('active-line')[0];
         if (active.previousElementSibling != null) {
-            activeItem_001(active.previousElementSibling, 'dinglj-line-number-container', -1);
+            activeItem_001(active, active.previousElementSibling, 'dinglj-line-number-container', -1);
         }
     }
 }
@@ -282,20 +282,21 @@ function ToNext_001(scope = 'step') {
         if (active.nextElementSibling == null) {
             ToNext_001('line');
         } else {
-            activeItem_001(active.nextElementSibling, 'dinglj-steps-container');
+            activeItem_001(active, active.nextElementSibling, 'dinglj-steps-container');
         }
     } else if (scope == 'line') {
         let active = getByClass('active-line')[0];
         if (active.nextElementSibling != null) {
-            activeItem_001(active.nextElementSibling, 'dinglj-line-number-container');
+            activeItem_001(active, active.nextElementSibling, 'dinglj-line-number-container');
         }
     }
 }
 
-function activeItem_001(element, containerID, direction = 1) {
+function activeItem_001(lastElement, element, containerID, direction = 1) {
     element.click();
     let container = getById(containerID);
-    container.scrollTop += (element.offsetHeight * direction);
+    let margin = (element.style.marginTop + element.style.marginBottom) / 2;
+    container.scrollTop += ((element.offsetHeight + margin) * direction);
 }
 
 /** 绑定左右键 */
