@@ -566,7 +566,9 @@ function toHistory_001(element, e) {
 }
 
 function addToStar_001() {
-    let text = getById('dinglj-image').value;
+    let text = decodeURI(getById('dinglj-image').src);
+    let url = decodeURI(window.location.href);
+    text = text.replace(url, '');
     let data = pathTolineNumberAndStep(text);
     const key = `${ data.lineNumber }/${ data.step }`;
     if (context_001.presist.star.includes(key)) {
