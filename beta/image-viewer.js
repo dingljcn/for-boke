@@ -264,7 +264,7 @@ function initLayout_001() {
             <div id="dinglj-right-guide">
                 <div id="dinglj-right-title">
                     <div style="flex: 1; opacity: 0">弹性布局填充物</div>
-                    <div id="dinglj-history-title active-tab" onclick="changeTab_001('history')">历史记录</div>
+                    <div id="dinglj-history-title" class="active-tab" onclick="changeTab_001('history')">历史记录</div>
                     <div id="dinglj-star-title" onclick="changeTab_001('star')">重点关注</div>
                     <div style="flex: 1; opacity: 0">弹性布局填充物</div>
                 </div>
@@ -439,13 +439,13 @@ function moveTab_001(element, from, to, mills = 200, callback = () => {}) {
     let step = (parseInt(to) - parseInt(from)) / mills;
     let timer = setInterval(() => {
         let left = parseInt(element.style.left || '0px');
-        console.log(left);
         if ((step > 0 && left > parseInt(to)) || (step < 0 && left < parseInt(to))) {
             clearInterval(timer);
             element.style.left = to;
             return;
         }
         element.style.left = `${ left + step }px`;
+        callback();
     }, 1);
 }
 
