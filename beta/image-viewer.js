@@ -536,10 +536,18 @@ function changeScope_001(isLeft, e) {
     if (nextElement) {
         toItem_001(context_001.focus, nextScope, nextElement);
         context_001.focus = nextScope;
+        if (nextScope == 'history') {
+            changeTab_001('history');
+        } else if (nextScope == 'star') {
+            changeTab_001('star');
+        }
     }
 }
 
 function toHistory_001(element, e) {
     toItem_001(context_001.focus, 'history', element);
     context_001.focus = 'history';
+    let data = /\[(\d+)] - (.*)/.exec(element.innerText);
+    let key = `1/${ data[1] }/${ data[2] }`;
+    getById('dinglj-image').src = key;
 }
