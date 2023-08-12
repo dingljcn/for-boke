@@ -119,7 +119,8 @@ const css_001 = `body {
     text-align: center;
 }
 #dinglj-line-title {
-    height: 20px;
+    height: 30px;
+    line-height: 30px;
     border-bottom: 1px solid rgb(0,0,0,0.1);
 }
 #dinglj-lines {
@@ -240,8 +241,10 @@ function initLayout_001() {
             <div id="dinglj-web-name">用例截图查看工具</div>
             <div id="dinglj-center-title">
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
-                <div class="toolbar-item" id="dinglj-toolbar-box">
-                    <div>标记为重点关注图片</div>
+                <div id="dinglj-toolbar-box">
+                    <div class="toolbar-item" onclick="addToStar_001()">标记为重点关注图片</div>
+                    <div class="toolbar-item" onclick="cleanHistory_001()">清空历史记录</div>
+                    <div class="toolbar-item" onclick="cleanStar_001()">清空重点关注</div>
                 </div>
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
                 <div class="dinglj-step-counter">
@@ -282,13 +285,7 @@ function initLayout_001() {
                 <div id="dinglj-his-star-list">
                     <div id="dinglj-his-star-mask">
                         <div id="dinglj-history-list"></div>
-                        <div id="dinglj-star-list">
-                            <div class="star-item dinglj-item" id="star-item-1">1_查看.png</div>
-                            <div class="star-item dinglj-item" id="star-item-2">2_查看.png</div>
-                            <div class="star-item dinglj-item" id="star-item-3">3_查看.png</div>
-                            <div class="star-item dinglj-item" id="star-item-4">4_查看.png</div>
-                            <div class="star-item dinglj-item" id="star-item-5">5_查看.png</div>
-                        </div>
+                        <div id="dinglj-star-list"></div>
                     </div>
                 </div>
             </div>
@@ -465,7 +462,7 @@ function moveTab_001(element, from, to, mills = 200, callback = () => {}) {
 
 /** 键盘事件绑定 */
 function bindKeyboardEvent_001() {
-    changeScope_001(false, null);
+    changeScope_001(context_001.layout, false, null);
     window.addEventListener('keyup', e => {
         onKeyUp_001(e);
     });
@@ -475,7 +472,7 @@ function onKeyUp_001(e) {
     if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
         changeItem_001(e.key == 'ArrowUp', e);
     } else if (['ArrowLeft', 'ArrowRight'].includes(e.key)) {
-        changeScope_001(e.key == 'ArrowLeft', e);
+        changeScope_001(context_001.layout, e.key == 'ArrowLeft', e);
     }
 }
 
@@ -524,12 +521,12 @@ function changeItem_001(isPrev, e) {
 }
 
 /** 左右切换事件 */
-function changeScope_001(isLeft, e) {
-    let idx = context_001.layout.indexOf(context_001.focus);
-    let len = context_001.layout.length;
+function changeScope_001(layout, isLeft, e) {
+    let idx = layout.indexOf(context_001.focus);
+    let len = layout.length;
     let direction = isLeft ? -1 : 1;
     // 计算下一个作用域
-    let nextScope = context_001.layout[((len + idx + direction) % len)];
+    let nextScope = layout[((len + idx + direction) % len)];
     // 获取下一个作用域的 last
     let nextElements = getByClass(`${ nextScope }-item last`);
     let nextElement = null;
@@ -552,12 +549,55 @@ function changeScope_001(isLeft, e) {
         } else if (nextScope == 'star') {
             changeTab_001('star');
         }
+    } else { // 否则移除 nextScope, 再次计算
+        let tmpLayout = JSON.parse(JSON.stringify(layout));
+        let idx = tmpLayout.indexOf(nextScope);
+        tmpLayout.splice(idx, 1)
+        changeScope_001(tmpLayout, isLeft, e);
     }
 }
 
 function toHistory_001(element, e) {
     toItem_001(context_001.focus, 'history', element);
     context_001.focus = 'history';
+    let data = /\[(\d+)] - (.*)/.exec(element.innerText);
+    let key = `1/${ data[1] }/${ data[2] }`;
+    getById('dinglj-image').src = key;
+}
+
+function addToStar_001() {
+    let text = getById('dinglj-image').value;
+    let data = pathTolineNumberAndStep(text);
+    const key = `${ data.lineNumber }/${ data.step }`;
+    if (context_001.presist.star.includes(key)) {
+        return;
+    }
+    context_001.presist.history.push(key);
+    let container = getById('dinglj-star-list');
+    let tmp = newElement('div', {
+        parentNode: container,
+    }, {
+        id: `star-item-${ container.children.length }`,
+        innerText: `[${ data.lineNumber }] - ${ data.step }`,
+    });
+    tmp.classList.add('dinglj-item');
+    tmp.classList.add('star-item');
+    tmp.addEventListener('click', e => {
+        toStar_001(tmp, e);
+    });
+}
+
+function pathTolineNumberAndStep(text) {
+    let data = /1\/(\d+)\/(.*)/.exec(text);
+    return {
+        lineNumber: data[1],
+        step: data[2]
+    }
+}
+
+function toStar_001(element, e) {
+    toItem_001(context_001.focus, 'star', element);
+    context_001.focus = 'star';
     let data = /\[(\d+)] - (.*)/.exec(element.innerText);
     let key = `1/${ data[1] }/${ data[2] }`;
     getById('dinglj-image').src = key;
