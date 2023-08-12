@@ -185,7 +185,8 @@ const css_001 = `body {
     overflow-y: scroll;
 }
 .dinglj-item {
-    padding: 3px 0;
+    padding: 3px;
+    margin: 3px 0;
 }
 .active {
     background: blue;
@@ -194,7 +195,7 @@ const css_001 = `body {
     font-weight: bolder;
 }
 .last {
-    background: #EEE;
+    background: #DDD;
     border-radius: 5px;
 }
 `;
@@ -301,11 +302,14 @@ function toLine_001(oldScope, newScope, element, order = 'head', callback = () =
     getById('dinglj-line-input').value = element.innerText;
     let steps = getByClass('step-item');
     if (steps && steps.length > 0) {
+        let step;
         if (order == 'head') {
-            toStep_001(context_001.focus, 'step', steps[0]);
+            step = steps[0];
         } else {
-            toStep_001(context_001.focus, 'step', steps[steps.length - 1]);
+            step = steps[steps.length - 1];
         }
+        toStep_001(context_001.focus, 'step', steps[0], false);
+        step.classList.add('last');
     }
 }
 
@@ -336,6 +340,7 @@ function drawSteps(element) {
         .map(n => `<div class="step-item dinglj-item" id="step-${n}">${n}</div>`)
         .join('');
     bindStepEvent_001();
+    getById('dinglj-step-total').innerText = Object.keys(context_001.steps).length;
 }
 
 function bindStepEvent_001() {
@@ -350,8 +355,10 @@ function bindStepEvent_001() {
     }
 }
 
-function toStep_001(oldScope, newScope, element) {
-    toItem_001(oldScope, newScope, element);
+function toStep_001(oldScope, newScope, element, fromClick = true) {
+    if (fromClick) {
+        toItem_001(oldScope, newScope, element);
+    }
     getById('dinglj-step-input').value = parseInt(element.innerText);
     const lineNumber = getById('dinglj-line-input').value;
     getById('dinglj-image').src = `1/${ lineNumber }/${ element.innerText }`;
