@@ -578,7 +578,7 @@ function addToStarList_001(data) {
     if (context_001.presist.star.includes(key)) {
         return;
     }
-    context_001.presist.history.push(key);
+    context_001.presist.star.push(key);
     let container = getById('dinglj-star-list');
     let tmp = newElement('div', {
         parentNode: container,
