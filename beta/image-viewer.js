@@ -383,7 +383,7 @@ function toStep_001(oldScope, newScope, element, fromClick = true) {
 function addToHistory_001(lineNumber, step) {
     const key = `${ lineNumber }/${ step }`;
     if (!context_001.presist.history.includes(key)) {
-        context_001.presist.history.add(key);
+        context_001.presist.history.push(key);
     }
     let container = getById('dinglj-history-list');
     let tmp = newElement('div', {
