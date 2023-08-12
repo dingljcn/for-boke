@@ -1,31 +1,41 @@
-function changeTab_001(to = 'history') {
-    let container = getById('dinglj-his-star-mask');
-    let left = container.style.left || '0px';
-    if (to == 'history' && parseInt(left) < 0) {
-        moveTab_001(container, '-200px', '0px', 100, () => {
-            getById('dinglj-history-title').classList.add('active-tab');
-            getById('dinglj-star-title').classList.remove('active-tab');
-        });
-    } else if (to == 'star' && parseInt(left) > -200) {
-        moveTab_001(container, '0px', '-200px', 100, () => {
-            getById('dinglj-history-title').classList.remove('active-tab');
-            getById('dinglj-star-title').classList.add('active-tab');
-        });
+function bindKeyboardEvent_001() {
+    window.addEventListener('keyup', e => {
+        onKeyUp_001(e);
+    });
+}
+
+function onKeyUp_001(e) {
+    if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
+        changeItem_001(e.key == 'ArrowUp', e);
+    } else if (['ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        changeScope_001(e.key == 'ArrowLeft', e);
     }
 }
 
-function moveTab_001(element, from, to, mills = 200, callback = () => {}) {
-    let step = (parseInt(to) - parseInt(from)) / mills;
-    let timer = setInterval(() => {
-        let left = parseInt(element.style.left || '0px');
-        console.log(left);
-        if ((step > 0 && left > parseInt(to)) || (step < 0 && left < parseInt(to))) {
-            clearInterval(timer);
-            element.style.left = to;
-            return;
+function changeItem_001(isPrev, e) {
+    console.log(e.key);
+    let element = getByClass('active')[0];
+    let prevStep = element.previousElementSibling;
+    let nextStep = element.nextElementSibling;
+    if (context_001.focus == 'step') {
+        if (isPrev) { // 向前翻
+            if (prevStep) { // 前一个步骤存在, 直接切换
+                prevStep.click();
+            } else { // 不存在, 跳转到前一个步骤的最后一个
+                let lastLine = getByClass('line-item last')[0];
+                if (lastLine.previousElementSibling) {
+                    let step = toLine_001('step', 'line', lastLine.previousElementSibling, 'tail');
+                    if (step) {
+                        toItem_001('line', 'step', step);
+                    }
+                }
+            }
         }
-        element.style.left = `${ left + step }px`;
-    }, 1);
+    }
 }
 
-changeTab_001('star');
+function changeScope_001(isLeft, e) {
+    
+}
+
+bindKeyboardEvent_001();
