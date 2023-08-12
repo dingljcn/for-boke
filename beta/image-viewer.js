@@ -2,6 +2,10 @@ const context_001 = {
     imageList: [],
     steps: {},
     layout: ['line', 'step', 'his', 'star'],
+    presist: {
+        history: [],
+        star: [],
+    }
 };
 
 function onload_001(callback) {
@@ -176,11 +180,17 @@ const css_001 = `body {
     flex: 1;
     overflow: hidden;
 }
+#dinglj-his-star-mask {
+    width: 400px;
+    position: relative;
+    height: 100%;
+    display: flex;
+}
 #dinglj-history-list {
     width: 200px;
     overflow-y: scroll;
 }
-#dinglj-history-list {
+#dinglj-star-list {
     width: 200px;
     overflow-y: scroll;
 }
@@ -248,19 +258,15 @@ function initLayout_001() {
                     <div style="flex: 1; opacity: 0">弹性布局填充物</div>
                 </div>
                 <div id="dinglj-his-star-list">
-                    <div id="dinglj-history-list">
-                        <div class="history-item dinglj-item" id="history-item-1">1_查看.png</div>
-                        <div class="history-item dinglj-item" id="history-item-2">2_查看.png</div>
-                        <div class="history-item dinglj-item" id="history-item-3">3_查看.png</div>
-                        <div class="history-item dinglj-item" id="history-item-4">4_查看.png</div>
-                        <div class="history-item dinglj-item" id="history-item-5">5_查看.png</div>
-                    </div>
-                    <div id="dinglj-star-list">
-                        <div class="star-item dinglj-item" id="star-item-1">1_查看.png</div>
-                        <div class="star-item dinglj-item" id="star-item-2">2_查看.png</div>
-                        <div class="star-item dinglj-item" id="star-item-3">3_查看.png</div>
-                        <div class="star-item dinglj-item" id="star-item-4">4_查看.png</div>
-                        <div class="star-item dinglj-item" id="star-item-5">5_查看.png</div>
+                    <div id="dinglj-his-star-mask">
+                        <div id="dinglj-history-list"></div>
+                        <div id="dinglj-star-list">
+                            <div class="star-item dinglj-item" id="star-item-1">1_查看.png</div>
+                            <div class="star-item dinglj-item" id="star-item-2">2_查看.png</div>
+                            <div class="star-item dinglj-item" id="star-item-3">3_查看.png</div>
+                            <div class="star-item dinglj-item" id="star-item-4">4_查看.png</div>
+                            <div class="star-item dinglj-item" id="star-item-5">5_查看.png</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -282,6 +288,10 @@ function drawLineNumber_001() {
     bindLineEvent_001();
     // 更新总行数
     getById('dinglj-line-total').innerText = context_001.lineNumbers[context_001.lineNumbers.length - 1];
+    let lines = getByClass('line-item');
+    if (lines && lines.length > 0) {
+        lines[0].click();
+    }
 }
 
 function bindLineEvent_001() {
@@ -314,13 +324,18 @@ function toLine_001(oldScope, newScope, element, order = 'head', callback = () =
 }
 
 function toItem_001(oldScope, newScope, element, callback) {
+    let activeElements = getByClass(`active ${ oldScope }-item`);
+    if (activeElements == 1) { // 一致, 不用切换样式
+        if (element.id == activeElements[0].id) {
+            return;
+        }
+    }
     // 把旧作用域的 last 清除
     let lastElements = getByClass(`last ${ oldScope }-item`);
     for (let lastElement of lastElements) {
         lastElement.classList.remove('last');
     }
     // 把旧作用域的 active 标记为 last
-    let activeElements = getByClass(`active ${ oldScope }-item`);
     for (let activeElement of activeElements) {
         activeElement.classList.remove('active');
         activeElement.classList.add('last');
@@ -362,4 +377,21 @@ function toStep_001(oldScope, newScope, element, fromClick = true) {
     getById('dinglj-step-input').value = parseInt(element.innerText);
     const lineNumber = getById('dinglj-line-input').value;
     getById('dinglj-image').src = `1/${ lineNumber }/${ element.innerText }`;
+    addToHistory_001(lineNumber, element.innerText);
+}
+
+function addToHistory_001(lineNumber, step) {
+    const key = `${ lineNumber }/${ step }`;
+    if (!context_001.presist.history.includes(key)) {
+        context_001.presist.history.add(key);
+    }
+    let container = getById('dinglj-history-list');
+    let tmp = newElement('div', {
+        parentNode: container,
+    }, {
+        id: `history-item-${ container.children.length }`,
+        innerText: `[${ lineNumber }] - ${ step }`,
+    });
+    tmp.classList.add('dinglj-item');
+    tmp.classList.add('history-item');
 }
