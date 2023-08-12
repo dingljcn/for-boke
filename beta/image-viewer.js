@@ -325,7 +325,7 @@ function toLine_001(oldScope, newScope, element, order = 'head', callback = () =
 
 function toItem_001(oldScope, newScope, element, callback) {
     let activeElements = getByClass(`active ${ oldScope }-item`);
-    if (activeElements == 1) { // 一致, 不用切换样式
+    if (activeElements.length == 1) { // 一致, 不用切换样式
         if (element.id == activeElements[0].id) {
             return;
         }
@@ -382,9 +382,10 @@ function toStep_001(oldScope, newScope, element, fromClick = true) {
 
 function addToHistory_001(lineNumber, step) {
     const key = `${ lineNumber }/${ step }`;
-    if (!context_001.presist.history.includes(key)) {
-        context_001.presist.history.push(key);
+    if (context_001.presist.history.includes(key)) {
+        return;
     }
+    context_001.presist.history.push(key);
     let container = getById('dinglj-history-list');
     let tmp = newElement('div', {
         parentNode: container,
