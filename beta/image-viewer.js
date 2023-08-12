@@ -138,7 +138,8 @@ const css_001 = `body {
     flex-direction: column;
 }
 #dinglj-step-title {
-    height: 20px;
+    height: 30px;
+    line-height: 30px;
     text-align: center;
     border-bottom: 1px solid rgb(0,0,0,0.1);
 }
@@ -171,15 +172,15 @@ const css_001 = `body {
     flex-direction: column;
 }
 #dinglj-right-title {
-    height: 20px;
+    height: 30px;
+    line-height: 30px;
     display: flex;
     border-bottom: 1px solid rgb(0,0,0,0.1);
 }
-#dinglj-history-title {
-    padding: 0 5px;
-}
+#dinglj-history-title,
 #dinglj-star-title {
     padding: 0 5px;
+    cursor: pointer;
 }
 #dinglj-his-star-list {
     flex: 1;
@@ -219,6 +220,9 @@ const css_001 = `body {
     color: blue;
     font-weight: bolder;
 }
+.toolbar-item {
+    cursor: pointer;
+}
 #dinglj-toolbar-box {
     display: flex;
 }
@@ -236,7 +240,7 @@ function initLayout_001() {
             <div id="dinglj-web-name">用例截图查看工具</div>
             <div id="dinglj-center-title">
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
-                <div id="dinglj-toolbar-box">
+                <div class="toolbar-item" id="dinglj-toolbar-box">
                     <div>标记为重点关注图片</div>
                 </div>
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
