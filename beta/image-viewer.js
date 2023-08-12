@@ -84,7 +84,7 @@ const css_001 = `body {
     flex: 1;
     padding: 0 10px;
 }
-#dinglj-step-counter {
+.dinglj-step-counter {
     padding: 0 10px;
 }
 #dinglj-line-input,
@@ -296,12 +296,20 @@ function bindLineEvent_001() {
 }
 
 function toLine_001(oldScope, newScope, element, order = 'head', callback = () => {}) {
-    toItem_001(oldScope, newScope, element, order, callback);
+    toItem_001(oldScope, newScope, element, callback);
     drawSteps(element);
     getById('dinglj-line-input').value = element.innerText;
+    let steps = getByClass('step-item');
+    if (steps && steps.length > 0) {
+        if (order == 'head') {
+            toStep_001(context_001.focus, 'step', steps[0]);
+        } else {
+            toStep_001(context_001.focus, 'step', steps[steps.length - 1]);
+        }
+    }
 }
 
-function toItem_001(oldScope, newScope, element, order, callback) {
+function toItem_001(oldScope, newScope, element, callback) {
     // 把旧作用域的 last 清除
     let lastElements = getByClass(`last ${ oldScope }-item`);
     for (let lastElement of lastElements) {
@@ -327,4 +335,24 @@ function drawSteps(element) {
     getById('dinglj-steps').innerHTML = context_001.steps[lineNumber]
         .map(n => `<div class="step-item dinglj-item" id="step-${n}">${n}</div>`)
         .join('');
+    bindStepEvent_001();
+}
+
+function bindStepEvent_001() {
+    let list = getByClass('step-item');
+    for (let element of list) {
+        element.addEventListener('click', e => {
+            e.stopPropagation();
+            log(`点击图片${ element.innerText }`);
+            toStep_001(context_001.focus, 'step', element);
+            context_001.focus = 'step';
+        });
+    }
+}
+
+function toStep_001(oldScope, newScope, element) {
+    toItem_001(oldScope, newScope, element);
+    getById('dinglj-step-input').value = parseInt(element.innerText);
+    const lineNumber = getById('dinglj-line-input').value;
+    getById('dinglj-image').src = `1/${ lineNumber }/${ element.innerText }`;
 }
