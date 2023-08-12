@@ -208,6 +208,10 @@ const css_001 = `body {
     background: #DDD;
     border-radius: 5px;
 }
+.active-tab {
+    color: blue;
+    font-weight: bolder;
+}
 `;
 
 
@@ -253,8 +257,8 @@ function initLayout_001() {
             <div id="dinglj-right-guide">
                 <div id="dinglj-right-title">
                     <div style="flex: 1; opacity: 0">弹性布局填充物</div>
-                    <div id="dinglj-history-title">历史记录</div>
-                    <div id="dinglj-history-star">重点关注</div>
+                    <div id="dinglj-history-title" onclick="changeTab_001('history')">历史记录</div>
+                    <div id="dinglj-history-star" onclick="changeTab_001('star')">重点关注</div>
                     <div style="flex: 1; opacity: 0">弹性布局填充物</div>
                 </div>
                 <div id="dinglj-his-star-list">
@@ -340,7 +344,8 @@ function toItem_001(oldScope, newScope, element, callback) {
         activeElement.classList.remove('active');
         activeElement.classList.add('last');
     }
-    // 把当前元素标记为 active
+    // 把当前元素标记为 active, 并移除 last
+    element.classList.remove('last');
     element.classList.add('active');
 }
 
@@ -395,4 +400,34 @@ function addToHistory_001(lineNumber, step) {
     });
     tmp.classList.add('dinglj-item');
     tmp.classList.add('history-item');
+}
+
+function changeTab_001(to = 'history') {
+    let container = getById('dinglj-his-star-mask');
+    let left = container.style.left || '0px';
+    if (to == 'history' && parseInt(left) < 0) {
+        moveTab_001(container, '-200px', '0px', 100, () => {
+            getById('dinglj-history-title').classList.add('active-tab');
+            getById('dinglj-star-title').classList.remove('active-tab');
+        });
+    } else if (to == 'star' && parseInt(left) > -200) {
+        moveTab_001(container, '0px', '-200px', 100, () => {
+            getById('dinglj-history-title').classList.remove('active-tab');
+            getById('dinglj-star-title').classList.add('active-tab');
+        });
+    }
+}
+
+function moveTab_001(element, from, to, mills = 200, callback = () => {}) {
+    let step = (parseInt(to) - parseInt(from)) / mills;
+    let timer = setInterval(() => {
+        let left = parseInt(element.style.left || '0px');
+        console.log(left);
+        if ((step > 0 && left > parseInt(to)) || (step < 0 && left < parseInt(to))) {
+            clearInterval(timer);
+            element.style.left = to;
+            return;
+        }
+        element.style.left = `${ left + step }px`;
+    }, 1);
 }
