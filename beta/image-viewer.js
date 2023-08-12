@@ -469,10 +469,22 @@ function changeItem_001(isPrev, e) {
         if (isPrev) { // 向前翻
             if (prevStep) { // 前一个步骤存在, 直接切换
                 prevStep.click();
-            } else { // 不存在, 跳转到前一个步骤的最后一个
+            } else { // 不存在, 跳转到前一行的最后一个步骤
                 let lastLine = getByClass('line-item last')[0];
                 if (lastLine.previousElementSibling) {
                     let step = toLine_001('step', 'line', lastLine.previousElementSibling, 'tail');
+                    if (step) {
+                        toItem_001('line', 'step', step);
+                    }
+                }
+            }
+        } else { // 向后翻
+            if (nextStep) { // 后一个步骤存在, 直接切换
+                nextStep.click();
+            } else { // 不存在, 则跳转后一行的第一个步骤
+                let lastLine = getByClass('line-item last')[0];
+                if (lastLine.nextElementSibling) {
+                    let step = toLine_001('step', 'line', lastLine.nextElementSibling, 'head');
                     if (step) {
                         toItem_001('line', 'step', step);
                     }
