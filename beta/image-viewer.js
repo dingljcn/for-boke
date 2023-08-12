@@ -425,7 +425,7 @@ function addToHistory_001(lineNumber, step) {
     });
     tmp.classList.add('dinglj-item');
     tmp.classList.add('history-item');
-    savePresist();
+    savePresist_001();
     tmp.addEventListener('click', e => {
         toHistory_001(tmp, e);
     });
@@ -588,7 +588,7 @@ function addToStarList_001(data) {
     });
     tmp.classList.add('dinglj-item');
     tmp.classList.add('star-item');
-    savePresist();
+    savePresist_001();
     tmp.addEventListener('click', e => {
         toStar_001(tmp, e);
     });
@@ -622,7 +622,7 @@ function cleanHistory_001() {
     context_001.presist.history = [];
     getById('dinglj-history-list').innerHTML = '';
     addToHistory_001(data.lineNumber, data.step);
-    savePresist();
+    savePresist_001();
 }
 
 function cleanStar_001() {
