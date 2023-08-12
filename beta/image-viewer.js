@@ -2,7 +2,7 @@ const context_001 = {
     imageList: [],
     steps: {},
     layout: ['line', 'step', 'history', 'star'],
-    presist: {
+    persist: {
         history: [],
         star: [],
     }
@@ -44,7 +44,7 @@ function run_001(config) {
 /** 正式执行逻辑 */
 function exec_001() {
     initLayout_001();
-    restorePresist_001();
+    restorePersist_001();
     drawLineNumber_001();
     bindKeyboardEvent_001();
 }
@@ -412,10 +412,10 @@ function toStep_001(oldScope, newScope, element, fromClick = true) {
 /** 添加到历史记录 */
 function addToHistory_001(lineNumber, step) {
     const key = `${ lineNumber }/${ step }`;
-    if (context_001.presist.history.includes(key)) {
+    if (context_001.persist.history.includes(key)) {
         return;
     }
-    context_001.presist.history.push(key);
+    context_001.persist.history.push(key);
     let container = getById('dinglj-history-list');
     let tmp = newElement('div', {
         parentNode: container,
@@ -425,7 +425,7 @@ function addToHistory_001(lineNumber, step) {
     });
     tmp.classList.add('dinglj-item');
     tmp.classList.add('history-item');
-    savePresist_001();
+    savePersist_001();
     tmp.addEventListener('click', e => {
         toHistory_001(tmp, e);
     });
@@ -575,10 +575,10 @@ function addToStar_001() {
 
 function addToStarList_001(data) {
     const key = `${ data.lineNumber }/${ data.step }`;
-    if (context_001.presist.star.includes(key)) {
+    if (context_001.persist.star.includes(key)) {
         return;
     }
-    context_001.presist.star.push(key);
+    context_001.persist.star.push(key);
     let container = getById('dinglj-star-list');
     let tmp = newElement('div', {
         parentNode: container,
@@ -588,7 +588,7 @@ function addToStarList_001(data) {
     });
     tmp.classList.add('dinglj-item');
     tmp.classList.add('star-item');
-    savePresist_001();
+    savePersist_001();
     tmp.addEventListener('click', e => {
         toStar_001(tmp, e);
     });
@@ -619,39 +619,39 @@ function toStar_001(element, e) {
 
 function cleanHistory_001() {
     let data = getImgData();
-    context_001.presist.history = [];
+    context_001.persist.history = [];
     getById('dinglj-history-list').innerHTML = '';
     addToHistory_001(data.lineNumber, data.step);
-    savePresist_001();
+    savePersist_001();
 }
 
 function cleanStar_001() {
-    context_001.presist.star = [];
+    context_001.persist.star = [];
     getById('dinglj-star-list').innerHTML = '';
-    savePresist_001();
+    savePersist_001();
 }
 
-function savePresist_001() {
+function savePersist_001() {
     if (context_001.config.persist) {
         let str = localStorage.getItem('dinglj-001-cache');
         let json = {};
         if (str) {
             json = JSON.parse(str);
         }
-        json[window.location.href] = context_001.presist;
+        json[window.location.href] = context_001.persist;
         localStorage.setItem('dinglj-001-cache', JSON.stringify(json));
     }
 }
 
-function restorePresist_001() {
-    let data = readPresist_001();
+function restorePersist_001() {
+    let data = readPersist_001();
     if (data) {
         console.log(data);
     }
 }
 
-function readPresist_001() {
-    if (context_001.config.presist) {
+function readPersist_001() {
+    if (context_001.config.persist) {
         let str = localStorage.getItem('dinglj-001-cache');
         let json = {};
         if (str) {
