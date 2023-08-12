@@ -1,7 +1,7 @@
 const context_001 = {
     imageList: [],
     steps: {},
-    layout: ['line', 'step', 'his', 'star'],
+    layout: ['line', 'step'],
     presist: {
         history: [],
         star: [],
@@ -449,12 +449,13 @@ function moveTab_001(element, from, to, mills = 200, callback = () => {}) {
     }, 1);
 }
 
+/** 键盘事件绑定 */
 function bindKeyboardEvent_001() {
     window.addEventListener('keyup', e => {
         onKeyUp_001(e);
     });
 }
-
+/** 按键抬起事件 */
 function onKeyUp_001(e) {
     if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
         changeItem_001(e.key == 'ArrowUp', e);
@@ -463,6 +464,7 @@ function onKeyUp_001(e) {
     }
 }
 
+/** 上下切换事件 */
 function changeItem_001(isPrev, e) {
     console.log(e.key);
     let element = getByClass('active')[0];
@@ -494,7 +496,7 @@ function changeItem_001(isPrev, e) {
                 }
             }
         }
-    } else if (context_001.focus == 'line') {
+    } else { //if (context_001.focus == 'line') {
         if (isPrev) {
             if (prevStep) {
                 prevStep.click();
@@ -507,6 +509,24 @@ function changeItem_001(isPrev, e) {
     }
 }
 
+/** 左右切换事件 */
 function changeScope_001(isLeft, e) {
-    
+    let idx = context_001.layout.indexOf(context_001.focus);
+    let len = context_001.layout.length;
+    let direction = isLeft ? -1 : 1;
+    let nextScope = context_001.layout[((len + idx + direction) % len)];
+    let nextElements = getByClass(`${ nextScope }-item last`);
+    let nextElement = null;
+    if (nextElements && nextElements.length == 1) {
+        nextElement = nextElements[0];
+    } else {
+        nextElements = getByClass(`${ nextScope }-item`);
+        if (nextElements && nextElements > 0) {
+            nextElement = nextElements[0];
+        }
+    }
+    if (nextElement) {
+        toItem_001(context_001.focus, nextScope, nextElement);
+        context_001.focus = nextScope;
+    }
 }
