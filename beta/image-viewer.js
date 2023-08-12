@@ -1,6 +1,6 @@
 const context_001 = {
     imageList: [],
-    focus: 'step', // line, step, his, star
+    steps: {},
     layout: ['line', 'step', 'his', 'star'],
 };
 
@@ -83,6 +83,14 @@ const css_001 = `body {
     display: flex;
     flex: 1;
     padding: 0 10px;
+}
+#dinglj-step-counter {
+    padding: 0 10px;
+}
+#dinglj-line-input,
+#dinglj-step-input {
+    outline: none;
+    width: 3rem;
 }
 #dinglj-other-options {
     padding: 0 10px;
@@ -203,13 +211,13 @@ function initLayout_001() {
             <div id="dinglj-web-name">用例截图查看工具</div>
             <div id="dinglj-center-title">
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
-                <div>
-                    <span>行数: </span>
-                    <input id="dinglj-line-input"/>/<span id="dinglj-line-total"></span>
+                <div class="dinglj-step-counter">
+                    <span>行数：</span>
+                    <input id="dinglj-line-input"/> / <span id="dinglj-line-total"></span>
                 </div>
-                <div>
-                    <span>步数: </span>
-                    <input id="dinglj-step-input"/>/<span id="dinglj-step-total"></span>
+                <div class="dinglj-step-counter">
+                    <span>步数：</span>
+                    <input id="dinglj-step-input"/> / <span id="dinglj-step-total"></span>
                 </div>
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
             </div>

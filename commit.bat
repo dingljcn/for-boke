@@ -1,4 +1,4 @@
 @echo off
 git add .
-git commit -m '图片显示'
+git commit -m 'image-viewer'
 git push
