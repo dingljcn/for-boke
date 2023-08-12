@@ -56,6 +56,9 @@ const css_const = {
     },
     image: {
         padding: '20px',
+    },
+    nav: {
+        width: '250px',
     }
 }
 
@@ -102,7 +105,7 @@ const css_001 = `body {
     padding: 0 10px;
 }
 #dinglj-left-guide {
-    width: 350px;
+    width: ${ css_const.nav.width };
     height: 100%;
     overflow: hidden;
     display: flex;
@@ -161,7 +164,7 @@ const css_001 = `body {
     box-shadow: 0 0 10px 1px grey;
 }
 #dinglj-right-guide {
-    width: 350px;
+    width: ${ css_const.nav.width };
     height: 100%;
     overflow: hidden;
     display: flex;
@@ -183,17 +186,17 @@ const css_001 = `body {
     overflow: hidden;
 }
 #dinglj-his-star-mask {
-    width: 700px;
+    width: calc(${ css_const.nav.width } * 2);
     position: relative;
     height: 100%;
     display: flex;
 }
 #dinglj-history-list {
-    width: 350px;
+    width: ${ css_const.nav.width };
     overflow-y: scroll;
 }
 #dinglj-star-list {
-    width: 350px;
+    width: ${ css_const.nav.width };
     overflow-y: scroll;
 }
 .dinglj-item {
@@ -419,12 +422,12 @@ function changeTab_001(to = 'history') {
     let container = getById('dinglj-his-star-mask');
     let left = container.style.left || '0px';
     if (to == 'history' && parseInt(left) < 0) {
-        moveTab_001(container, '-350px', '0px', 100, () => {
+        moveTab_001(container, `-${ css_const.nav.width }`, '0px', 100, () => {
             getById('dinglj-history-title').classList.add('active-tab');
             getById('dinglj-star-title').classList.remove('active-tab');
         });
     } else if (to == 'star' && parseInt(left) > -200) {
-        moveTab_001(container, '0px', '-350px', 100, () => {
+        moveTab_001(container, '0px', `-${ css_const.nav.width }`, 100, () => {
             getById('dinglj-history-title').classList.remove('active-tab');
             getById('dinglj-star-title').classList.add('active-tab');
         });
