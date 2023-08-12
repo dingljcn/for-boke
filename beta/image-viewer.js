@@ -223,6 +223,7 @@ const css_001 = `body {
 }
 .toolbar-item {
     cursor: pointer;
+    padding: 0 15px;
 }
 #dinglj-toolbar-box {
     display: flex;
@@ -423,6 +424,7 @@ function addToHistory_001(lineNumber, step) {
     });
     tmp.classList.add('dinglj-item');
     tmp.classList.add('history-item');
+    savePresist();
     tmp.addEventListener('click', e => {
         toHistory_001(tmp, e);
     });
@@ -566,10 +568,7 @@ function toHistory_001(element, e) {
 }
 
 function addToStar_001() {
-    let text = decodeURI(getById('dinglj-image').src);
-    let url = decodeURI(window.location.href);
-    text = text.replace(url, '');
-    let data = pathTolineNumberAndStep(text);
+    let data = getImgData();
     const key = `${ data.lineNumber }/${ data.step }`;
     if (context_001.presist.star.includes(key)) {
         return;
@@ -584,9 +583,17 @@ function addToStar_001() {
     });
     tmp.classList.add('dinglj-item');
     tmp.classList.add('star-item');
+    savePresist();
     tmp.addEventListener('click', e => {
         toStar_001(tmp, e);
     });
+}
+
+function getImgData() {
+    let text = decodeURI(getById('dinglj-image').src);
+    let url = decodeURI(window.location.href);
+    text = text.replace(url, '');
+    return pathTolineNumberAndStep(text);
 }
 
 function pathTolineNumberAndStep(text) {
@@ -603,4 +610,30 @@ function toStar_001(element, e) {
     let data = /\[(\d+)] - (.*)/.exec(element.innerText);
     let key = `1/${ data[1] }/${ data[2] }`;
     getById('dinglj-image').src = key;
+}
+
+function cleanHistory_001() {
+    let data = getImgData();
+    context_001.presist.history = [];
+    getById('dinglj-history-list').innerHTML = '';
+    addToHistory_001(data.lineNumber, data.step);
+    savePresist();
+}
+
+function cleanStar_001() {
+    context_001.presist.star = [];
+    getById('dinglj-star-list').innerHTML = '';
+    savePresist();
+}
+
+function savePresist() {
+    if (context_001.config.persist) {
+        let str = localStorage.getItem('dinglj-001-cache');
+        let json = {};
+        if (str) {
+            json = JSON.parse(str);
+        }
+        json[window.location.href] = context_001.presist;
+        localStorage.setItem('dinglj-001-cache', JSON.stringify(json));
+    }
 }
