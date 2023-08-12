@@ -451,6 +451,7 @@ function moveTab_001(element, from, to, mills = 200, callback = () => {}) {
 
 /** 键盘事件绑定 */
 function bindKeyboardEvent_001() {
+    changeScope_001(false, null);
     window.addEventListener('keyup', e => {
         onKeyUp_001(e);
     });
@@ -466,7 +467,6 @@ function onKeyUp_001(e) {
 
 /** 上下切换事件 */
 function changeItem_001(isPrev, e) {
-    console.log(e.key);
     let element = getByClass('active')[0];
     let prevStep = element.previousElementSibling;
     let nextStep = element.nextElementSibling;
