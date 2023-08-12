@@ -219,6 +219,9 @@ const css_001 = `body {
     color: blue;
     font-weight: bolder;
 }
+#dinglj-toolbar-box {
+    display: flex;
+}
 `;
 
 /** 绘制布局 */
@@ -232,6 +235,10 @@ function initLayout_001() {
         <div id="dinglj-all-title">
             <div id="dinglj-web-name">用例截图查看工具</div>
             <div id="dinglj-center-title">
+                <div style="flex: 1; opacity: 0">弹性布局填充物</div>
+                <div id="dinglj-toolbar-box">
+                    <div>标记为重点关注图片</div>
+                </div>
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
                 <div class="dinglj-step-counter">
                     <span>行数：</span>
