@@ -1,7 +1,7 @@
 const context_001 = {
     imageList: [],
     steps: {},
-    layout: ['line', 'step'],
+    layout: ['line', 'step', 'history'],
     presist: {
         history: [],
         star: [],
@@ -415,6 +415,9 @@ function addToHistory_001(lineNumber, step) {
     });
     tmp.classList.add('dinglj-item');
     tmp.classList.add('history-item');
+    tmp.addEventListener('click', e => {
+        toHistory_001(tmp, e);
+    });
 }
 
 /** 切换 tab 页事件 */
@@ -514,19 +517,29 @@ function changeScope_001(isLeft, e) {
     let idx = context_001.layout.indexOf(context_001.focus);
     let len = context_001.layout.length;
     let direction = isLeft ? -1 : 1;
+    // 计算下一个作用域
     let nextScope = context_001.layout[((len + idx + direction) % len)];
+    // 获取下一个作用域的 last
     let nextElements = getByClass(`${ nextScope }-item last`);
     let nextElement = null;
+    // 如果 last 存在, 则取 last
     if (nextElements && nextElements.length == 1) {
         nextElement = nextElements[0];
     } else {
+        // 如果 last 不存在, 则取第一个
         nextElements = getByClass(`${ nextScope }-item`);
         if (nextElements && nextElements > 0) {
             nextElement = nextElements[0];
         }
     }
+    // 如果下一个存在元素, 则切换作用域
     if (nextElement) {
         toItem_001(context_001.focus, nextScope, nextElement);
         context_001.focus = nextScope;
     }
+}
+
+function toHistory_001(element, e) {
+    toItem_001(context_001.focus, 'history', element);
+    context_001.focus = 'history';
 }
