@@ -41,9 +41,11 @@ function run_001(config) {
     exec_001();
 }
 
+/** 正式执行逻辑 */
 function exec_001() {
     initLayout_001();
     drawLineNumber_001();
+    bindKeyboardEvent_001();
 }
 
 
@@ -197,6 +199,8 @@ const css_001 = `body {
 .dinglj-item {
     padding: 3px;
     margin: 3px 0;
+    transition: 0.3s;
+    cursor: pointer;
 }
 .active {
     background: blue;
@@ -214,7 +218,7 @@ const css_001 = `body {
 }
 `;
 
-
+/** 绘制布局 */
 function initLayout_001() {
     newElement('style', {
         parentNode: document.head
@@ -257,8 +261,8 @@ function initLayout_001() {
             <div id="dinglj-right-guide">
                 <div id="dinglj-right-title">
                     <div style="flex: 1; opacity: 0">弹性布局填充物</div>
-                    <div id="dinglj-history-title" onclick="changeTab_001('history')">历史记录</div>
-                    <div id="dinglj-history-star" onclick="changeTab_001('star')">重点关注</div>
+                    <div id="dinglj-history-title active-tab" onclick="changeTab_001('history')">历史记录</div>
+                    <div id="dinglj-star-title" onclick="changeTab_001('star')">重点关注</div>
                     <div style="flex: 1; opacity: 0">弹性布局填充物</div>
                 </div>
                 <div id="dinglj-his-star-list">
@@ -298,6 +302,7 @@ function drawLineNumber_001() {
     }
 }
 
+/** 界面点击行号事件 */
 function bindLineEvent_001() {
     let list = getByClass('line-item');
     for (let element of list) {
@@ -310,6 +315,7 @@ function bindLineEvent_001() {
     }
 }
 
+/** 切换行事件 */
 function toLine_001(oldScope, newScope, element, order = 'head', callback = () => {}) {
     toItem_001(oldScope, newScope, element, callback);
     drawSteps(element);
@@ -327,6 +333,7 @@ function toLine_001(oldScope, newScope, element, order = 'head', callback = () =
     }
 }
 
+/** 切换条目事件 */
 function toItem_001(oldScope, newScope, element, callback) {
     let activeElements = getByClass(`active ${ oldScope }-item`);
     if (activeElements.length == 1) { // 一致, 不用切换样式
@@ -349,6 +356,7 @@ function toItem_001(oldScope, newScope, element, callback) {
     element.classList.add('active');
 }
 
+/** 绘制步骤 */
 function drawSteps(element) {
     const lineNumber = element.innerText;
     let reg = /.*\.png">(.*.png)<\/a>.*/;
@@ -363,6 +371,7 @@ function drawSteps(element) {
     getById('dinglj-step-total').innerText = Object.keys(context_001.steps).length;
 }
 
+/** 界面点击步骤事件 */
 function bindStepEvent_001() {
     let list = getByClass('step-item');
     for (let element of list) {
@@ -375,6 +384,7 @@ function bindStepEvent_001() {
     }
 }
 
+/** 切换步骤事件 */
 function toStep_001(oldScope, newScope, element, fromClick = true) {
     if (fromClick) {
         toItem_001(oldScope, newScope, element);
@@ -385,6 +395,7 @@ function toStep_001(oldScope, newScope, element, fromClick = true) {
     addToHistory_001(lineNumber, element.innerText);
 }
 
+/** 添加到历史记录 */
 function addToHistory_001(lineNumber, step) {
     const key = `${ lineNumber }/${ step }`;
     if (context_001.presist.history.includes(key)) {
@@ -402,6 +413,7 @@ function addToHistory_001(lineNumber, step) {
     tmp.classList.add('history-item');
 }
 
+/** 切换 tab 页事件 */
 function changeTab_001(to = 'history') {
     let container = getById('dinglj-his-star-mask');
     let left = container.style.left || '0px';
@@ -418,6 +430,7 @@ function changeTab_001(to = 'history') {
     }
 }
 
+/** tab 页切换动画 */
 function moveTab_001(element, from, to, mills = 200, callback = () => {}) {
     let step = (parseInt(to) - parseInt(from)) / mills;
     let timer = setInterval(() => {
