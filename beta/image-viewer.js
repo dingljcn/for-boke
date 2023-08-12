@@ -1,7 +1,7 @@
 const context_001 = {
     imageList: [],
     steps: {},
-    layout: ['line', 'step', 'history'],
+    layout: ['line', 'step', 'history', 'star'],
     presist: {
         history: [],
         star: [],
