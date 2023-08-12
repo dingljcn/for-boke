@@ -570,11 +570,11 @@ function toHistory_001(element, e) {
 
 function addToStar_001() {
     let data = getImgData();
-    addToStarList_001(data);
+    addToStarList_001(data.lineNumber, data.step);
 }
 
-function addToStarList_001(data) {
-    const key = `${ data.lineNumber }/${ data.step }`;
+function addToStarList_001(lineNumber, step) {
+    const key = `${ lineNumber }/${ step }`;
     if (context_001.persist.star.includes(key)) {
         return;
     }
@@ -584,7 +584,7 @@ function addToStarList_001(data) {
         parentNode: container,
     }, {
         id: `star-item-${ container.children.length }`,
-        innerText: `[${ data.lineNumber }] - ${ data.step }`,
+        innerText: `[${ lineNumber }] - ${ step }`,
     });
     tmp.classList.add('dinglj-item');
     tmp.classList.add('star-item');
@@ -646,7 +646,18 @@ function savePersist_001() {
 function restorePersist_001() {
     let data = readPersist_001();
     if (data) {
-        console.log(data);
+        if (data.history) {
+            for (let tmp of data.history) {
+                let kv = tmp.split('/');
+                addToHistory_001(kv[0], kv[1]);
+            }
+        }
+        if (data.star) {
+            for (let tmp of data.star) {
+                let kv = tmp.split('/');
+                addToStarList_001(kv[0], kv[1]);
+            }
+        }
     }
 }
 
