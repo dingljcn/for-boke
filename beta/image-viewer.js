@@ -528,7 +528,7 @@ function changeScope_001(isLeft, e) {
     } else {
         // 如果 last 不存在, 则取第一个
         nextElements = getByClass(`${ nextScope }-item`);
-        if (nextElements && nextElements > 0) {
+        if (nextElements && nextElements.length > 0) {
             nextElement = nextElements[0];
         }
     }
