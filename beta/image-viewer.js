@@ -80,6 +80,7 @@ const css_001 = `body {
     padding: 0 10px;
 }
 #dinglj-center-title {
+    display: flex;
     flex: 1;
     padding: 0 10px;
 }
@@ -200,7 +201,18 @@ function initLayout_001() {
     document.body.innerHTML = `<div id="dinglj-all-container">
         <div id="dinglj-all-title">
             <div id="dinglj-web-name">用例截图查看工具</div>
-            <div id="dinglj-center-title"></div>
+            <div id="dinglj-center-title">
+                <div style="flex: 1; opacity: 0">弹性布局填充物</div>
+                <div>
+                    <span>行数: </span>
+                    <input id="dinglj-line-input"/>/<span id="dinglj-line-total"></span>
+                </div>
+                <div>
+                    <span>步数: </span>
+                    <input id="dinglj-step-input"/>/<span id="dinglj-step-total"></span>
+                </div>
+                <div style="flex: 1; opacity: 0">弹性布局填充物</div>
+            </div>
             <div id="dinglj-other-options">其他操作</div>
         </div>
         <div id="dinglj-under-title">
@@ -259,6 +271,8 @@ function drawLineNumber_001() {
         .map(number => `<div class="line-item dinglj-item" id="line-${ number }">${ number }</div>`)
         .join('');
     bindLineEvent_001();
+    // 更新总行数
+    getById('dinglj-line-total').innerText = context_001.lineNumbers[context_001.lineNumbers.length - 1];
 }
 
 function bindLineEvent_001() {
@@ -276,6 +290,7 @@ function bindLineEvent_001() {
 function toLine_001(oldScope, newScope, element, order = 'head', callback = () => {}) {
     toItem_001(oldScope, newScope, element, order, callback);
     drawSteps(element);
+    getById('dinglj-line-input').value = element.innerText;
 }
 
 function toItem_001(oldScope, newScope, element, order, callback) {
@@ -298,10 +313,10 @@ function drawSteps(element) {
     const lineNumber = element.innerText;
     let reg = /.*\.png">(.*.png)<\/a>.*/;
     let res = get(`1/${ lineNumber }`);
-    context_001.lineNumbers[lineNumber] = res.split('\n')
+    context_001.steps[lineNumber] = res.split('\n')
             .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
             .filter(href => href != '');
-    getById('dinglj-steps').innerHTML = context_001.lineNumbers[lineNumber]
+    getById('dinglj-steps').innerHTML = context_001.steps[lineNumber]
         .map(n => `<div class="step-item dinglj-item" id="step-${n}">${n}</div>`)
         .join('');
 }
