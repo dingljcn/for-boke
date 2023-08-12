@@ -44,6 +44,7 @@ function run_001(config) {
 /** 正式执行逻辑 */
 function exec_001() {
     initLayout_001();
+    restorePresist_001();
     drawLineNumber_001();
     bindKeyboardEvent_001();
 }
@@ -569,6 +570,10 @@ function toHistory_001(element, e) {
 
 function addToStar_001() {
     let data = getImgData();
+    addToStarList_001(data);
+}
+
+function addToStarList_001(data) {
     const key = `${ data.lineNumber }/${ data.step }`;
     if (context_001.presist.star.includes(key)) {
         return;
@@ -623,10 +628,10 @@ function cleanHistory_001() {
 function cleanStar_001() {
     context_001.presist.star = [];
     getById('dinglj-star-list').innerHTML = '';
-    savePresist();
+    savePresist_001();
 }
 
-function savePresist() {
+function savePresist_001() {
     if (context_001.config.persist) {
         let str = localStorage.getItem('dinglj-001-cache');
         let json = {};
@@ -636,4 +641,23 @@ function savePresist() {
         json[window.location.href] = context_001.presist;
         localStorage.setItem('dinglj-001-cache', JSON.stringify(json));
     }
+}
+
+function restorePresist_001() {
+    let data = readPresist_001();
+    if (data) {
+        console.log(data);
+    }
+}
+
+function readPresist_001() {
+    if (context_001.config.presist) {
+        let str = localStorage.getItem('dinglj-001-cache');
+        let json = {};
+        if (str) {
+            json = JSON.parse(str);
+        }
+        return json[window.location.href] || null;
+    }
+    return null;
 }
