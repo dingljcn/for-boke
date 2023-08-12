@@ -473,7 +473,7 @@ function changeItem_001(isPrev, e) {
                 let lastLine = getByClass('line-item last')[0];
                 if (lastLine.previousElementSibling) {
                     let step = toLine_001('step', 'line', lastLine.previousElementSibling, 'tail');
-                    if (step) {
+                    if (step) { // 焦点重新回到 step
                         toItem_001('line', 'step', step);
                     }
                 }
@@ -485,10 +485,20 @@ function changeItem_001(isPrev, e) {
                 let lastLine = getByClass('line-item last')[0];
                 if (lastLine.nextElementSibling) {
                     let step = toLine_001('step', 'line', lastLine.nextElementSibling, 'head');
-                    if (step) {
+                    if (step) { // 焦点重新回到 step
                         toItem_001('line', 'step', step);
                     }
                 }
+            }
+        }
+    } else if (context_001.focus == 'line') {
+        if (isPrev) {
+            if (prevStep) {
+                prevStep.click();
+            }
+        } else {
+            if (nextStep) {
+                nextStep.click();
             }
         }
     }
