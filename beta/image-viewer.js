@@ -127,11 +127,11 @@ const css_001 = `body {
 #dinglj-lines {
     padding: 6px;
     flex: 1;
-    overflow-y: scroll;
+    overflow: hidden;
 }
-#dinglj-lines::webkit-scrollbar {
-    width: 5px;
-}
+// #dinglj-lines::webkit-scrollbar {
+//     width: 5px;
+// }
 #dinglj-step-container {
     flex: 1;
     height: 100%;
