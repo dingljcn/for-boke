@@ -142,6 +142,7 @@ const css_001 = `body {
     margin-left: 6px;
 }
 .scroll-block {
+    position: relative;
     width: 6px;
     margin-left: -1px;
     background: white;
@@ -716,10 +717,11 @@ function moveScroll(containerID, itemClass, scrollID) {
             break;
         }
     }
-    let itemHeight = item.offsetHeight + 6; // 元素全高度
+    let itemHeight = item.offsetHeight + 3; // 元素全高度
     let itemSize = container.children.length; // 元素个数
     let totalHeight = itemHeight * itemSize; // 滚动高度
     scrollBtn.style.height = `${ (viewHeight / totalHeight) * viewHeight }px`; // 设置滚动块高度
+    scrollBtn.style.top = `${ (i / itemSize) * viewHeight }`;
     container.style.top = `-${ itemHeight * i }px`; // 设置当前元素偏移量
     console.log(container.style.top);
 }
