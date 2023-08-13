@@ -9,7 +9,9 @@ const context_001 = {
     drag: {
         active: false,
         x: 0,
-        y: 0
+        y: 0,
+        top: 0,
+        left: 0,
     }
 };
 
@@ -52,6 +54,7 @@ function exec_001() {
     restorePersist_001();
     drawLineNumber_001();
     bindKeyboardEvent_001();
+    bindDragEvent_001();
     moveScroll_001('dinglj-lines-view', 'line-item', 'dinglj-lines-scroll');
 }
 
@@ -747,34 +750,49 @@ function moveScroll_001(containerID, itemClass, scrollID) {
     scrollBtn.style.top = `${ scrollBtnTop }`;
 }
 
-function startDragImpl_001(e) {
+function bindDragEvent_001() {
+    startDrag_001();
+    finishDrag_001();
+    doDrag_001();
+}
+
+function startDragImpl_001(element, e) {
     context_001.drag.active = true;
-    console.log(e);
+    context_001.drag.x = e.screenX;
+    context_001.drag.y = e.screenX;
+    context_001.drag.top = parseInt(element.style.top);
+    context_001.drag.left = parseInt(element.style.left);
 }
 
 function startDrag_001() {
     for (scrollBtn of getByClass('scroll-block')) {
-        scrollBtn.addEventListener('mousedown', startDragImpl_001);
+        scrollBtn.addEventListener('mousedown', e => {
+            startDragImpl_001(scrollBtn, e);
+        });
     }
 }
 
-function finishDragImpl_001(e) {
+function finishDragImpl_001(element, e) {
     context_001.drag.active = false;
     console.log(e);
 }
 
 function finishDrag_001() {
     for (scrollBtn of getByClass('scroll-block')) {
-        scrollBtn.addEventListener('mouseup', finishDragImpl_001);
+        scrollBtn.addEventListener('mouseup', e => {
+            finishDragImpl_001(scrollBtn, e);
+        });
     }
 }
 
-function doDragImpl_001(e) {
+function doDragImpl_001(element, e) {
     console.log(e);
 }
 
 function doDrag_001() {
     for (scrollBtn of getByClass('scroll-block')) {
-        scrollBtn.addEventListener('mousemove', doDragImpl_001);
+        scrollBtn.addEventListener('mousemove', e => {
+            doDragImpl_001(scrollBtn, e);
+        });
     }
 }
