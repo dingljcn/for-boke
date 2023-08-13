@@ -733,7 +733,7 @@ function moveScroll_001(containerID, itemClass, scrollID) {
     if (offset4Item < viewHeight / 2) {
         // 偏移量小于显示高度的一一半, 什么都不做
     } else {
-        scrollBtn.style.top = `${ (i / (itemSize - halfViewSize)) * (viewHeight - scrollBtnHeight) }`;
+        scrollBtn.style.top = `${ ((i - halfViewSize) / (itemSize - halfViewSize)) * (viewHeight - scrollBtnHeight) }`;
         container.style.top = `-${ offset4Item - baseHeight }px`; // 设置当前元素偏移量
         console.log(container.style.top);
     }
