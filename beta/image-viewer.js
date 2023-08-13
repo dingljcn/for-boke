@@ -128,10 +128,15 @@ const css_001 = `body {
     padding: 6px;
     flex: 1;
     overflow: hidden;
+    display: flex;
 }
-// #dinglj-lines::webkit-scrollbar {
-//     width: 5px;
-// }
+#dinglj-lines-view {
+    flex: 1;
+}
+#dinglj-lines-scroll {
+    width: 5px;
+    height: 100%;
+}
 #dinglj-step-container {
     flex: 1;
     height: 100%;
@@ -265,7 +270,12 @@ function initLayout_001() {
             <div id="dinglj-left-guide">
                 <div id="dinglj-line-container">
                     <div id="dinglj-line-title">行数</div>
-                    <div id="dinglj-lines"></div>
+                    <div id="dinglj-lines">
+                        <div id="dinglj-lines-view"></div>
+                        <div id="dinglj-lines-scroll">
+                            <div class="scroll-block"></div>
+                        </div>
+                    </div>
                 </div>
                 <div id="dinglj-step-container">
                     <div id="dinglj-step-title">步数</div>
@@ -303,7 +313,7 @@ function drawLineNumber_001() {
         .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
         .filter(href => href != '')
         .map(href => href.substring(0, href.length - 1));
-    getById('dinglj-lines').innerHTML = context_001.lineNumbers
+    getById('dinglj-lines-view').innerHTML = context_001.lineNumbers
         .map(number => `<div class="line-item dinglj-item" id="line-${ number }">${ number }</div>`)
         .join('');
     bindLineEvent_001();
