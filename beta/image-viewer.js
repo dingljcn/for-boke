@@ -5,6 +5,11 @@ const context_001 = {
     persist: {
         history: [],
         star: [],
+    },
+    drag: {
+        active: false,
+        x: 0,
+        y: 0
     }
 };
 
@@ -729,12 +734,47 @@ function moveScroll_001(containerID, itemClass, scrollID) {
     let baseHeight = halfViewSize * itemHeight; // 视图一半的高度
     let offset4Item = itemHeight * i; // 当前元素的绝对偏移量
     let scrollBtnHeight = (viewHeight / totalHeight) * viewHeight; // 滚动高度要减去滚动条本身的高度
+    let scrollBtnTop = 0;
     scrollBtn.style.height = `${ scrollBtnHeight }px`; // 设置滚动块高度
     if (offset4Item < viewHeight / 2) {
         // 偏移量小于显示高度的一一半, 什么都不做
     } else {
-        scrollBtn.style.top = `${ ((i - halfViewSize) / (itemSize - halfViewSize)) * (viewHeight - scrollBtnHeight) }`;
+        let scrollPercent = (i - halfViewSize) / (itemSize - halfViewSize); // 滚动比例, 减去无需滚动的部分
+        let scrollHeight = viewHeight - scrollBtnHeight; // 滚动高度, 减去滚动块自己的高度
+        scrollBtnTop = scrollPercent * scrollHeight;
         container.style.top = `-${ offset4Item - baseHeight }px`; // 设置当前元素偏移量
-        console.log(container.style.top);
+    }
+    scrollBtn.style.top = `${ scrollBtnTop }`;
+}
+
+function startDragImpl_001(e) {
+    context_001.drag.active = true;
+    console.log(e);
+}
+
+function startDrag_001() {
+    for (scrollBtn of getByClass('scroll-block')) {
+        scrollBtn.addEventListener('mousedown', startDragImpl_001);
+    }
+}
+
+function finishDragImpl_001(e) {
+    context_001.drag.active = false;
+    console.log(e);
+}
+
+function finishDrag_001() {
+    for (scrollBtn of getByClass('scroll-block')) {
+        scrollBtn.addEventListener('mouseup', finishDragImpl_001);
+    }
+}
+
+function doDragImpl_001(e) {
+    console.log(e);
+}
+
+function doDrag_001() {
+    for (scrollBtn of getByClass('scroll-block')) {
+        scrollBtn.addEventListener('mousemove', doDragImpl_001);
     }
 }
