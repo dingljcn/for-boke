@@ -777,11 +777,9 @@ function finishDragImpl_001(element, e) {
 }
 
 function finishDrag_001() {
-    for (scrollBtn of getByClass('scroll-block')) {
-        scrollBtn.addEventListener('mouseup', e => {
-            finishDragImpl_001(scrollBtn, e);
-        });
-    }
+    window.addEventListener('mouseup', e => {
+        finishDragImpl_001(scrollBtn, e);
+    });
 }
 
 function doDragImpl_001(element, e) {
