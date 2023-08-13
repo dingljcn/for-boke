@@ -47,7 +47,7 @@ function exec_001() {
     restorePersist_001();
     drawLineNumber_001();
     bindKeyboardEvent_001();
-    moveScroll('dinglj-lines-view', 'line-item', 'dinglj-lines-scroll');
+    moveScroll_001('dinglj-lines-view', 'line-item', 'dinglj-lines-scroll');
 }
 
 
@@ -392,7 +392,7 @@ function toItem_001(oldScope, newScope, element, callback) {
     // 把当前元素标记为 active, 并移除 last
     element.classList.remove('last');
     element.classList.add('active');
-    moveScroll(`dinglj-${ newScope }-view`, `${ newScope }-item`, `dinglj-${ newScope }-scroll`)
+    moveScroll_001(`dinglj-${ newScope }s-view`, `${ newScope }-item`, `dinglj-${ newScope }-scroll`)
 }
 
 /** 绘制步骤 */
@@ -698,7 +698,7 @@ function readPersist_001() {
     return null;
 }
 
-function moveScroll(containerID, itemClass, scrollID) {
+function moveScroll_001(containerID, itemClass, scrollID) {
     let container = getById(containerID); // 容器
     if (!container) {
         return;
