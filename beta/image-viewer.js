@@ -790,9 +790,7 @@ function doDragImpl_001(element, e) {
 }
 
 function doDrag_001() {
-    for (scrollBtn of getByClass('scroll-block')) {
-        scrollBtn.addEventListener('mousemove', e => {
-            doDragImpl_001(scrollBtn, e);
-        });
-    }
+    window.addEventListener('mousemove', e => {
+        doDragImpl_001(scrollBtn, e);
+    });
 }
