@@ -759,9 +759,9 @@ function bindDragEvent_001() {
 function startDragImpl_001(element, e) {
     context_001.drag.active = true;
     context_001.drag.x = e.screenX;
-    context_001.drag.y = e.screenX;
-    context_001.drag.top = parseInt(element.style.top);
-    context_001.drag.left = parseInt(element.style.left);
+    context_001.drag.y = e.screenY;
+    context_001.drag.top = parseInt(element.style.top || '0');
+    context_001.drag.left = parseInt(element.style.left || '0');
 }
 
 function startDrag_001() {
@@ -774,7 +774,6 @@ function startDrag_001() {
 
 function finishDragImpl_001(element, e) {
     context_001.drag.active = false;
-    console.log(e);
 }
 
 function finishDrag_001() {
@@ -786,7 +785,10 @@ function finishDrag_001() {
 }
 
 function doDragImpl_001(element, e) {
-    console.log(e);
+    if (context_001.drag.active) {
+        let offset = e.screenY - context_001.drag.y;
+        element.style.top = `${ context_001.drag.top + offset }px`;
+    }
 }
 
 function doDrag_001() {
