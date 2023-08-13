@@ -141,7 +141,7 @@ const css_001 = `body {
     height: 100%;
     margin-left: 6px;
 }
-#scroll-block {
+.scroll-block {
     width: 6px;
     margin-left: -1px;
     background: white;
