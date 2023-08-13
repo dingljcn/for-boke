@@ -725,14 +725,15 @@ function moveScroll_001(containerID, itemClass, scrollID) {
     let itemHeight = item.offsetHeight + 3; // 元素全高度
     let itemSize = container.children.length; // 元素个数
     let totalHeight = itemHeight * itemSize; // 滚动高度
-    let offset4Item = itemHeight * i;
+    let halfViewSize = parseInt(viewHeight / 2 / 31); // 视图所能显示的 item 数的一半
+    let baseHeight = halfViewSize * 31; // 视图一半的高度
+    let offset4Item = itemHeight * i; // 当前元素的绝对偏移量
     let scrollBtnHeight = (viewHeight / totalHeight) * viewHeight; // 滚动高度要减去滚动条本身的高度
     scrollBtn.style.height = `${ scrollBtnHeight }px`; // 设置滚动块高度
     if (offset4Item < viewHeight / 2) {
         // 偏移量小于显示高度的一一半, 什么都不做
     } else {
-        scrollBtn.style.top = `${ (i / itemSize) * (viewHeight - scrollBtnHeight) }`;
-        let baseHeight = parseInt(viewHeight / 2 / 31) * 31; // 视图一半的高度
+        scrollBtn.style.top = `${ (i / (itemSize - halfViewSize)) * (viewHeight - scrollBtnHeight) }`;
         container.style.top = `-${ offset4Item - baseHeight }px`; // 设置当前元素偏移量
         console.log(container.style.top);
     }
