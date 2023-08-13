@@ -224,7 +224,6 @@ const css_001 = `body {
 .dinglj-item {
     padding: 3px;
     margin: 3px 0;
-    transition: 0.3s;
     cursor: pointer;
 }
 .active {
@@ -730,8 +729,9 @@ function moveScroll_001(containerID, itemClass, scrollID) {
     if (offset4Item < viewHeight / 2) {
         // 偏移量小于显示高度的一一半, 什么都不做
     } else {
-        scrollBtn.style.height = `${ (viewHeight / totalHeight) * viewHeight }px`; // 设置滚动块高度
-        scrollBtn.style.top = `${ (i / itemSize) * viewHeight }`;
+        let scrollBtnHeight = (viewHeight / totalHeight) * viewHeight;
+        scrollBtn.style.height = `${ scrollBtnHeight }px`; // 设置滚动块高度
+        scrollBtn.style.top = `${ (i / itemSize) * (viewHeight - scrollBtnHeight) }`;
         let baseHeight = parseInt(viewHeight / 2 / 31) * 31; // 视图一半的高度
         container.style.top = `-${ offset4Item - baseHeight }px`; // 设置当前元素偏移量
         console.log(container.style.top);
