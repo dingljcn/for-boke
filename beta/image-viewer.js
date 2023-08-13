@@ -818,7 +818,7 @@ function scrollView_001(element) {
     }
     let item = view.children[0];
     let itemHeight = item.offsetHeight + 3;
-    let halfViewSize = parseInt(view.offsetHeight / 2 / item); // 视图能显示的个数的一半
+    let halfViewSize = parseInt(view.offsetHeight / 2 / itemHeight); // 视图能显示的个数的一半
     let scrollItemSize = view.children.length - halfViewSize;
     let idx = parseInt(scrollItemSize * percent);
     let offset4Item = itemHeight * idx;
