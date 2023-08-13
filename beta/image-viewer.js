@@ -392,7 +392,7 @@ function toItem_001(oldScope, newScope, element, callback) {
     // 把当前元素标记为 active, 并移除 last
     element.classList.remove('last');
     element.classList.add('active');
-    moveScroll_001(`dinglj-${ newScope }s-view`, `${ newScope }-item`, `dinglj-${ newScope }-scroll`)
+    moveScroll_001(`dinglj-${ newScope }s-view`, `${ newScope }-item`, `dinglj-${ newScope }s-scroll`)
 }
 
 /** 绘制步骤 */
