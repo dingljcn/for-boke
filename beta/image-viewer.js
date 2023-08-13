@@ -77,7 +77,7 @@ const css_001 = `body {
     font-size: 14px;
 }
 * {
-    user-selected: none;
+    user-select: none;
 }
 #dinglj-all-container {
     display: flex;
@@ -788,7 +788,16 @@ function finishDrag_001() {
 function doDragImpl_001(element, e) {
     if (context_001.drag.active) {
         let offset = e.screenY - context_001.drag.y;
-        element.style.top = `${ context_001.drag.top + offset }px`;
+        let target = context_001.drag.top + offset;
+        let min = 0;
+        let max = element.parentElement.offsetHeight - element.offsetHeight;
+        if (target < min) {
+            target = min;
+        } else if (target > max) {
+            target = max;
+        }
+        element.style.top = `${ target }px`;
+        scrollView_001(element);
     }
 }
 
@@ -796,4 +805,24 @@ function doDrag_001() {
     window.addEventListener('mousemove', e => {
         doDragImpl_001(scrollBtn, e);
     });
+}
+
+function scrollView_001(element) {
+    let parent = element.parentElement;
+    let view = parent.previousElementSibling;
+    let max = parent.offsetHeight - element.offsetHeight;
+    let toTop = parseInt(element.style.top);
+    let percent = toTop / max;
+    if (!view.children) {
+        return;
+    }
+    let item = view.children[0];
+    let itemHeight = item.offsetHeight + 3;
+    let halfViewSize = parseInt(view.offsetHeight / 2 / item); // 视图能显示的个数的一半
+    let scrollItemSize = view.children.length - halfViewSize;
+    let idx = parseInt(scrollItemSize * percent);
+    let offset4Item = itemHeight * idx;
+    if (offset4Item >= view.offsetHeight / 2) {
+        view.style.top = `${ offset4Item - (itemHeight * halfViewSize) }px`;
+    }
 }
