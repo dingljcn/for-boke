@@ -134,6 +134,7 @@ const css_001 = `body {
 #dinglj-lines-view {
     flex: 1;
     position: relative;
+    transition: 0.2;
 }
 #dinglj-lines-scroll {
     width: 4px;
@@ -148,6 +149,7 @@ const css_001 = `body {
     background: white;
     box-shadow: 0 0 5px grey;
     border-radius: 3px;
+    transition: 0.2s;
 }
 #dinglj-step-container {
     flex: 1;
@@ -697,6 +699,9 @@ function readPersist_001() {
 
 function moveScroll(containerID, itemClass, scrollID) {
     let container = getById(containerID); // 容器
+    if (!container) {
+        return;
+    }
     let scroll = getById(scrollID); // 滚动条
     let scrollBtn = scroll.children[0]; // 滚动块
     let viewHeight = container.offsetHeight;
@@ -720,8 +725,14 @@ function moveScroll(containerID, itemClass, scrollID) {
     let itemHeight = item.offsetHeight + 3; // 元素全高度
     let itemSize = container.children.length; // 元素个数
     let totalHeight = itemHeight * itemSize; // 滚动高度
-    scrollBtn.style.height = `${ (viewHeight / totalHeight) * viewHeight }px`; // 设置滚动块高度
-    scrollBtn.style.top = `${ (i / itemSize) * viewHeight }`;
-    container.style.top = `-${ itemHeight * i }px`; // 设置当前元素偏移量
-    console.log(container.style.top);
+    let offset4Item = itemHeight * i;
+    if (offset4Item < viewHeight / 2) {
+        // 偏移量小于显示高度的一一半, 什么都不做
+    } else {
+        scrollBtn.style.height = `${ (viewHeight / totalHeight) * viewHeight }px`; // 设置滚动块高度
+        scrollBtn.style.top = `${ (i / itemSize) * viewHeight }`;
+        let baseHeight = parseInt(viewHeight / 2 / 31) * 31; // 视图一半的高度
+        container.style.top = `-${ offset4Item - baseHeight }px`; // 设置当前元素偏移量
+        console.log(container.style.top);
+    }
 }
