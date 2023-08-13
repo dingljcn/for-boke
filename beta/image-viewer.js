@@ -76,6 +76,9 @@ const css_001 = `body {
     margin: 0;
     font-size: 14px;
 }
+* {
+    user-selected: none;
+}
 #dinglj-all-container {
     display: flex;
     flex-direction: column;
