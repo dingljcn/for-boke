@@ -303,9 +303,10 @@ function drawLineNumber_001() {
         .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
         .filter(href => href != '')
         .map(href => href.substring(0, href.length - 1));
-    getById('dinglj-lines').innerHTML = context_001.lineNumbers
+    let children = context_001.lineNumbers
         .map(number => `<div class="line-item dinglj-item" id="line-${ number }">${ number }</div>`)
         .join('');
+    getById('dinglj-lines').innerHTML = `<div>${ children }</div>`;
     bindLineEvent_001();
     // 更新总行数
     getById('dinglj-line-total').innerText = context_001.lineNumbers[context_001.lineNumbers.length - 1];
