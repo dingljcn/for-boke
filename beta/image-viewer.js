@@ -726,11 +726,11 @@ function moveScroll_001(containerID, itemClass, scrollID) {
     let itemSize = container.children.length; // 元素个数
     let totalHeight = itemHeight * itemSize; // 滚动高度
     let offset4Item = itemHeight * i;
+    let scrollBtnHeight = (viewHeight / totalHeight) * viewHeight; // 滚动高度要减去滚动条本身的高度
+    scrollBtn.style.height = `${ scrollBtnHeight }px`; // 设置滚动块高度
     if (offset4Item < viewHeight / 2) {
         // 偏移量小于显示高度的一一半, 什么都不做
     } else {
-        let scrollBtnHeight = (viewHeight / totalHeight) * viewHeight;
-        scrollBtn.style.height = `${ scrollBtnHeight }px`; // 设置滚动块高度
         scrollBtn.style.top = `${ (i / itemSize) * (viewHeight - scrollBtnHeight) }`;
         let baseHeight = parseInt(viewHeight / 2 / 31) * 31; // 视图一半的高度
         container.style.top = `-${ offset4Item - baseHeight }px`; // 设置当前元素偏移量
