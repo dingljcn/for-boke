@@ -47,6 +47,7 @@ function exec_001() {
     restorePersist_001();
     drawLineNumber_001();
     bindKeyboardEvent_001();
+    moveScroll('dinglj-lines-view', 'line-item', 'dinglj-lines-scroll');
 }
 
 
@@ -132,10 +133,20 @@ const css_001 = `body {
 }
 #dinglj-lines-view {
     flex: 1;
+    position: relative;
 }
 #dinglj-lines-scroll {
-    width: 5px;
+    width: 4px;
+    background: #CCC;
     height: 100%;
+    margin-left: 6px;
+}
+#scroll-block {
+    width: 6px;
+    margin-left: -1px;
+    background: white;
+    box-shadow: 0 0 5px grey;
+    border-radius: 3px;
 }
 #dinglj-step-container {
     flex: 1;
@@ -681,4 +692,34 @@ function readPersist_001() {
         return json[window.location.href] || null;
     }
     return null;
+}
+
+function moveScroll(containerID, itemClass, scrollID) {
+    let container = getById(containerID); // 容器
+    let scroll = getById(scrollID); // 滚动条
+    let scrollBtn = scroll.children[0]; // 滚动块
+    let viewHeight = container.offsetHeight;
+    let item = getByClass(`${ itemClass } active`)[0]; //先取 active
+    if (!item) {
+        item = getByClass(`${ itemClass } last`)[0]; // 再取 last
+        if (!item) {
+            item = getByClass(`${ itemClass }`)[0]; // 最后取第一个
+            if (!item) {
+                return; //不存在, 退出
+            }
+        }
+    }
+    let i = -1;
+    let list = getByClass(itemClass);
+    for (i = 0; i < list.length; i++) { // 定位当前元素下标
+        if (list[i].id == item.id) {
+            break;
+        }
+    }
+    let itemHeight = item.offsetHeight + 6; // 元素全高度
+    let itemSize = container.children.length; // 元素个数
+    let totalHeight = itemHeight * itemSize; // 滚动高度
+    scrollBtn.style.height = `${ (viewHeight / totalHeight) * viewHeight }px`; // 设置滚动块高度
+    container.style.top = `-${ itemHeight * i }px`; // 设置当前元素偏移量
+    console.log(container.style.top);
 }
