@@ -66,6 +66,9 @@ function initLayout_001() {
         innerText: context_001.config.style.css
     }, []);
     document.body.innerHTML = `<div id="dinglj-all-container">
+        <div id="dinglj-global-mask">
+            <img id="dinglj-full-screen-image" src="#" onclick="fullScreen_001(src, 'close')"/>
+        </div>
         <div id="dinglj-all-title">
             <div id="dinglj-web-name">用例截图查看工具</div>
             <div id="dinglj-center-title">
@@ -111,7 +114,7 @@ function initLayout_001() {
             </div>
             <div id="dinglj-image-area">
                 <div id="dinglj-image-box">
-                    <img id="dinglj-image" src="1/11/4_录入.png"/>
+                    <img id="dinglj-image" src="1/11/4_录入.png" onclick="fullScreen_001(src, 'open')"/>
                 </div>
             </div>
             <div id="dinglj-right-guide">
@@ -734,4 +737,13 @@ function onDragScroll_001(element) {
     let offset4Item = itemHeight * idx;
     // 滚动元素列表
     view.style.top = `-${ offset4Item < 0 ? 0 : offset4Item }px`;
+}
+
+/** 全屏浏览图片 */
+function fullScreen_001(src, type) {
+    let mask = getById('dinglj-global-mask');
+    let image = getById('dinglj-full-screen-image');
+    mask.style.zIndex = type == 'open' ? 999 : -999;
+    mask.style.opacity = type == 'open' ? 1 : 0;
+    image.src = src;
 }
