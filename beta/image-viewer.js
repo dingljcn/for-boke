@@ -58,214 +58,12 @@ function exec_001() {
     moveScroll_001('dinglj-lines-view', 'line-item', 'dinglj-lines-scroll');
 }
 
-
-const css_const = {
-    title: {
-        background: '#321b33',
-        height: '40px'
-    },
-    image: {
-        padding: '20px',
-    },
-    nav: {
-        width: '250px',
-    }
-}
-
-const css_001 = `body {
-    margin: 0;
-    font-size: 14px;
-}
-* {
-    user-select: none;
-}
-#dinglj-all-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
-}
-#dinglj-all-title {
-    background: ${ css_const.title.background };
-    height: ${ css_const.title.height };
-    line-height: ${ css_const.title.height };
-    display: flex;
-    color: white;
-}
-#dinglj-under-title {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-}
-#dinglj-web-name {
-    padding: 0 10px;
-}
-#dinglj-center-title {
-    display: flex;
-    flex: 1;
-    padding: 0 10px;
-}
-.dinglj-step-counter {
-    padding: 0 10px;
-}
-#dinglj-line-input,
-#dinglj-step-input {
-    outline: none;
-    width: 3rem;
-}
-#dinglj-other-options {
-    padding: 0 10px;
-}
-#dinglj-left-guide {
-    width: ${ css_const.nav.width };
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-}
-#dinglj-line-container {
-    width: 80px;
-    height: 100%;
-    display: flex;
-    overflow: hidden;
-    flex-direction: column;
-    text-align: center;
-}
-#dinglj-line-title {
-    height: 30px;
-    line-height: 30px;
-    border-bottom: 1px solid rgb(0,0,0,0.1);
-}
-#dinglj-lines {
-    padding: 6px;
-    flex: 1;
-    overflow: hidden;
-    display: flex;
-}
-#dinglj-lines-view {
-    flex: 1;
-    position: relative;
-    transition: 0.2;
-}
-#dinglj-lines-scroll {
-    width: 4px;
-    background: #CCC;
-    height: 100%;
-    margin-left: 6px;
-}
-.scroll-block {
-    position: relative;
-    width: 6px;
-    margin-left: -1px;
-    background: white;
-    box-shadow: 0 0 5px grey;
-    border-radius: 3px;
-    transition: 0.2s;
-}
-#dinglj-step-container {
-    flex: 1;
-    height: 100%;
-    display: flex;
-    overflow: hidden;
-    flex-direction: column;
-}
-#dinglj-step-title {
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-    border-bottom: 1px solid rgb(0,0,0,0.1);
-}
-#dinglj-steps {
-    padding: 6px;
-    flex: 1;
-    overflow-y: scroll;
-}
-#dinglj-image-area {
-    flex: 1;
-    overflow: hidden;
-}
-#dinglj-image-box {
-    width: calc(100% - ${ css_const.image.padding } * 2);
-    height: calc(100% - ${ css_const.image.padding } * 2);
-    padding: ${ css_const.image.padding };
-}
-#dinglj-image {
-    border-radius: 5px;
-    max-width: 100%;
-    max-height: 100%;
-    overflow: hidden;
-    box-shadow: 0 0 10px 1px grey;
-}
-#dinglj-right-guide {
-    width: ${ css_const.nav.width };
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-#dinglj-right-title {
-    height: 30px;
-    line-height: 30px;
-    display: flex;
-    border-bottom: 1px solid rgb(0,0,0,0.1);
-}
-#dinglj-history-title,
-#dinglj-star-title {
-    padding: 0 5px;
-    cursor: pointer;
-}
-#dinglj-his-star-list {
-    flex: 1;
-    overflow: hidden;
-}
-#dinglj-his-star-mask {
-    width: calc(${ css_const.nav.width } * 2);
-    position: relative;
-    height: 100%;
-    display: flex;
-}
-#dinglj-history-list {
-    width: ${ css_const.nav.width };
-    overflow-y: scroll;
-}
-#dinglj-star-list {
-    width: ${ css_const.nav.width };
-    overflow-y: scroll;
-}
-.dinglj-item {
-    padding: 3px;
-    margin: 3px 0;
-    cursor: pointer;
-}
-.active {
-    background: blue;
-    color: white;
-    border-radius: 5px;
-    font-weight: bolder;
-}
-.last {
-    background: #DDD;
-    border-radius: 5px;
-}
-.active-tab {
-    color: blue;
-    font-weight: bolder;
-}
-.toolbar-item {
-    cursor: pointer;
-    padding: 0 15px;
-}
-#dinglj-toolbar-box {
-    display: flex;
-}
-`;
-
 /** 绘制布局 */
 function initLayout_001() {
     newElement('style', {
         parentNode: document.head
     }, {
-        innerText: css_001
+        innerText: context_001.config.style.css
     }, []);
     document.body.innerHTML = `<div id="dinglj-all-container">
         <div id="dinglj-all-title">
@@ -447,9 +245,11 @@ function toStep_001(oldScope, newScope, element, fromClick = true) {
 /** 添加到历史记录 */
 function addToHistory_001(lineNumber, step) {
     const key = `${ lineNumber }/${ step }`;
+    // 已经存在, 不再添加
     if (context_001.persist.history.includes(key)) {
         return;
     }
+    // 添加
     context_001.persist.history.push(key);
     let container = getById('dinglj-history-list');
     let tmp = newElement('div', {
@@ -460,7 +260,9 @@ function addToHistory_001(lineNumber, step) {
     });
     tmp.classList.add('dinglj-item');
     tmp.classList.add('history-item');
+    // 持久化
     savePersist_001();
+    // 绑定点击事件
     tmp.addEventListener('click', e => {
         toHistory_001(tmp, e);
     });
@@ -471,12 +273,12 @@ function changeTab_001(to = 'history') {
     let container = getById('dinglj-his-star-mask');
     let left = container.style.left || '0px';
     if (to == 'history' && parseInt(left) < 0) {
-        moveTab_001(container, `-${ css_const.nav.width }`, '0px', 100, () => {
+        moveTab_001(container, `-${ context_001.config.style.css_const.nav.width }`, '0px', 100, () => {
             getById('dinglj-history-title').classList.add('active-tab');
             getById('dinglj-star-title').classList.remove('active-tab');
         });
     } else if (to == 'star' && parseInt(left) > -200) {
-        moveTab_001(container, '0px', `-${ css_const.nav.width }`, 100, () => {
+        moveTab_001(container, '0px', `-${ context_001.config.style.css_const.nav.width }`, 100, () => {
             getById('dinglj-history-title').classList.remove('active-tab');
             getById('dinglj-star-title').classList.add('active-tab');
         });
@@ -595,6 +397,7 @@ function changeScope_001(layout, isLeft, e) {
     }
 }
 
+/** 切换历史记录事件 */
 function toHistory_001(element, e) {
     toItem_001(context_001.focus, 'history', element);
     context_001.focus = 'history';
@@ -603,16 +406,20 @@ function toHistory_001(element, e) {
     getById('dinglj-image').src = key;
 }
 
+/** 添加到重点关注 */
 function addToStar_001() {
     let data = getImgData();
     addToStarList_001(data.lineNumber, data.step);
 }
 
+/** 添加到重点关注列表 */
 function addToStarList_001(lineNumber, step) {
     const key = `${ lineNumber }/${ step }`;
+    // 已存在, 不添加
     if (context_001.persist.star.includes(key)) {
         return;
     }
+    // 添加
     context_001.persist.star.push(key);
     let container = getById('dinglj-star-list');
     let tmp = newElement('div', {
@@ -623,12 +430,15 @@ function addToStarList_001(lineNumber, step) {
     });
     tmp.classList.add('dinglj-item');
     tmp.classList.add('star-item');
+    // 持久化
     savePersist_001();
+    // 绑定点击事件
     tmp.addEventListener('click', e => {
         toStar_001(tmp, e);
     });
 }
 
+/** img 标签得 src 从地址转为 lineNumber, step */
 function getImgData() {
     let text = decodeURI(getById('dinglj-image').src);
     let url = decodeURI(window.location.href);
@@ -636,6 +446,7 @@ function getImgData() {
     return pathTolineNumberAndStep(text);
 }
 
+/** 1/行号/步骤.png 转为 lineNumber, step */
 function pathTolineNumberAndStep(text) {
     let data = /1\/(\d+)\/(.*)/.exec(text);
     return {
@@ -644,6 +455,7 @@ function pathTolineNumberAndStep(text) {
     }
 }
 
+/** 切换到重点关注事件 */
 function toStar_001(element, e) {
     toItem_001(context_001.focus, 'star', element);
     context_001.focus = 'star';
@@ -652,20 +464,26 @@ function toStar_001(element, e) {
     getById('dinglj-image').src = key;
 }
 
+/** 清除历史记录点击事件 */
 function cleanHistory_001() {
     let data = getImgData();
     context_001.persist.history = [];
     getById('dinglj-history-list').innerHTML = '';
+    // 当前正在浏览的图片重新添加
     addToHistory_001(data.lineNumber, data.step);
+    // 持久化
     savePersist_001();
 }
 
+/** 清除重点关注点击事件 */
 function cleanStar_001() {
     context_001.persist.star = [];
     getById('dinglj-star-list').innerHTML = '';
+    // 持久化
     savePersist_001();
 }
 
+/** 持久化历史记录与重点关注 */
 function savePersist_001() {
     if (context_001.config.persist) {
         let str = localStorage.getItem('dinglj-001-cache');
@@ -678,6 +496,7 @@ function savePersist_001() {
     }
 }
 
+/** 恢复历史记录与重点关注 */
 function restorePersist_001() {
     let data = readPersist_001();
     if (data) {
@@ -696,6 +515,7 @@ function restorePersist_001() {
     }
 }
 
+/** 读取持久化数据 */
 function readPersist_001() {
     if (context_001.config.persist) {
         let str = localStorage.getItem('dinglj-001-cache');
@@ -708,58 +528,100 @@ function readPersist_001() {
     return null;
 }
 
+/** 滚动条显示逻辑 */
 function moveScroll_001(containerID, itemClass, scrollID) {
-    let container = getById(containerID); // 容器
+    /** 容器, Element */
+    let container = getById(containerID);
     if (!container) {
         return;
     }
-    let scroll = getById(scrollID); // 滚动条
-    let scrollBtn = scroll.children[0]; // 滚动块
+    /** 有效元素, Element */
+    let item = getValidItem_001(itemClass);
+    if (!item) {
+        return;
+    }
+    /** 滚动条, Element */
+    let scroll = getById(scrollID);
+    /** 滚动块, Element */
+    let scrollBtn = scroll.children[0];
+    /** 视图高度, Number */
     let viewHeight = container.offsetHeight;
+    /** 有效元素的下标, Int */
+    let idx = calcIndex_001(itemClass, item);
+    /** 有效元素的整体高度, Int */
+    let itemHeight = item.offsetHeight + 3;
+    /** 元素的总个数, Int */
+    let totalCount = container.children.length;
+    /** 所有元素整体高度的和, Int */
+    let totalHeight = itemHeight * totalCount;
+    // 如果整体高度之和 < 视图高度, 表示没有必要用滚动条, 则将其隐藏
+    scroll.style.opacity = 1;
+    if (totalHeight < viewHeight) {
+        scroll.style.opacity = 0;
+        return
+    }
+    /** 视图高度的一半所能显示的元素个数, Int */
+    let halfViewSize = parseInt(viewHeight / 2 / itemHeight);
+    /** 视图高度的一半, Int */
+    let baseHeight = halfViewSize * itemHeight;
+    /** 当前元素的绝对偏移量, Int */
+    let offset4Item = itemHeight * idx;
+    /** 滚动条高度 = (视图高度 / 整体高度之和) * 视图高度, Int */
+    let scrollBtnHeight = (viewHeight / totalHeight) * viewHeight;
+    /** 距离顶部的偏移量, Int */
+    let scrollBtnTop = 0;
+    // 设置滚动块高度
+    scrollBtn.style.height = `${ scrollBtnHeight }px`;
+    // 当前元素绝对偏移量已经超过了视图一半的高度, 则进行滚动
+    if (offset4Item > halfViewSize) {
+        /** 滚动比例, 减去无需滚动的部分, Double */
+        let scrollPercent = (idx - halfViewSize) / (totalCount - halfViewSize);
+        /** 离顶部的相对偏移量 */
+        let relativeTop = offset4Item - baseHeight;
+        // 设置当前元素偏移量, 不能小于 0
+        container.style.top = `-${ relativeTop < 0 ? 0 : relativeTop }px`;
+        // 滚动高度, 先用滚动条高度减去滚动块自己的高度, 再乘上百分比
+        scrollBtnTop = scrollPercent * (viewHeight - scrollBtnHeight);
+    }
+    // 滚动条进行滚动
+    scrollBtn.style.top = `${ scrollBtnTop }`;
+}
+
+/** 获取当前作用域中有效的元素, 优先级依次为 active, last, first */
+function getValidItem_001(itemClass) {
+    if (!itemClass) {
+        return null;
+    }
     let item = getByClass(`${ itemClass } active`)[0]; //先取 active
     if (!item) {
         item = getByClass(`${ itemClass } last`)[0]; // 再取 last
         if (!item) {
             item = getByClass(`${ itemClass }`)[0]; // 最后取第一个
-            if (!item) {
-                return; //不存在, 退出
-            }
         }
     }
-    let i = -1;
-    let list = getByClass(itemClass);
-    for (i = 0; i < list.length; i++) { // 定位当前元素下标
-        if (list[i].id == item.id) {
-            break;
-        }
-    }
-    let itemHeight = item.offsetHeight + 3; // 元素全高度
-    let itemSize = container.children.length; // 元素个数
-    let totalHeight = itemHeight * itemSize; // 滚动高度
-    let halfViewSize = parseInt(viewHeight / 2 / itemHeight); // 视图所能显示的 item 数的一半
-    let baseHeight = halfViewSize * itemHeight; // 视图一半的高度
-    let offset4Item = itemHeight * i; // 当前元素的绝对偏移量
-    let scrollBtnHeight = (viewHeight / totalHeight) * viewHeight; // 滚动高度要减去滚动条本身的高度
-    let scrollBtnTop = 0;
-    scrollBtn.style.height = `${ scrollBtnHeight }px`; // 设置滚动块高度
-    if (offset4Item < viewHeight / 2) {
-        // 偏移量小于显示高度的一一半, 什么都不做
-    } else {
-        let scrollPercent = (i - halfViewSize) / (itemSize - halfViewSize); // 滚动比例, 减去无需滚动的部分
-        let scrollHeight = viewHeight - scrollBtnHeight; // 滚动高度, 减去滚动块自己的高度
-        scrollBtnTop = scrollPercent * scrollHeight;
-        container.style.top = `-${ offset4Item - baseHeight }px`; // 设置当前元素偏移量
-    }
-    scrollBtn.style.top = `${ scrollBtnTop }`;
+    return item;
 }
 
+/** 计算期望的元素在列表中排第几个 */
+function calcIndex_001(itemClass, expectItem) {
+    let list = getByClass(itemClass);
+    for (idx = 0; idx < list.length; idx++) { // 定位当前元素下标
+        if (list[idx].id == expectItem.id) {
+            return idx;
+        }
+    }
+}
+
+/** 绑定拖拽事件 */
 function bindDragEvent_001() {
     startDrag_001();
     finishDrag_001();
     doDrag_001();
 }
 
+/** 拖拽开始实现 */
 function startDragImpl_001(element, e) {
+    // 记录起始 x, y 坐标, 记录原来的 top, left 值
     context_001.drag.active = true;
     context_001.drag.x = e.screenX;
     context_001.drag.y = e.screenY;
@@ -767,6 +629,7 @@ function startDragImpl_001(element, e) {
     context_001.drag.left = parseInt(element.style.left || '0');
 }
 
+/** 拖拽开始事件 */
 function startDrag_001() {
     for (scrollBtn of getByClass('scroll-block')) {
         scrollBtn.addEventListener('mousedown', e => {
@@ -775,54 +638,73 @@ function startDrag_001() {
     }
 }
 
+/** 拖拽结束实现 */
 function finishDragImpl_001(element, e) {
     context_001.drag.active = false;
 }
 
+/** 拖拽结束事件 */
 function finishDrag_001() {
     window.addEventListener('mouseup', e => {
         finishDragImpl_001(scrollBtn, e);
     });
 }
 
+/** 拖拽过程实现 */
 function doDragImpl_001(element, e) {
     if (context_001.drag.active) {
+        // 鼠标偏移量
         let offset = e.screenY - context_001.drag.y;
+        // 新的 top = 以前的 top + 偏移量
         let target = context_001.drag.top + offset;
-        let min = 0;
-        let max = element.parentElement.offsetHeight - element.offsetHeight;
+        // 偏移量最小为 0, 最大为滚动条高度 - 滚动块高度
+        let min = 0, max = element.parentElement.offsetHeight - element.offsetHeight;
         if (target < min) {
             target = min;
         } else if (target > max) {
             target = max;
         }
         element.style.top = `${ target }px`;
-        scrollView_001(element);
+        onDragScroll_001(element);
     }
 }
 
+/** 拖拽过程事件 */
 function doDrag_001() {
     window.addEventListener('mousemove', e => {
         doDragImpl_001(scrollBtn, e);
     });
 }
 
-function scrollView_001(element) {
+/** 拖拽滚动块事件 */
+function onDragScroll_001(element) {
+    /** 滚动条 */
     let parent = element.parentElement;
+    /** 元素列表 */
     let view = parent.previousElementSibling;
-    let max = parent.offsetHeight - element.offsetHeight;
-    let toTop = parseInt(element.style.top);
-    let percent = toTop / max;
     if (!view.children) {
         return;
     }
+    /** 最大高度 */
+    let max = parent.offsetHeight - element.offsetHeight;
+    /** 顶部偏移量 */
+    let toTop = parseInt(element.style.top);
+    /** 偏移比例 */
+    let percent = toTop / max;
+    /** 任意元素 */
     let item = view.children[0];
+    /** 元素的高度 */
     let itemHeight = item.offsetHeight + 3;
-    let halfViewSize = parseInt(view.offsetHeight / 2 / itemHeight); // 视图能显示的个数的一半
+    /** 视图一半的高度所能显示的元素个数 */
+    let halfViewSize = parseInt(view.offsetHeight / 2 / itemHeight);
+    /** 参与滚动的元素个数, 即视图一半以前的不参与滚动 */
     let scrollItemSize = view.children.length - halfViewSize;
+    /** 要显示的元素下标 = 参与滚动的元素个数 * 百分比 */
     let idx = parseInt(scrollItemSize * percent);
+    /** 距离顶部的绝对偏移量 */
     let offset4Item = itemHeight * idx;
-    if (offset4Item >= view.offsetHeight / 2) {
+    if (offset4Item > halfViewSize * itemHeight) {
+        // 滚动元素列表
         view.style.top = `${ offset4Item - (itemHeight * halfViewSize) }px`;
     }
 }
