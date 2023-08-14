@@ -640,6 +640,7 @@ function startDragImpl_001(element, e) {
     context_001.drag.top = parseInt(element.style.top || '0');
     context_001.drag.left = parseInt(element.style.left || '0');
     context_001.drag.element = element;
+    element.style.transition = '0';
 }
 
 /** 拖拽开始事件 */
@@ -658,6 +659,7 @@ function startDrag_001() {
 /** 拖拽结束实现 */
 function finishDragImpl_001(element, e) {
     context_001.drag.active = false;
+    element.style.transition = '0.2s';
 }
 
 /** 拖拽结束事件 */
@@ -722,6 +724,6 @@ function onDragScroll_001(element) {
     let offset4Item = itemHeight * idx;
     if (offset4Item > halfViewSize * itemHeight) {
         // 滚动元素列表
-        view.style.top = `${ offset4Item - (itemHeight * halfViewSize) }px`;
+        view.style.top = `-${ offset4Item - (itemHeight * halfViewSize) }px`;
     }
 }
