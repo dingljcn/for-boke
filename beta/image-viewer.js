@@ -65,10 +65,11 @@ function initLayout_001() {
     }, {
         innerText: context_001.config.style.css
     }, []);
-    document.body.innerHTML = `<div id="dinglj-all-container">
-        <div id="dinglj-global-mask">
-            <img id="dinglj-full-screen-image" src="#" onclick="fullScreen_001(src, 'close')"/>
-        </div>
+    document.body.innerHTML = `
+    <div id="dinglj-global-mask">
+        <img id="dinglj-full-screen-image" src="#" onclick="fullScreen_001(src, 'close')"/>
+    </div>
+    <div id="dinglj-all-container">
         <div id="dinglj-all-title">
             <div id="dinglj-web-name">用例截图查看工具</div>
             <div id="dinglj-center-title">
