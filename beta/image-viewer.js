@@ -55,7 +55,7 @@ function exec_001() {
     drawLineNumber_001();
     bindKeyboardEvent_001();
     bindDragEvent_001();
-    moveScroll_001('dinglj-lines-view', 'line-item', 'dinglj-lines-scroll');
+    displayScroll_001();
 }
 
 /** 绘制布局 */
@@ -101,7 +101,12 @@ function initLayout_001() {
                 </div>
                 <div id="dinglj-step-container">
                     <div id="dinglj-step-title">步数</div>
-                    <div id="dinglj-steps"></div>
+                    <div id="dinglj-steps">
+                        <div id="dinglj-steps-view"></div>
+                        <div id="dinglj-steps-scroll">
+                            <div class="scroll-block"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="dinglj-image-area">
@@ -211,7 +216,7 @@ function drawSteps(element) {
     context_001.steps[lineNumber] = res.split('\n')
             .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
             .filter(href => href != '');
-    getById('dinglj-steps').innerHTML = context_001.steps[lineNumber]
+    getById('dinglj-steps-view').innerHTML = context_001.steps[lineNumber]
         .map(n => `<div class="step-item dinglj-item" id="step-${n}">${n}</div>`)
         .join('');
     bindStepEvent_001();
@@ -526,6 +531,13 @@ function readPersist_001() {
         return json[window.location.href] || null;
     }
     return null;
+}
+
+function displayScroll_001() {
+    moveScroll_001('dinglj-lines-view', 'line-item', 'dinglj-lines-scroll');
+    moveScroll_001('dinglj-steps-view', 'line-item', 'dinglj-steps-scroll');
+    moveScroll_001('dinglj-histories-view', 'line-item', 'dinglj-histories-scroll');
+    moveScroll_001('dinglj-stars-view', 'line-item', 'dinglj-stars-scroll');
 }
 
 /** 滚动条显示逻辑 */
