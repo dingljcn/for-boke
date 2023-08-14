@@ -124,8 +124,8 @@ function initLayout_001() {
                 <div id="dinglj-his-star-list">
                     <div id="dinglj-his-star-mask">
                         <div id="dinglj-history-list">
-                            <div id="dinglj-histories-view"></div>
-                            <div id="dinglj-histories-scroll">
+                            <div id="dinglj-historys-view"></div>
+                            <div id="dinglj-historys-scroll">
                                 <div class="scroll-block"></div>
                             </div>
                         </div>
@@ -266,7 +266,7 @@ function addToHistory_001(lineNumber, step) {
     }
     // 添加
     context_001.persist.history.push(key);
-    let container = getById('dinglj-histories-view');
+    let container = getById('dinglj-historys-view');
     let tmp = newElement('div', {
         parentNode: container,
     }, {
@@ -483,7 +483,7 @@ function toStar_001(element, e) {
 function cleanHistory_001() {
     let data = getImgData();
     context_001.persist.history = [];
-    getById('dinglj-histories-view').innerHTML = '';
+    getById('dinglj-historys-view').innerHTML = '';
     // 当前正在浏览的图片重新添加
     addToHistory_001(data.lineNumber, data.step);
     // 持久化
@@ -546,7 +546,7 @@ function readPersist_001() {
 function displayScroll_001() {
     moveScroll_001('dinglj-lines-view', 'line-item', 'dinglj-lines-scroll');
     moveScroll_001('dinglj-steps-view', 'line-item', 'dinglj-steps-scroll');
-    moveScroll_001('dinglj-histories-view', 'line-item', 'dinglj-histories-scroll');
+    moveScroll_001('dinglj-historys-view', 'line-item', 'dinglj-historys-scroll');
     moveScroll_001('dinglj-stars-view', 'line-item', 'dinglj-stars-scroll');
 }
 
