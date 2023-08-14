@@ -596,7 +596,7 @@ function moveScroll_001(containerID, itemClass, scrollID) {
         scrollBtnTop = scrollPercent * (viewHeight - scrollBtnHeight);
     }
     // 滚动条进行滚动
-    scrollBtn.style.top = `${ scrollBtnTop }`;
+    scrollBtn.style.top = `${ scrollBtnTop < 0 ? 0 : scrollBtnTop }`;
 }
 
 /** 获取当前作用域中有效的元素, 优先级依次为 active, last, first */
@@ -643,10 +643,14 @@ function startDragImpl_001(element, e) {
 
 /** 拖拽开始事件 */
 function startDrag_001() {
-    for (scrollBtn of getByClass('scroll-block')) {
-        scrollBtn.addEventListener('mousedown', e => {
-            startDragImpl_001(scrollBtn, e);
+    let list = getByClass('scroll-block');
+    for (let i = 0; i < list.length; i++) {
+        let element = list[i];
+        element.addEventListener('mousedown', e => {
+            logln('点击的元素:', element, '事件', e);
+            startDragImpl_001(element, e);
         });
+        logln("元素", element, "代码", element.mousedown);
     }
 }
 
