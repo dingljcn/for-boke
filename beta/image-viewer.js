@@ -123,8 +123,18 @@ function initLayout_001() {
                 </div>
                 <div id="dinglj-his-star-list">
                     <div id="dinglj-his-star-mask">
-                        <div id="dinglj-history-list"></div>
-                        <div id="dinglj-star-list"></div>
+                        <div id="dinglj-history-list">
+                            <div id="dinglj-histories-view"></div>
+                            <div id="dinglj-histories-scroll">
+                                <div class="scroll-block"></div>
+                            </div>
+                        </div>
+                        <div id="dinglj-star-list">
+                            <div id="dinglj-stars-view"></div>
+                            <div id="dinglj-stars-scroll">
+                                <div class="scroll-block"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -256,7 +266,7 @@ function addToHistory_001(lineNumber, step) {
     }
     // 添加
     context_001.persist.history.push(key);
-    let container = getById('dinglj-history-list');
+    let container = getById('dinglj-histories-view');
     let tmp = newElement('div', {
         parentNode: container,
     }, {
@@ -426,7 +436,7 @@ function addToStarList_001(lineNumber, step) {
     }
     // 添加
     context_001.persist.star.push(key);
-    let container = getById('dinglj-star-list');
+    let container = getById('dinglj-stars-view');
     let tmp = newElement('div', {
         parentNode: container,
     }, {
@@ -473,7 +483,7 @@ function toStar_001(element, e) {
 function cleanHistory_001() {
     let data = getImgData();
     context_001.persist.history = [];
-    getById('dinglj-history-list').innerHTML = '';
+    getById('dinglj-histories-view').innerHTML = '';
     // 当前正在浏览的图片重新添加
     addToHistory_001(data.lineNumber, data.step);
     // 持久化
@@ -483,7 +493,7 @@ function cleanHistory_001() {
 /** 清除重点关注点击事件 */
 function cleanStar_001() {
     context_001.persist.star = [];
-    getById('dinglj-star-list').innerHTML = '';
+    getById('dinglj-stars-view').innerHTML = '';
     // 持久化
     savePersist_001();
 }
@@ -722,8 +732,6 @@ function onDragScroll_001(element) {
     let idx = parseInt(scrollItemSize * percent);
     /** 距离顶部的绝对偏移量 */
     let offset4Item = itemHeight * idx;
-    if (offset4Item > halfViewSize * itemHeight) {
-        // 滚动元素列表
-        view.style.top = `-${ offset4Item - (itemHeight * halfViewSize) }px`;
-    }
+    // 滚动元素列表
+    view.style.top = `-${ offset4Item < 0 ? 0 : offset4Item }px`;
 }
