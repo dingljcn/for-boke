@@ -662,7 +662,7 @@ function finishDragImpl_001(element, e) {
 /** 拖拽结束事件 */
 function finishDrag_001() {
     window.addEventListener('mouseup', e => {
-        finishDragImpl_001(scrollBtn, e);
+        finishDragImpl_001(context_001.drag.element, e);
     });
 }
 
@@ -688,7 +688,7 @@ function doDragImpl_001(element, e) {
 /** 拖拽过程事件 */
 function doDrag_001() {
     window.addEventListener('mousemove', e => {
-        doDragImpl_001(scrollBtn, e);
+        doDragImpl_001(context_001.drag.element, e);
     });
 }
 
