@@ -639,6 +639,7 @@ function startDragImpl_001(element, e) {
     context_001.drag.y = e.screenY;
     context_001.drag.top = parseInt(element.style.top || '0');
     context_001.drag.left = parseInt(element.style.left || '0');
+    context_001.drag.element = element;
 }
 
 /** 拖拽开始事件 */
