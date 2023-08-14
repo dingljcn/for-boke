@@ -743,7 +743,6 @@ function onDragScroll_001(element) {
 function fullScreen_001(src, type) {
     let mask = getById('dinglj-global-mask');
     let image = getById('dinglj-full-screen-image');
-    mask.style.zIndex = type == 'open' ? 999 : -999;
-    mask.style.opacity = type == 'open' ? 1 : 0;
-    image.src = src;
+    mask.style.display = type == 'open' ? 'block' : 'none';
+    image.src = type == 'open' ? src : '#';
 }
