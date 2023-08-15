@@ -1,4 +1,4 @@
 @echo off
 git add .
-git commit -m 'release:image-viewer'
+git commit -m 'wiki-preview'
 git push
