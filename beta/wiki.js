@@ -244,7 +244,7 @@ function fillMyTickets_002() {
 function getNotResolveTickets_002() {
     let list = [];
     for (let element of context_002.source) {
-        if (element.owner == context_002.config.whoami.zh && element.status.toLowerCase() != 'close' && element.status.toLowerCase() != 'fixed') { // 属主是我, 没有关闭的
+        if (element.owner == context_002.config.whoami.zh && element.status.toLowerCase() != 'closed' && element.status.toLowerCase() != 'fixed') { // 属主是我, 没有关闭的
             list.push(element);
         }
     }
