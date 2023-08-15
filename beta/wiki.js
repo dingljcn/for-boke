@@ -208,7 +208,7 @@ function changePage_002(id) {
     target.classList.add(className);
     // 移动指示条
     let name = getNavEleName_002(target);
-    let height = getNavItemHeight_002() * indexOfNav_002(name);
+    let height = (getNavItemHeight_002() + 5) * indexOfNav_002(name);
     getById('dinglj-nav-point').style.top = `${ height }px`;
     // 显示界面滚动高度
     let relativeTop = getByClass('dinglj-page')[0].offsetHeight * indexOfNav_002(name) * -1;
