@@ -82,11 +82,11 @@ function initLayout_001() {
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
                 <div class="dinglj-step-counter">
                     <span>行数：</span>
-                    <input id="dinglj-line-input"/> / <span id="dinglj-line-total"></span>
+                    <input id="dinglj-line-input" onchange="jumpToItem_001('line', value)"/> / <span id="dinglj-line-total"></span>
                 </div>
                 <div class="dinglj-step-counter">
                     <span>步数：</span>
-                    <input id="dinglj-step-input"/> / <span id="dinglj-step-total"></span>
+                    <input id="dinglj-step-input" onchange="jumpToItem_001('step', value)"/> / <span id="dinglj-step-total"></span>
                 </div>
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
             </div>
@@ -751,7 +751,7 @@ function fullScreen_001(src, type) {
 }
 
 /** 从标题行的文本框进行输入跳转 */
-function jumpToStep_001(scope, idx) {
+function jumpToItem_001(scope, idx) {
     let list = getById(`dinglj-${ scope }s-view`).children;
     if (!list || list.length == 0) {
         return;
