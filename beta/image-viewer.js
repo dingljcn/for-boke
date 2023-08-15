@@ -234,7 +234,7 @@ function drawSteps(element) {
         .map(n => `<div class="step-item dinglj-item" id="step-${n}">${n}</div>`)
         .join('');
     bindStepEvent_001();
-    getById('dinglj-step-total').innerText = Object.keys(context_001.steps).length;
+    getById('dinglj-step-total').innerText = Object.keys(context_001.steps.lineNumber).length;
 }
 
 /** 界面点击步骤事件 */
@@ -672,8 +672,10 @@ function startDrag_001() {
 
 /** 拖拽结束实现 */
 function finishDragImpl_001(element, e) {
-    context_001.drag.active = false;
-    element.style.transition = '0.2s';
+    if (element) {
+        context_001.drag.active = false;
+        element.style.transition = '0.2s';
+    }
 }
 
 /** 拖拽结束事件 */
@@ -685,7 +687,7 @@ function finishDrag_001() {
 
 /** 拖拽过程实现 */
 function doDragImpl_001(element, e) {
-    if (context_001.drag.active) {
+    if (context_001.drag.active && element) {
         // 鼠标偏移量
         let offset = e.screenY - context_001.drag.y;
         // 新的 top = 以前的 top + 偏移量
@@ -746,4 +748,36 @@ function fullScreen_001(src, type) {
     let image = getById('dinglj-full-screen-image');
     mask.style.display = type == 'open' ? 'block' : 'none';
     image.src = type == 'open' ? src : '#';
+}
+
+/** 从标题行的文本框进行输入跳转 */
+function jumpToStep_001(scope, idx) {
+    let list = getById(`dinglj-${ scope }s-view`).children;
+    if (!list || list.length == 0) {
+        return;
+    }
+    idx = parseInt(idx);
+    let firstItem = list[0];
+    let finalItem = list[list.length - 1];
+    let tmp = idx;
+    let step = -1; // 先向前找
+    let item = null;
+    let min = parseInt( firstItem.id.replace(`${ scope }-`, ''));
+    let max = parseInt( finalItem.id.replace(`${ scope }-`, ''));
+    do {
+        if (tmp < min && step < 0) { // 检查是否下标越界
+            step = 1; // 前面没了, 向后找
+            tmp = idx + step;
+            continue;
+        }
+        let element = getById(`line-${ tmp }`);
+        if (element) {
+            item = element;
+            break;
+        }
+        tmp += step;
+    } while(tmp <= max);
+    if (item) {
+        item.click();
+    }
 }
