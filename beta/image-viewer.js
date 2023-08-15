@@ -85,11 +85,11 @@ function initLayout_001() {
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
                 <div class="dinglj-step-counter">
                     <span>行数(${ context_001.config.eventBind.focusLine })</span>
-                    <input id="dinglj-line-input" onchange="jumpToItem_001('line', value)"/> / <span id="dinglj-line-total"></span>
+                    <input id="dinglj-line-input" onchange="jumpToItem_001('line', value)" onclick="select()"/> / <span id="dinglj-line-total"></span>
                 </div>
                 <div class="dinglj-step-counter">
                     <span>步数(${ context_001.config.eventBind.focusStep })</span>
-                    <input id="dinglj-step-input" onchange="jumpToItem_001('step', value)"/> / <span id="dinglj-step-total"></span>
+                    <input id="dinglj-step-input" onchange="jumpToItem_001('step', value)" onclick="select()"/> / <span id="dinglj-step-total"></span>
                 </div>
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
             </div>
