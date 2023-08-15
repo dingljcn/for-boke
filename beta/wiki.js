@@ -1,6 +1,5 @@
 const context_002 = {
     list: {
-        source: [], // 我的所有变更都存储在这里
         notResolve: {
             name: '需要处理',
             data: {},
@@ -54,8 +53,9 @@ const context_002 = {
                 }
                 return result;
             }
-        }
+        },
     },
+    source: [], // 我的所有变更都存储在这里
     runtime: {
         realActive: '',
         activePage: () => context_002.runtime.realActive || (context_002.runtime.realActive = Object.keys(context_002.list)[0]),
@@ -155,7 +155,7 @@ function readMyTickets_002() {
                 cc: simpleTd.exec(data[19])[1]
             });
         }
-        context_002.list.source = elementList;
+        context_002.source = elementList;
         makePages_002();
     })
 }
@@ -171,7 +171,6 @@ function drawUI_002() {
             <div id="dinglj-nav-point"></div>
             <div id="dinglj-navs"> ${
                 Object.keys(context_002.list)
-                .filter(key => context_002.list[key].name != undefined)
                 .map(key => `<div class="dinglj-nav-item ${ context_002.runtime.activePage() == key ? 'dinglj-active-nav' : '' }" id="dinglj-nav-${ key }" onclick="changePage_002(id)">${ context_002.list[key].name }</div>`)
                 .join('') 
             }</div>
@@ -224,7 +223,7 @@ function makePages_002() {
 
 function getMyTickets_002() {
     let list = [];
-    for (let element of context_002.list.source) {
+    for (let element of context_002.source) {
         if (element.owner == context_002.config.whoami.zh) { // 属主是我
             list.push(element);
         }
@@ -244,7 +243,7 @@ function fillMyTickets_002() {
 
 function getNotResolveTickets_002() {
     let list = [];
-    for (let element of context_002.list.source) {
+    for (let element of context_002.source) {
         if (element.owner == context_002.config.whoami.zh && element.status.toLowerCase() != 'close' && element.status.toLowerCase() != 'fixed') { // 属主是我, 没有关闭的
             list.push(element);
         }
@@ -264,7 +263,7 @@ function fillNotResolveTickets_002() {
 
 function getISubmitTickets_002() {
     let list = [];
-    for (let element of context_002.list.source) {
+    for (let element of context_002.source) {
         if (element.reporter == context_002.config.whoami.zh) { // 报告人是我
             list.push(element);
         }
