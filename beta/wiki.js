@@ -171,6 +171,7 @@ function drawUI_002() {
             <div id="dinglj-nav-point"></div>
             <div id="dinglj-navs"> ${
                 Object.keys(context_002.list)
+                .filter(key => context_002.list[key].name != undefined)
                 .map(key => `<div class="dinglj-nav-item ${ context_002.runtime.activePage() == key ? 'dinglj-active-nav' : '' }" id="dinglj-nav-${ key }" onclick="changePage_002(id)">${ context_002.list[key].name }</div>`)
                 .join('') 
             }</div>
