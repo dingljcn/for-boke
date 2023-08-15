@@ -12,6 +12,9 @@ const context_001 = {
         y: 0,
         top: 0,
         left: 0,
+    },
+    shortcut: {
+        ctrl: false
     }
 };
 
@@ -75,17 +78,17 @@ function initLayout_001() {
             <div id="dinglj-center-title">
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
                 <div id="dinglj-toolbar-box">
-                    <div class="toolbar-item" onclick="addToStar_001()">标记为重点关注图片</div>
-                    <div class="toolbar-item" onclick="cleanHistory_001()">清空历史记录</div>
-                    <div class="toolbar-item" onclick="cleanStar_001()">清空重点关注</div>
+                    <div class="toolbar-item" onclick="addToStar_001()">标记为重点关注图片(${ context_001.config.eventBind.starImg })</div>
+                    <div class="toolbar-item" onclick="cleanHistory_001()">清空历史记录(${ context_001.config.eventBind.cleanHistory })</div>
+                    <div class="toolbar-item" onclick="cleanStar_001()">清空重点关注(${ context_001.config.eventBind.cleanStar })</div>
                 </div>
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
                 <div class="dinglj-step-counter">
-                    <span>行数：</span>
+                    <span>行数(${ context_001.config.eventBind.focusLine })</span>
                     <input id="dinglj-line-input" onchange="jumpToItem_001('line', value)"/> / <span id="dinglj-line-total"></span>
                 </div>
                 <div class="dinglj-step-counter">
-                    <span>步数：</span>
+                    <span>步数(${ context_001.config.eventBind.focusStep })</span>
                     <input id="dinglj-step-input" onchange="jumpToItem_001('step', value)"/> / <span id="dinglj-step-total"></span>
                 </div>
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
@@ -325,13 +328,67 @@ function bindKeyboardEvent_001() {
     window.addEventListener('keyup', e => {
         onKeyUp_001(e);
     });
+    window.addEventListener('keydown', e => {
+        onKeyDown_001(e);
+    });
 }
+
 /** 按键抬起事件 */
 function onKeyUp_001(e) {
-    if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
-        changeItem_001(e.key == 'ArrowUp', e);
-    } else if (['ArrowLeft', 'ArrowRight'].includes(e.key)) {
-        changeScope_001(context_001.layout, e.key == 'ArrowLeft', e);
+    let key = e.key;
+    if (['ArrowUp', 'ArrowDown'].includes(key)) {
+        changeItem_001(key == 'ArrowUp', e);
+    } else if (['ArrowLeft', 'ArrowRight'].includes(key)) {
+        changeScope_001(context_001.layout, key == 'ArrowLeft', e);
+    } else if ('Control' == key) {
+        context_001.shortcut.ctrl = false;
+    } else if (['1', '2'].includes(key) && context_001.shortcut.ctrl) {
+        activeShortcut_001(key);
+    }
+}
+
+/** 按键按下事件 */
+function onKeyDown_001(e) {
+    let key = e.key;
+    if ('Control' == key) {
+        context_001.shortcut.ctrl = true;
+    }
+}
+
+const eventMap = {
+    starImg: addToStar_001,
+    cleanHistory: cleanHistory_001,
+    cleanStar: cleanStar_001,
+    focusLine: shortcut_focusLineCounter_001,
+    focusStep: shortcut_focusStepCounter_001,
+    fullScreen: shortcut_fullScreen_001
+}
+
+/** 快捷键绑定 */
+function activeShortcut_001(key) {
+    for (let key in context_001.config.eventBind) {
+        if (context_001.config.eventBind[key] == key) {
+            eventMap[key]();
+        }
+    }
+}
+
+/** 聚焦行输入器 */
+function shortcut_focusLineCounter_001() {
+    getById('dinglj-line-input').click();
+}
+
+/** 聚焦步骤输入器 */
+function shortcut_focusStepCounter_001() {
+    getById('dinglj-step-input').click();
+}
+
+/** 全屏/取消全屏查看图片 */
+function shortcut_fullScreen_001() {
+    if (getById('dinglj-global-mask').style.display == 'none') {
+        getById('dinglj-image').click();
+    } else {
+        getById('dinglj-full-screen-image').click();
     }
 }
 
@@ -771,6 +828,9 @@ function jumpToItem_001(scope, idx) {
             continue;
         }
         let element = getById(`${ scope }-${ tmp }`);
+        if (scope == 'step') {
+            element = list[tmp - 1];
+        }
         if (element) {
             item = element;
             break;
