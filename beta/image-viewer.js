@@ -335,14 +335,14 @@ function bindKeyboardEvent_001() {
 
 /** 按键抬起事件 */
 function onKeyUp_001(e) {
-    let key = e.key;
+    let key = (e.key).toUpperCase();
     if (['ArrowUp', 'ArrowDown'].includes(key)) {
         changeItem_001(key == 'ArrowUp', e);
     } else if (['ArrowLeft', 'ArrowRight'].includes(key)) {
         changeScope_001(context_001.layout, key == 'ArrowLeft', e);
     } else if ('Alt' == key) {
         context_001.shortcut.alt = false;
-    } else if (['1', '2'].includes(key) && context_001.shortcut.alt) {
+    } else if (Object.values(context_001.config.eventBind).includes(key) && context_001.shortcut.alt) {
         activeShortcut_001(key);
     }
 }
@@ -365,9 +365,9 @@ const eventMap = {
 }
 
 /** 快捷键绑定 */
-function activeShortcut_001(key) {
+function activeShortcut_001(eventKey) {
     for (let key in context_001.config.eventBind) {
-        if (context_001.config.eventBind[key] == key) {
+        if (context_001.config.eventBind[key] == eventKey) {
             eventMap[key]();
         }
     }
