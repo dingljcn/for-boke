@@ -115,7 +115,7 @@ function initLayout_001() {
             </div>
             <div id="dinglj-image-area">
                 <div id="dinglj-image-box">
-                    <img id="dinglj-image" src="1/11/4_录入.png" onclick="fullScreen_001(src, 'open')"/>
+                    <img id="dinglj-image" src="#" onclick="fullScreen_001(src, 'open')"/>
                 </div>
             </div>
             <div id="dinglj-right-guide">
@@ -234,7 +234,7 @@ function drawSteps(element) {
         .map(n => `<div class="step-item dinglj-item" id="step-${n}">${n}</div>`)
         .join('');
     bindStepEvent_001();
-    getById('dinglj-step-total').innerText = Object.keys(context_001.steps.lineNumber).length;
+    getById('dinglj-step-total').innerText = Object.keys(context_001.steps[lineNumber]).length;
 }
 
 /** 界面点击步骤事件 */
