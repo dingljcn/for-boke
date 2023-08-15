@@ -270,6 +270,7 @@ function toStep_001(oldScope, newScope, element, fromClick = true) {
     getById('dinglj-step-input').value = parseInt(element.innerText);
     const lineNumber = getById('dinglj-line-input').value;
     getById('dinglj-image').src = `1/${ lineNumber }/${ element.innerText }`;
+    getById('dinglj-full-screen-image').src = `1/${ lineNumber }/${ element.innerText }`;
     addToHistory_001(lineNumber, element.innerText);
 }
 
@@ -506,6 +507,7 @@ function toHistory_001(element, e) {
     let data = /\[(\d+)] - (.*)/.exec(element.innerText);
     let key = `1/${ data[1] }/${ data[2] }`;
     getById('dinglj-image').src = key;
+    getById('dinglj-full-screen-image').src = key;
 }
 
 /** 添加到重点关注 */
@@ -564,6 +566,7 @@ function toStar_001(element, e) {
     let data = /\[(\d+)] - (.*)/.exec(element.innerText);
     let key = `1/${ data[1] }/${ data[2] }`;
     getById('dinglj-image').src = key;
+    getById('dinglj-full-screen-image').src = key;
 }
 
 /** 清除历史记录点击事件 */
