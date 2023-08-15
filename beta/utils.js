@@ -35,10 +35,10 @@ function isMatch(config) {
                 return true;
             }
         }
-        return config.matchList.length == 0; // 长度为 0, 返回 true, 反之返回 false
     } else { // 如果没有要匹配的网址, 默认是允许执行脚本
         return true;
     }
+    return false; // 到这里说明存在要匹配的网址, 但匹配失败, 返回 false
 }
 
 /** 对象转 json 字符串 */

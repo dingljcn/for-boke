@@ -6,6 +6,27 @@ class LangItem {
     }
 }
 
+/** 新脚本 onload 函数格式 */
+function onload_xxx(callback) {
+    // 引入通用脚本
+    let utilScript = document.createElement('script');
+    utilScript.type = 'text/javascript';
+    utilScript.src = 'https://dingljcn.github.io/for-boke/beta/utils.js?' + Math.random();
+    // 成功
+    utilScript.onload = async function() {
+        localStorage.setItem(`dinglj-script-???`, utilScript.src); // 缓存本次成功 load 的 url
+        callback();
+    }
+    // 失败
+    utilScript.onerror = () => {
+        let lastURL = localStorage.getItem(`dinglj-script-???`);
+        console.error(`${ utilScript.src } 拉取失败, 拉取上次成功的地址 ${ lastURL }`);
+        utilScript.remove();
+        appendScript(callback);
+    }
+    document.head.appendChild(utilScript);
+}
+
 /** 判断当前网址是否启用脚本 */
 function isMatch(config) {
     if (config.matchList) { // 如果存在要匹配的网址, 则匹配, 匹配成功才进入
@@ -248,5 +269,30 @@ function toSecond(number = 0, originUnit = 'hour') {
         case 'hour': return number * 60 * 60; // 一小时 60 分钟
         case 'min': return number * 60; // 一分钟 60 秒
         case 'sec': return number;
+    }
+}
+
+/**
+ * 简单的 get 请求
+ * @param {string} path 完整地址或相对地址
+ * @param {Function} callback 回调函数
+ */
+function get(path = '', sync = false, callback = res => {}) {
+    const http = new XMLHttpRequest();
+    http.open('GET', path, sync);
+    http.send();
+    if (http.readyState == 4 && http.status == 200) {
+        callback(http.responseText);
+    }
+    return http.responseText;
+}
+
+function log(obj) {
+    console.log(obj);
+}
+
+function logln() {
+    for (let i = 0; i < arguments.length; i++) {
+        console.log(arguments[i]);
     }
 }
