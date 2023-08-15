@@ -78,7 +78,8 @@ function drawUI_002() {
     }, []);
     getById('main').innerHTML = `<div id="dinglj-global-left">
         <div id="dinglj-page-nav-box">
-            <div id="dinglj-nav-point"> ${
+            <div id="dinglj-nav-point"></div>
+            <div id="dinglj-navs"> ${
                 Object.keys(context_002.list)
                 .map(key => `<div class="dinglj-nav-item ${ context_002.runtime.activePage() == key ? 'dinglj-active-nav' : '' }" id="dinglj-nav-${ key }">${ context_002.list[key].name }</div>`)
                 .join('') 
