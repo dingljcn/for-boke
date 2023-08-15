@@ -336,21 +336,21 @@ function bindKeyboardEvent_001() {
 /** 按键抬起事件 */
 function onKeyUp_001(e) {
     let key = (e.key).toUpperCase();
-    if (['ArrowUp', 'ArrowDown'].includes(key)) {
+    if (['ArrowUp', 'ArrowDown'].map(i => i.toUpperCase()).includes(key)) {
         changeItem_001(key == 'ArrowUp', e);
-    } else if (['ArrowLeft', 'ArrowRight'].includes(key)) {
+    } else if (['ArrowLeft', 'ArrowRight'].map(i => i.toUpperCase()).includes(key)) {
         changeScope_001(context_001.layout, key == 'ArrowLeft', e);
-    } else if ('Alt' == key) {
+    } else if (['Alt'].map(i => i.toUpperCase()).includes(key)) {
         context_001.shortcut.alt = false;
-    } else if (Object.values(context_001.config.eventBind).includes(key) && context_001.shortcut.alt) {
+    } else if (Object.values(context_001.config.eventBind).map(i => i.toUpperCase()).includes(key) && context_001.shortcut.alt) {
         activeShortcut_001(key);
     }
 }
 
 /** 按键按下事件 */
 function onKeyDown_001(e) {
-    let key = e.key;
-    if ('Alt' == key) {
+    let key = (e.key).toUpperCase();
+    if (['Alt'].map(i => i.toUpperCase()).includes(key)) {
         context_001.shortcut.alt = true;
     }
 }
