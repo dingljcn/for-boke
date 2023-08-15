@@ -341,24 +341,41 @@ function bindKeyboardEvent_001() {
     });
 }
 
+const keyName = {
+    up: 'ARROWUP',
+    down: 'ARROWDOWN',
+    left: 'ARROWLEFT',
+    right: 'ARROWRIGHT',
+    alt: "ALT",
+}
+
+const keyGroup = {
+    up_down: [keyName.up, keyName.down],
+    left_right: [keyName.left, keyName.right],
+    alt: [keyName.alt],
+}
+
 /** 按键抬起事件 */
 function onKeyUp_001(e) {
     let key = (e.key).toUpperCase();
-    if (['ArrowUp', 'ArrowDown'].map(i => i.toUpperCase()).includes(key)) {
-        changeItem_001(key == 'ArrowUp', e);
-    } else if (['ArrowLeft', 'ArrowRight'].map(i => i.toUpperCase()).includes(key)) {
-        changeScope_001(context_001.layout, key == 'ArrowLeft', e);
-    } else if (['Alt'].map(i => i.toUpperCase()).includes(key)) {
+    if (keyGroup.up_down.includes(key)) {
+        changeItem_001(key == keyName.up, e);
+    } else if (keyGroup.left_right.includes(key)) {
+        changeScope_001(context_001.layout, key == keyName.left, e);
+    } else if (keyGroup.alt.includes(key)) {
         context_001.shortcut.alt = false;
-    } else if (Object.values(context_001.config.eventBind).map(i => i.toUpperCase()).includes(key) && context_001.shortcut.alt) {
-        activeShortcut_001(key);
+    } else if (context_001.shortcut.alt) {
+        let allowedShortcuts = Object.values(context_001.config.eventBind).map(i => i.toUpperCase());
+        if (allowedShortcuts.includes(key)) {
+            activeShortcut_001(key);
+        }
     }
 }
 
 /** 按键按下事件 */
 function onKeyDown_001(e) {
     let key = (e.key).toUpperCase();
-    if (['Alt'].map(i => i.toUpperCase()).includes(key)) {
+    if (keyGroup.alt.includes(key)) {
         context_001.shortcut.alt = true;
     }
 }
