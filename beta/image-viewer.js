@@ -770,7 +770,7 @@ function jumpToItem_001(scope, idx) {
             tmp = idx + step;
             continue;
         }
-        let element = getById(`line-${ tmp }`);
+        let element = getById(`${ scope }-${ tmp }`);
         if (element) {
             item = element;
             break;
