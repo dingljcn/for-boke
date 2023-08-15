@@ -210,6 +210,9 @@ function changePage_002(id) {
     let name = getNavEleName_002(target);
     let height = getNavItemHeight_002() * indexOfNav_002(name);
     getById('dinglj-nav-point').style.top = `${ height }px`;
+    // 显示界面滚动高度
+    let relativeTop = getByClass('dinglj-page')[0].offsetHeight * indexOfNav_002(name) * -1;
+    getById('dinglj-page-view').style.top = `${ relativeTop }px`;
 }
 
 /** 每个导航元素的名字 */
