@@ -16,6 +16,9 @@ const context_002 = {
                 return result;
             }
         }
+    },
+    config: {
+        css: ''
     }
 }
 
@@ -58,7 +61,13 @@ function exec_002() {
 }
 
 function drawUI_002() {
-
+    newElement('style', {
+        parentNode: document.head
+    }, {
+        innerText: context_002.config.css
+    }, []);
+    getById('main').innerHTML = ``;
+    getById('footer').remove();
 }
 
 function getMyTickets_002() {
@@ -112,5 +121,5 @@ function getMyTickets_002() {
 }
 
 function fillMyTickets_002() {
-    
+
 }
