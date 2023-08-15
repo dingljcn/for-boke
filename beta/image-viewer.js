@@ -14,7 +14,7 @@ const context_001 = {
         left: 0,
     },
     shortcut: {
-        ctrl: false
+        alt: false
     }
 };
 
@@ -340,9 +340,9 @@ function onKeyUp_001(e) {
         changeItem_001(key == 'ArrowUp', e);
     } else if (['ArrowLeft', 'ArrowRight'].includes(key)) {
         changeScope_001(context_001.layout, key == 'ArrowLeft', e);
-    } else if ('Control' == key) {
-        context_001.shortcut.ctrl = false;
-    } else if (['1', '2'].includes(key) && context_001.shortcut.ctrl) {
+    } else if ('Alt' == key) {
+        context_001.shortcut.alt = false;
+    } else if (['1', '2'].includes(key) && context_001.shortcut.alt) {
         activeShortcut_001(key);
     }
 }
@@ -350,8 +350,8 @@ function onKeyUp_001(e) {
 /** 按键按下事件 */
 function onKeyDown_001(e) {
     let key = e.key;
-    if ('Control' == key) {
-        context_001.shortcut.ctrl = true;
+    if ('Alt' == key) {
+        context_001.shortcut.alt = true;
     }
 }
 
