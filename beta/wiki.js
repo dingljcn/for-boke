@@ -19,7 +19,7 @@ const context_002 = {
         }
     },
     runtime: {
-        activePage: Object.keys(context_002.list)[0],
+        activePage: () => Object.keys(context_002.list)[0],
     },
     config: {
         css: ''
@@ -74,7 +74,7 @@ function drawUI_002() {
         <div id="dinglj-page-nav-box">
             <div id="dinglj-nav-point"> ${
                 Object.keys(context_002.list)
-                .map(key => `<div class="dinglj-nav-item ${ context_002.runtime.activePage == key ? 'dinglj-active-nav' : '' }" id="dinglj-nav-${ key }">${ context_002.list[key].name }</div>`)
+                .map(key => `<div class="dinglj-nav-item ${ context_002.runtime.activePage() == key ? 'dinglj-active-nav' : '' }" id="dinglj-nav-${ key }">${ context_002.list[key].name }</div>`)
                 .join('') 
             }</div>
         </div>
