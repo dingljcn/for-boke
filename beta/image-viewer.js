@@ -93,7 +93,15 @@ function initLayout_001() {
                 </div>
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
             </div>
-            <div id="dinglj-other-options">其他操作</div>
+            <div id="dinglj-other-options">
+                <div id="dinglj-other-options-text">其他操作</div>
+                <div id="dinglj-other-options-box">
+                    <div style="cursor: pointer" onclick="window.open('erpLog');">系统日志</div>
+                    <div style="cursor: pointer" onclick="window.open('logs');">工具日志</div>
+                    <div style="cursor: pointer" onclick="window.open('test.xls');">用例下载</div>
+                    <div style="cursor: pointer" onclick="window.open('默认步骤');">默认步骤</div>
+                </div>
+            </div>
         </div>
         <div id="dinglj-under-title">
             <div id="dinglj-left-guide">
