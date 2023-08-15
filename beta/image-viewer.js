@@ -745,10 +745,8 @@ function startDrag_001() {
     for (let i = 0; i < list.length; i++) {
         let element = list[i];
         element.addEventListener('mousedown', e => {
-            logln('点击的元素:', element, '事件', e);
             startDragImpl_001(element, e);
         });
-        logln("元素", element, "代码", element.mousedown);
     }
 }
 
