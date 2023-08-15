@@ -1,5 +1,6 @@
 const context_002 = {
     list: {
+        source: [], // 我的所有变更都存储在这里
         notResolve: {
             name: '需要处理',
             data: {},
@@ -8,11 +9,11 @@ const context_002 = {
                     '所有': []
                 };
                 for (let element of list) {
-                    let module = element.module; // 以模块进行分组
-                    let array = result[module];
+                    let component = element.component; // 以模块进行分组
+                    let array = result[component];
                     if (!array) {
                         array = [];
-                        result[module] = array;
+                        result[component] = array;
                     }
                     array.push(element);
                     result['所有'].push(element);
@@ -40,7 +41,19 @@ const context_002 = {
         iReport: {
             name: '我提出的变更',
             data: {},
-            defaultSort: (list = []) => list
+            defaultSort: (list = []) => { // return: { tabName, List<Ticket> }
+                let result = {};
+                for (let element of list) {
+                    let owner = element.owner; // 以属主进行分组
+                    let array = result[owner];
+                    if (!array) {
+                        array = [];
+                        result[owner] = array;
+                    }
+                    array.push(element);
+                }
+                return result;
+            }
         }
     },
     runtime: {
@@ -86,8 +99,65 @@ function run_002(config) {
 }
 
 function exec_002() {
+    readMyTickets_002(); // 先读数据, 如果出了错, 就不会往下走了, 顺便还能容个错
     drawUI_002();
-    // drawPages_002();
+    drawPages_002();
+}
+
+function readMyTickets_002() {
+    $.get(context_002.config.url.myTickets).then(res => {
+        console.log(1);
+        let isTr = false;
+        let item = '';
+        let list = [];
+        // 第一个 for 循环, 遍历返回的 response, 把每一行都提取出来
+        for (let line of res.split('\n')) {
+            if (/^\s*<tr class="((odd)|(even)) prio[0-9]+">\s*$/.test(line)) { // 开始 tr
+                isTr = true;
+            } else if (isTr) {
+                if (/^\s*<\/tr>\s*$/.test(line)) { // 结束 tr
+                    isTr = false;
+                    item = item.replaceAll(/\s\s+/g, '').replaceAll(/\n/g, '').replaceAll(/<\/td>/g, '</td>\n');
+                    list.push(item);
+                    item = '';
+                    continue;
+                }
+                item += line;
+            }
+        }
+        // console.log(list); // 打开这行, 可以看第一个变更每个单元格的内容
+        // 第二个 for 循环, 遍历每一行变更, 转换为对象
+        let elementList = [];
+        const withA = /<td.*><a.*>(.*)<\/a><\/td>/;
+        const withSpan = /<td.*><span.*>(.*)<\/span><\/td>/;
+        const simpleTd = /<td.*>(.*)<\/td>/;
+        for (let element of list) {
+            let data = element.split('\n');
+            elementList.push({
+                id: withA.exec(data[0])[1],
+                summary: withA.exec(data[1])[1],
+                owner: withSpan.exec(data[2])[1],
+                status: simpleTd.exec(data[3])[1],
+                reporter: withSpan.exec(data[4])[1],
+                type: simpleTd.exec(data[5])[1],
+                priority: simpleTd.exec(data[6])[1],
+                component: simpleTd.exec(data[7])[1],
+                resolution: simpleTd.exec(data[8])[1],
+                time: withA.exec(data[9])[1],
+                changetime: withA.exec(data[10])[1],
+                plandate: simpleTd.exec(data[11])[1],
+                pingtai: simpleTd.exec(data[12])[1],
+                project: simpleTd.exec(data[13])[1],
+                ticketclass: simpleTd.exec(data[14])[1],
+                testadjust: simpleTd.exec(data[15])[1],
+                testreport: simpleTd.exec(data[16])[1],
+                testower1: simpleTd.exec(data[17])[1],
+                keywords: simpleTd.exec(data[18])[1],
+                cc: simpleTd.exec(data[19])[1]
+            });
+        }
+        context_002.list.source = elementList;
+    })
 }
 
 function drawUI_002() {
@@ -148,56 +218,23 @@ function indexOfNav_002(key) {
 function drawPages_002() {
     getMyTickets_002();
     getNotResolveTickets_002();
+    getISubmitTickets_002();
 }
 
 function getMyTickets_002() {
-    $.get(context_002.config.url.myTickets).then(res => {
-        console.log(1);
-        let isTr = false;
-        let item = '';
-        let list = [];
-        // 第一个 for 循环, 遍历返回的 response, 把每一行都提取出来
-        for (let line of res.split('\n')) {
-            if (/^\s*<tr class="color([0-9]+)-((even)|(odd))">\s*$/.test(line)) { // 开始 tr
-                isTr = true;
-            } else if (isTr) {
-                if (/^\s*<\/tr>\s*$/.test(line)) { // 结束 tr
-                    isTr = false;
-                    item = item.replaceAll(/\s\s+/g, '').replaceAll(/\n/g, '').replaceAll(/<\/td>/g, '</td>\n');
-                    list.push(item);
-                    item = '';
-                    continue;
-                }
-                item += line;
-            }
+    let list = [];
+    for (let element of context_002.list.source) {
+        if (element.owner == context_002.config.whoami.zh) { // 属主是我
+            list.push(element);
         }
-        // 第二个 for 循环, 遍历每一行变更, 转换为对象
-        let elementList = [];
-        for (let element of list) {
-            let ticket = {};
-            for (let line of element.split('\n')) {
-                if (!line) {
-                    continue;
-                }
-                let className = /<td class="(\w+)"/.exec(line)[1];
-                let value = '';
-                if (className == 'ticket' || className == 'summary') {
-                    value = /<td class="\w+"><a.*>(.*)<\/a>/.exec(line)[1];
-                } else {
-                    value = /<td class="\w+">(.*)<\/td>/.exec(line)[1];
-                }
-                ticket[className] = value;
-            }
-            elementList.push(ticket);
-        }
-        // 最后, 对变更列表进行整理, 如果配置中自定义了逻辑, 则调用自定义逻辑, 否则使用默认逻辑
-        if (context_002.config.sort.myTickets) {
-            context_002.list.myTickets.data = context_002.config.sort.myTickets(elementList);
-        } else {
-            context_002.list.myTickets.data = context_002.list.myTickets.defaultSort(elementList);
-        }
-        fillMyTickets_002();
-    })
+    }
+    // 对变更列表进行整理, 如果配置中自定义了逻辑, 则调用自定义逻辑, 否则使用默认逻辑
+    if (context_002.config.sort.myTickets) {
+        context_002.list.myTickets.data = context_002.config.sort.myTickets(list);
+    } else {
+        context_002.list.myTickets.data = context_002.list.myTickets.defaultSort(list);
+    }
+    fillMyTickets_002();
 }
 
 function fillMyTickets_002() {
@@ -205,5 +242,41 @@ function fillMyTickets_002() {
 }
 
 function getNotResolveTickets_002() {
+    let list = [];
+    for (let element of context_002.list.source) {
+        if (element.owner == context_002.config.whoami.zh && element.status.toLowerCase() != 'close' && element.status.toLowerCase() != 'fixed') { // 属主是我, 没有关闭的
+            list.push(element);
+        }
+    }
+    // 对变更列表进行整理, 如果配置中自定义了逻辑, 则调用自定义逻辑, 否则使用默认逻辑
+    if (context_002.config.sort.notResolve) {
+        context_002.list.notResolve.data = context_002.config.sort.notResolve(list);
+    } else {
+        context_002.list.notResolve.data = context_002.list.notResolve.defaultSort(list);
+    }
+    fillNotResolveTickets_002();
+}
+
+function fillNotResolveTickets_002() {
+    
+}
+
+function getISubmitTickets_002() {
+    let list = [];
+    for (let element of context_002.list.source) {
+        if (element.reporter == context_002.config.whoami.zh) { // 报告人是我
+            list.push(element);
+        }
+    }
+    // 对变更列表进行整理, 如果配置中自定义了逻辑, 则调用自定义逻辑, 否则使用默认逻辑
+    if (context_002.config.sort.iReport) {
+        context_002.list.iReport.data = context_002.config.sort.iReport(list);
+    } else {
+        context_002.list.iReport.data = context_002.list.iReport.defaultSort(list);
+    }
+    fillISubmitTickets_002();
+}
+
+function fillISubmitTickets_002() {
     
 }
