@@ -81,7 +81,7 @@ function drawUI_002() {
             <div id="dinglj-nav-point"></div>
             <div id="dinglj-navs"> ${
                 Object.keys(context_002.list)
-                .map(key => `<div class="dinglj-nav-item ${ context_002.runtime.activePage() == key ? 'dinglj-active-nav' : '' }" id="dinglj-nav-${ key }">${ context_002.list[key].name }</div>`)
+                .map(key => `<div class="dinglj-nav-item ${ context_002.runtime.activePage() == key ? 'dinglj-active-nav' : '' }" id="dinglj-nav-${ key }" onclick="changePage_002(id)">${ context_002.list[key].name }</div>`)
                 .join('') 
             }</div>
         </div>
@@ -89,6 +89,40 @@ function drawUI_002() {
     <div id="dinglj-global-right">
     </div>`;
     rmf(getById('footer'));
+}
+
+/** 导航元素点击事件 */
+function changePage_002(id) {
+    if (!id) {
+        return;
+    }
+    // 切换 item 本身的样式
+    let className = 'dinglj-active-nav';
+    let lastActive = getByClass(className)[0];
+    if (lastActive) {
+        lastActive.classList.remove(className);
+    }
+    let target = getById(id);
+    target.classList.add(className);
+    // 移动指示条
+    let name = getNavEleName_002(target);
+    let height = getNavItemHeight_002() * indexOfNav_002(name);
+    getById('dinglj-nav-point').style.top = `${ height }px`;
+}
+
+/** 每个导航元素的名字 */
+function getNavEleName_002(element) {
+    return element.id.replace('dinglj-nav-', '');
+}
+
+/** 每个导航元素的高度 */
+function getNavItemHeight_002() {
+    return parseInt(getByClass('dinglj-nav-item')[0].offsetHeight || '0');
+}
+
+/** 当前导航元素的下标 */
+function indexOfNav_002(key) {
+    return Object.keys(context_002.list).indexOf(key);
 }
 
 function getMyTickets_002() {
