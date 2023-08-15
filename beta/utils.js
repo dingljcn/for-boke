@@ -296,3 +296,9 @@ function logln() {
         console.log(arguments[i]);
     }
 }
+
+function rmf(element) {
+    if (element) {
+        element.remove();
+    }
+}

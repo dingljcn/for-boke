@@ -67,7 +67,7 @@ function drawUI_002() {
         innerText: context_002.config.css
     }, []);
     getById('main').innerHTML = ``;
-    getById('footer').remove();
+    rmf(getById('footer'));
 }
 
 function getMyTickets_002() {
