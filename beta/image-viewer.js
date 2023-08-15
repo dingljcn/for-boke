@@ -78,6 +78,7 @@ function initLayout_001() {
             <div id="dinglj-center-title">
                 <div style="flex: 1; opacity: 0">弹性布局填充物</div>
                 <div id="dinglj-toolbar-box">
+                    <div class="toolbar-item" onclick="window.open('..')">上一级目录</div>
                     <div class="toolbar-item" onclick="addToStar_001()">标记为重点关注图片(${ context_001.config.eventBind.starImg })</div>
                     <div class="toolbar-item" onclick="cleanHistory_001()">清空历史记录(${ context_001.config.eventBind.cleanHistory })</div>
                     <div class="toolbar-item" onclick="cleanStar_001()">清空重点关注(${ context_001.config.eventBind.cleanStar })</div>
