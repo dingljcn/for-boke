@@ -16,6 +16,11 @@ const context_002 = {
                 }
                 return result;
             }
+        },
+        iReport: {
+            name: '我提出的变更',
+            data: {},
+            defaultSort: (list = []) => list
         }
     },
     runtime: {
