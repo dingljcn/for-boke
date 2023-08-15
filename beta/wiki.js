@@ -101,7 +101,6 @@ function run_002(config) {
 function exec_002() {
     readMyTickets_002(); // 先读数据, 如果出了错, 就不会往下走了, 顺便还能容个错
     drawUI_002();
-    drawPages_002();
 }
 
 function readMyTickets_002() {
@@ -157,6 +156,7 @@ function readMyTickets_002() {
             });
         }
         context_002.list.source = elementList;
+        makePages_002();
     })
 }
 
@@ -216,7 +216,7 @@ function indexOfNav_002(key) {
     return Object.keys(context_002.list).indexOf(key);
 }
 
-function drawPages_002() {
+function makePages_002() {
     getMyTickets_002();
     getNotResolveTickets_002();
     getISubmitTickets_002();
