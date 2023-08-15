@@ -177,6 +177,18 @@ function drawUI_002() {
         </div>
     </div>
     <div id="dinglj-global-right">
+        <div id="dinglj-page-view">${
+            Object.values(context_002.list)
+            .map(i => i.data)
+            .map(tabs => `<div class="dinglj-page">${
+                `<div class="page-title">
+                    ${ Object.keys(tabs).map(k => `<div class="page-name" id="page-name-${ k }">${ k }</div>`).join('') }
+                </div>` + // 此处是拼接 tab 页的标题
+                `<div class="page-table">
+                </div>` // 此处是拼接表格的数据, 过于复杂, 所以放到函数里
+            }</div>`)
+            .join('\n')
+        }</div>
     </div>`;
     rmf(getById('footer'));
 }
@@ -234,11 +246,6 @@ function getMyTickets_002() {
     } else {
         context_002.list.myTickets.data = context_002.list.myTickets.defaultSort(list);
     }
-    fillMyTickets_002();
-}
-
-function fillMyTickets_002() {
-
 }
 
 function getNotResolveTickets_002() {
@@ -254,11 +261,6 @@ function getNotResolveTickets_002() {
     } else {
         context_002.list.notResolve.data = context_002.list.notResolve.defaultSort(list);
     }
-    fillNotResolveTickets_002();
-}
-
-function fillNotResolveTickets_002() {
-    
 }
 
 function getISubmitTickets_002() {
@@ -274,9 +276,4 @@ function getISubmitTickets_002() {
     } else {
         context_002.list.iReport.data = context_002.list.iReport.defaultSort(list);
     }
-    fillISubmitTickets_002();
-}
-
-function fillISubmitTickets_002() {
-    
 }
