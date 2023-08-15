@@ -1,6 +1,7 @@
 const context_002 = {
     list: {
         myTickets: {
+            name: '我的所有变更',
             data: {},
             defaultSort: (list = []) => { // return: { tabName, List<Ticket> }
                 let result = {};
@@ -16,6 +17,9 @@ const context_002 = {
                 return result;
             }
         }
+    },
+    runtime: {
+        activePage: Object.keys(context_002.list)[0],
     },
     config: {
         css: ''
@@ -66,7 +70,17 @@ function drawUI_002() {
     }, {
         innerText: context_002.config.css
     }, []);
-    getById('main').innerHTML = ``;
+    getById('main').innerHTML = `<div id="dinglj-global-left">
+        <div id="dinglj-page-nav-box">
+            <div id="dinglj-nav-point"> ${
+                Object.keys(context_002.list)
+                .map(key => `<div class="dinglj-nav-item ${ context_002.runtime.activePage == key ? 'dinglj-active-nav' : '' }" id="dinglj-nav-${ key }">${ context_002.list[key].name }</div>`)
+                .join('') 
+            }</div>
+        </div>
+    </div>
+    <div id="dinglj-global-right">
+    </div>`;
     rmf(getById('footer'));
 }
 
