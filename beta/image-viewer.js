@@ -413,7 +413,8 @@ function shortcut_focusStepCounter_001() {
 
 /** 全屏/取消全屏查看图片 */
 function shortcut_fullScreen_001() {
-    if (getById('dinglj-global-mask').style.display == 'none') {
+    let display = getById('dinglj-global-mask').style.display;
+    if (display = '' || display == 'none') {
         getById('dinglj-image').click();
     } else {
         getById('dinglj-full-screen-image').click();
