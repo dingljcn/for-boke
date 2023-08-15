@@ -20,7 +20,7 @@ const context_002 = {
     },
     runtime: {
         realActive: '',
-        activePage: () => realActive || (realActive = Object.keys(context_002.list)[0]),
+        activePage: () => context_002.runtime.realActive || (context_002.runtime.realActive = Object.keys(context_002.list)[0]),
     },
     config: {
         css: ''
