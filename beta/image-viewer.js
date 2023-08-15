@@ -196,6 +196,7 @@ function toLine_001(oldScope, newScope, element, order = 'head', callback = () =
     toItem_001(oldScope, newScope, element, callback);
     drawSteps(element);
     getById('dinglj-line-input').value = element.innerText;
+    getById('dinglj-steps-view').style.top = '0px';
     let steps = getByClass('step-item');
     if (steps && steps.length > 0) {
         let step;
