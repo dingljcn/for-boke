@@ -1,5 +1,25 @@
 const context_002 = {
     list: {
+        notResolve: {
+            name: '需要处理',
+            data: {},
+            defaultSort: (list = []) => { // return: { tabName, List<Ticket> }
+                let result = {
+                    '所有': []
+                };
+                for (let element of list) {
+                    let module = element.module; // 以模块进行分组
+                    let array = result[module];
+                    if (!array) {
+                        array = [];
+                        result[module] = array;
+                    }
+                    array.push(element);
+                    result['所有'].push(element);
+                }
+                return result;
+            }
+        },
         myTickets: {
             name: '我的所有变更',
             data: {},
@@ -67,7 +87,7 @@ function run_002(config) {
 
 function exec_002() {
     drawUI_002();
-    getMyTickets_002();
+    // drawPages_002();
 }
 
 function drawUI_002() {
@@ -125,6 +145,11 @@ function indexOfNav_002(key) {
     return Object.keys(context_002.list).indexOf(key);
 }
 
+function drawPages_002() {
+    getMyTickets_002();
+    getNotResolveTickets_002();
+}
+
 function getMyTickets_002() {
     $.get(context_002.config.url.myTickets).then(res => {
         console.log(1);
@@ -177,4 +202,8 @@ function getMyTickets_002() {
 
 function fillMyTickets_002() {
 
+}
+
+function getNotResolveTickets_002() {
+    
 }
