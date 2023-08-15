@@ -100,7 +100,6 @@ function run_002(config) {
 
 function exec_002() {
     readMyTickets_002(); // 先读数据, 如果出了错, 就不会往下走了, 顺便还能容个错
-    drawUI_002();
 }
 
 function readMyTickets_002() {
@@ -157,6 +156,7 @@ function readMyTickets_002() {
         }
         context_002.source = elementList;
         makePages_002();
+        drawUI_002();
     })
 }
 
