@@ -391,7 +391,7 @@ function drawTabHead(groupName) {
     // 只显示有变更的 tab 页
     let tabStrateges = context.config.stratege.tab.filter(stratege => stratege.list.length > 0);
     let tabHTML = tabStrateges.map(stratege => {
-        return `<div class="tab-name-item" id="${ stratege.tagId }" style="cursor: pointer; transition: 0.4s; padding: 5px; margin: ${ margin }px">${ stratege.tabName }</div>`;
+        return `<div class="tab-name-item" id="${ stratege.tabId }" style="cursor: pointer; transition: 0.4s; padding: 5px; margin: ${ margin }px">${ stratege.tabName }</div>`;
     }).join('');
     getById('dinglj-tab-name').innerHTML = `${ tabHTML }<div id="tab-name-underline" style="height: 3px; width: 60px; transition: 0.4s; background: ${ context.config.style.tab.underlineColor }; position: absolute; bottom: 0px; left: 0px"></div>`;
     let list = getByClass('tab-name-item');
@@ -419,6 +419,7 @@ function drawTabHead(groupName) {
     }, (element, event) => {
         let width = element.offsetWidth + margin * 2;
         let left = element.offsetLeft - margin;
+        context.activeTabId = element.id;
         underLine.style.width = `${ width }px`;
         underLine.style.left = `${ left }px`;
         let idx = indexOfPropInList(tabStrateges, 'tabName', element.innerHTML);
@@ -440,13 +441,14 @@ function drawTabPage(groupName, containerWidth, tabStrateges) {
         return `<div class="dinglj-ticket-list" style="height: 100%; transition: 0.4s; width: ${ containerWidth }px; display: inline-block; opacity: 0; vertical-align: top;">
             <div style="width: 100%; display: flex; flex-direction: column; height: 100%">
                 ${ genTHead(groupName, stratege) }
-                <div style="flex: 1; overflow-y: scroll">
+                <div style="flex: 1; overflow-y: scroll" id="${ stratege.tabId }-data">
                     ${ genTBody(groupName, stratege) }
                 </div>
             </div>
         </div>`;
     }).join('');
     getById('dinglj-ticket-view').innerHTML = views;
+    addSpecialOperation4Test(); // 给自动化变更 tab 页增加一些特殊的操作
     fixStyle();
     fixTicketHref();
 }
@@ -492,7 +494,7 @@ function genTBody(groupName, stratege) {
                     break;
                 }
             }
-            return ignoreRow ? 'DINGLJ_IGNORE_THIS_ROW_DINGLJ' : `<div class="dinglj-column-data-${ cell.key }" style="min-width: 80px; max-width: 80px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; text-align: center; padding: 0 5px; line-height: 30px">${ cell.value }</div>`;
+            return ignoreRow ? 'DINGLJ_IGNORE_THIS_ROW_DINGLJ' : `<div class="dinglj-column-data-${ cell.key }" style="min-width: 80px; max-width: 80px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; text-align: center; padding: 0 5px; line-height: 30px; position: relative">${ cell.value }</div>`;
         }).join('');
         let ignore = tdList.includes('DINGLJ_IGNORE_THIS_ROW_DINGLJ');
         return ignore ? '' : `<div class="dinglj-table-tr dinglj-${ (++count) % 2 == 0 ? 'even' : 'odd' }" style="display: flex; padding: 5px 0;">${ tdList }</div>`
@@ -592,4 +594,207 @@ function parseToSecond(text) {
     } else {
         return 0;
     }
+}
+
+function addSpecialOperation4Test() {
+    let tabKey = context.tabPathIdMap['自动化变更'];
+    let container = getById(`${ tabKey }-data`);
+    if (!container) {
+        return;
+    }
+    for (let ticket of container.children) {
+        let cell = findCellInTicket(ticket, 'dinglj-column-data-summary');
+        if (cell) {
+            addSpecialButton(ticket, cell);
+        }
+    }
+}
+
+function findCellInTicket(ticket, className = '') {
+    for (let cell of ticket.children) {
+        if (cell.classList.contains(className)) {
+            return cell;
+        }
+    }
+    return null;
+}
+
+function addSpecialButton(ticket, cell) {
+    let element = newElement('div', {
+        parentNode: cell
+    }, {
+        id: 'dinglj-tmp-special-box'
+    }, {
+        position: 'absolute',
+        display: 'none',
+        background: 'rgb(52,133,251)',
+        width: '100%',
+        height: '100%',
+        padding: '0 5px',
+        top: '0',
+        left: '0',
+    });
+    let ticketId = findCellInTicket(ticket, 'dinglj-column-data-id').innerText;
+    let ticketNumber = parseInt(ticketId.replace('#', ''));
+    element.innerHTML = `<div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="copyText('${ ticketId } ${ cell.innerText }')">复制</div>
+    <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljSteps(${ ticketNumber })">用例步骤</div>
+    <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljDB(${ ticketNumber })">数据库</div>
+    <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljStack(${ ticketNumber })">报错日志</div>
+    <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljImg(${ ticketNumber })">变更截图</div>
+    <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljAllImg(${ ticketNumber })">所有截图</div>`;
+    mouseIOEvent([cell], (cell, e) => {
+        element.style.display = 'block';
+    }, (cell, e) => {
+        element.style.display = 'none';
+    });
+}
+
+function dingljSteps(ticketNumber) {
+    dingljGetWikies(ticketNumber, wikies => {
+        let flag = false;
+        for (let wiki of wikies) {
+            if (/\n((录入)|(操作)|(选择)|(查看)|(点击)):.*/.test(wiki)) {
+                dingljDisplayWiki(wiki);
+                flag = true;
+            }
+        }
+        if (!flag) {
+            alert('未找到信息');
+        }
+    });
+}
+
+function dingljDB(ticketNumber) {
+    dingljGetWikies(ticketNumber, wikies => {
+        let flag = false;
+        for (let wiki of wikies) {
+            if (/.*DB_TYPE=.*/.test(wiki)) {
+                let result = '';
+                for (let line of wiki.split('\n')) {
+                    if (line.startsWith('set')) {
+                        result += ';' + /set ([A-Za-z0-9_]+=[A-Za-z0-9:._@,]+).*/.exec(line)[1];
+                    }
+                }
+                if (result) {
+                    result.replace(/((ticket)|(TICKET))_/, `ticket_${ ticketNumber }`);
+                    result = result.substring(1);
+                    wiki += `\n\n环境变量: \n${ result }`;
+                }
+                dingljDisplayWiki(wiki);
+                flag = true;
+            }
+        }
+        if (!flag) {
+            alert('未找到信息');
+        }
+    });
+}
+
+function dingljStack(ticketNumber) {
+    dingljGetWikies(ticketNumber, wikies => {
+        let flag = false;
+        for (let wiki of wikies) {
+            if (/.*((java\.lang\..*Exception)|(at org.springframework.web.filter.RequestContextFilter.doFilterInternal)).*/.test(wiki)) {
+                dingljDisplayWiki(wiki);
+                flag = true;
+            }
+        }
+        if (!flag) {
+            alert('未找到信息');
+        }
+    });
+}
+
+function dingljDisplayWiki(wiki) {
+    let mask = newElement('div', {
+        parentNode: document.body
+    }, {
+        innerHTML: `<div id="dinglj-tmp-dialog" style="
+            box-shadow: 0 0 10px -3px #EEE;
+            border-radius: 5px;
+            width: 1000px;
+            padding: 20px;
+            height: 600px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            background: white;
+            word-wrap: break-word;
+            transform: translate(-50%, -50%);"
+        >${ wiki.replaceAll('\n', '<br>') }</div>`,
+    }, {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 999,
+        background: 'rgba(0,0,0,0.7)',
+    });
+    getById('dinglj-tmp-dialog').addEventListener('click', e => {
+        e.stopPropagation();
+    });
+    mask.addEventListener('click', e => {
+        mask.remove();
+    });
+}
+
+function dingljAllImg(ticketNumber) {
+    $.get(`${ context.config.ticketURL }/${ ticketNumber }`).then(res => {
+        let result = /截图路径: <a class="ext-link" href="(.*)"><span/.exec(res.replaceAll(/\n\s+/g, ''));
+        window.open(result[1]);
+    })
+}
+
+function dingljImg(ticketNumber) {
+    $.get(`${ context.config.ticketURL }/${ ticketNumber }`).then(res => {
+        console.log(1);
+        let result = /<img src="(.*)" alt=/.exec(res.replaceAll(/\n\s+/g, ''));
+        let mask = newElement('div', {
+            parentNode: document.body
+        }, {
+            innerHTML: `<img style="box-shadow: 0 0 10px -3px #EEE; border-radius: 5px; max-width: 95%; max-height: 95%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)" src="${ result[1] }"/>`,
+        }, {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 999,
+            background: 'rgba(0,0,0,0.7)',
+        });
+        mask.addEventListener('click', e => {
+            mask.remove();
+        })
+    });
+}
+
+function dingljGetWikies(ticketNumber, callback) {
+    $.get(`${ context.config.ticketURL }/${ ticketNumber }`).then(res => {
+        let wikies = [];
+        let isWiki = false;
+        let string = '';
+        for (let line of res.split('\n')) {
+            line = line.trim();
+            if (!line) {
+                continue;
+            }
+            if (/.*<pre class="wiki">.*/.test(line)) {
+                line = (/.*<pre class="wiki">(.*)/.exec(line)[1]).trim(); // 取 wiki 后的数据
+                isWiki = true;
+            }
+            if (/.*<\/pre>.*/.test(line)) {
+                string += (/(.*)<\/pre>.*/.exec(line)[1]).trim(); // 取 wiki 前的数据
+                wikies.push(string);
+                string = '';
+                isWiki = false;
+            }
+            if (isWiki) {
+                string += line + '\n';
+            }
+        }
+        callback(wikies);
+    });
 }
