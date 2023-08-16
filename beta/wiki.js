@@ -100,6 +100,7 @@ function run_002(config) {
 }
 
 function exec_002() {
+    drawUI_002();
     readMyTickets_002(); // 先读数据, 如果出了错, 就不会往下走了, 顺便还能容个错
     let timer = setInterval(() => {
         if (context_002.waitting == false) {
@@ -163,7 +164,6 @@ function readMyTickets_002() {
             });
         }
         context_002.source = elementList;
-        drawUI_002();
         context_002.waitting = false;
     })
 }
