@@ -62,7 +62,8 @@ const context_002 = {
     },
     config: {
         css: ''
-    }
+    },
+    waitting: true,
 }
 
 function onload_002(callback) {
@@ -100,6 +101,9 @@ function run_002(config) {
 
 function exec_002() {
     readMyTickets_002(); // 先读数据, 如果出了错, 就不会往下走了, 顺便还能容个错
+    while (context_002.waitting); // 等待数据读取完毕
+    makePages_002();
+    showPages_002();
 }
 
 function readMyTickets_002() {
@@ -155,8 +159,8 @@ function readMyTickets_002() {
             });
         }
         context_002.source = elementList;
-        makePages_002();
         drawUI_002();
+        context_002.waitting = false;
     })
 }
 
@@ -178,17 +182,8 @@ function drawUI_002() {
     </div>
     <div id="dinglj-global-right">
         <div id="dinglj-page-view">${
-            Object.values(context_002.list)
-            .map(i => i.data)
-            .map(tabs => `<div class="dinglj-page">${
-                `<div class="page-title">
-                    ${ Object.keys(tabs).map(k => `<div class="page-name" id="page-name-${ k }">${ k }</div>`).join('') }
-                </div>` + // 此处是拼接 tab 页的标题
-                `<div class="page-table">
-                </div>` // 此处是拼接表格的数据, 过于复杂, 所以放到函数里
-            }</div>`)
-            .join('\n')
-        }</div>
+            Object.values(context_002.list).map(i => `<div class="dinglj-page"><h1>'${ i.name }' 页面数据加载中</h1></div>`).join('')
+        }/div>
     </div>`;
     rmf(getById('footer'));
 }
@@ -279,4 +274,17 @@ function getISubmitTickets_002() {
     } else {
         context_002.list.iReport.data = context_002.list.iReport.defaultSort(list);
     }
+}
+
+function showPages_002() {
+    getById('dinglj-page-view').innerHTML = Object.values(context_002.list)
+        .map(i => i.data)
+        .map(tabs => `<div class="dinglj-page">${
+            `<div class="page-title">
+                ${ Object.keys(tabs).map(k => `<div class="page-name" id="page-name-${ k }">${ k }</div>`).join('') }
+            </div>` + // 此处是拼接 tab 页的标题
+            `<div class="page-table">
+            </div>` // 此处是拼接表格的数据, 过于复杂, 所以放到函数里
+        }</div>`)
+        .join('\n')
 }
