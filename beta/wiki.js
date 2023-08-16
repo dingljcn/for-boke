@@ -101,9 +101,13 @@ function run_002(config) {
 
 function exec_002() {
     readMyTickets_002(); // 先读数据, 如果出了错, 就不会往下走了, 顺便还能容个错
-    while (context_002.waitting); // 等待数据读取完毕
-    makePages_002();
-    showPages_002();
+    let timer = setInterval(() => {
+        if (context_002.waitting == false) {
+            clearInterval(timer);
+            makePages_002();
+            showPages_002();
+        }
+    }, 200);
 }
 
 function readMyTickets_002() {
