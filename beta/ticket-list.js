@@ -771,9 +771,11 @@ function getDingljMask(current, ticketNumber) {
     let next = (current + keys.length + 1) % keys.length;
     let prev = (current + keys.length - 1) % keys.length;
     getById('dinglj-special-btn-next').addEventListener('click', e => {
+        e.stopPropagation();
         invoke(keys[next], ticketNumber);
     })
     getById('dinglj-special-btn-prev').addEventListener('click', e => {
+        e.stopPropagation();
         invoke(keys[prev], ticketNumber);
     })
     return getById('dinglj-mask-view-for-ticket-list');
