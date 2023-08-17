@@ -287,28 +287,61 @@ function getISubmitTickets_002() {
 
 function showPages_002() {
     getById('dinglj-page-view').innerHTML = Object.values(context_002.list)
-        .map(i => i.data)
-        .map(tabs => `<div class="dinglj-page">${
+        .map(item => `<div class="dinglj-page">${
             `<div class="page-title">
-                ${ Object.keys(tabs).map(k => `<div class="page-name" id="page-name-${ k }">${ k }</div>`).join('') }
+                ${ Object.keys(item.data).map(k => `<div class="page-name" id="page-name-${ k }">${ k }</div>`).join('') }
             </div>` + // 此处是拼接 tab 页的标题
             `<div class="page-tables">${
-                genTables_002(tabs)
+                genTables_002(item)
             }</div>` // 此处是拼接表格的数据, 过于复杂, 所以放到函数里
         }</div>`)
         .join('\n')
 }
 
-function genTables_002(tabs) {
-    console.log(tabs);
+function genTables_002(item) {
+    let tabs = item.data;
     return `<div id="dinglj-tables-view-box" style="width: ${ Object.keys(tabs).length }00%">${
         Object.keys(tabs).map(tableKey => {
             let table = tabs[tableKey];
+            let colFilter = calcFieldsToDisplay(item, tableKey, table);
             return `<div id="dinglj-table-view" style="width: calc(100% / ${ Object.keys(tabs).length })">
                 <div class="dinglj-table-head">${
-                    Object.keys(table[0]).map(k => `<div class="dinglj-cell">${ k }</div>`).join('')
+                    colFilter.display.map(column => `<div class="dinglj-cell">${ column.zh }</div>`).join('')
                 }</div>
             </div>`;
         }).join('')
     }</div>`
+}
+
+function calcFieldsToDisplay(item, tableKey, table) {
+    let colFilter = {
+        display: Object.values(context_002.config.columns),
+        ignore: [],
+        toDisplay: function(column) {
+            let idx = this.ignore.indexOf(column);
+            if (idx >= 0) {
+                this.ignore.splice(idx, 1);
+            }
+            idx = this.display.indexOf(column);
+            if (idx == -1) {
+                this.display.push(column);
+            }
+        },
+        toIgnore: function(column) {
+            let idx = this.display.indexOf(column);
+            if (idx >= 0) {
+                this.display.splice(idx, 1);
+            }
+            idx = this.ignore.indexOf(column);
+            if (idx == -1) {
+                this.ignore.push(column);
+            }
+        },
+    }
+    if (context_002.config.filters && context_002.config.filters.col) {
+        for (let filter of context_002.config.filters.col) {
+            filter(item.name, item, tableKey, table, colFilter);
+        }
+    }
+    return colFilter;
 }
