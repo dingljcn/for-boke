@@ -286,28 +286,44 @@ function getISubmitTickets_002() {
 }
 
 function showPages_002() {
-    getById('dinglj-page-view').innerHTML = Object.values(context_002.list)
-        .map(item => `<div class="dinglj-page">${
-            `<div class="page-title">
-                ${ Object.keys(item.data).map(k => `<div class="page-name" id="page-name-${ k }">${ k }</div>`).join('') }
-            </div>` + // 此处是拼接 tab 页的标题
-            `<div class="page-tables">${
-                genTables_002(item)
-            }</div>` // 此处是拼接表格的数据, 过于复杂, 所以放到函数里
-        }</div>`)
-        .join('\n')
+    let styleModify = [];
+    getById('dinglj-page-view').innerHTML = Object.keys(context_002.list)
+        .map(pageName => {
+            let page = context_002.list[pageName];
+            return `<div class="dinglj-page">${
+                `<div class="page-title">
+                    ${ Object.keys(page.data).map(tabName => `<div class="page-name" id="page-name-${ tabName }">${ tabName }</div>`).join('') }
+                </div>` + // 此处是拼接 tab 页的标题
+                `<div class="page-tables">${
+                    genTables_002(pageName, page, styleModify)
+                }</div>` // 此处是拼接表格的数据, 过于复杂, 所以放到函数里
+            }</div>`
+        })
+        .join('\n');
+    for (let func of styleModify) {
+        func();
+    }
 }
 
-function genTables_002(item) {
-    let tabs = item.data;
+function genTables_002(pageName, page, styleModify) {
+    let tabs = page.data;
     return `<div id="dinglj-tables-view-box" style="width: ${ Object.keys(tabs).length }00%">${
         Object.keys(tabs).map(tableKey => {
             let table = tabs[tableKey];
-            let display = calcFieldsToDisplay(item, tableKey, table);
+            let display = calcFieldsToDisplay(page, tableKey, table);
+            // 拼接每个表格的数据
             return `<div id="dinglj-table-view" style="width: calc(100% / ${ Object.keys(tabs).length })">
-                <div class="dinglj-table-head">${
-                    display.map(column => `<div class="dinglj-cell">${ column.zh }</div>`).join('')
-                }</div>
+                <div class="dinglj-table-head">${ // 拼接表头字段
+                    display.map(column => `<div class="dinglj-cell table-head cell-in-page-${ pageName } cell-in-tab-${ tableKey } cell-${ column.en }">${ column.zh }</div>`).join('')
+                }</div>${
+                    // 拼接每一行数据
+                    table.map(line => {
+                        return `<div class="dinglj-table-line">${
+                            // 拼接每一行的每一列
+                            display.map(column => `<div class="dinglj-cell table-line cell-in-page-${ pageName } cell-in-tab-${ tableKey } cell-${ column.en }">${ line[column.en] }</div>`).join('')
+                        }</div>`
+                    }).join('')
+                }
             </div>`;
         }).join('')
     }</div>`
