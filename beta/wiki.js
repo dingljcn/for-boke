@@ -292,6 +292,7 @@ function showPages_002() {
             let page = context_002.list[pageName];
             return `<div class="dinglj-page">${
                 `<div class="page-title">
+                    <div class="dinglj-float-nav"></div>
                     ${ Object.keys(page.data).map(tabName => `<div class="page-name" onclick="changeTab_002('page-name-${ tabName.replace(' ', '') }', '${ Object.keys(page.data).indexOf(tabName) }')" id="page-name-${ tabName.replace(' ', '') }">${ tabName }</div>`).join('') }
                 </div>` + // 此处是拼接 tab 页的标题
                 `<div class="page-tables">${
@@ -300,6 +301,10 @@ function showPages_002() {
             }</div>`
         })
         .join('\n');
+    for (let floatNav of getByClass('dinglj-float-nav')) {
+        let width = floatNav.nextElementSibling.offsetWidth;
+        floatNav.style.width = `${ width }px`;
+    }
     for (let func of styleModify) {
         func();
     }
