@@ -345,7 +345,6 @@ function calcFieldsToDisplay(item, tableKey, table) {
     }
     if (context_002.config.order && context_002.config.order.columns) {
         context_002.config.order.columns(colFilter.display);
-    } else {
-        return colFilter.display;
     }
+    return colFilter.display;
 }
