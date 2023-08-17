@@ -389,9 +389,11 @@ function calcFieldsToDisplay(item, tableKey, table) {
 }
 
 function changeTab_002(elementID, tabIdx) {
-    let container = getById(elementID)
-        .parentNode         // title 的容器
-        .nextElementSibling // title 的下一个节点就是 tables
-        .children[0]        // 0 是 box
+    let element = getById(elementID);
+    let parentNode = element.parentNode;
+    let floatNav = parentNode.children[0];
+    let container = parentNode.nextElementSibling.children[0];
     container.style.left = `-${ tabIdx }00%`;
+    floatNav.style.width = `${ element.offsetWidth }px`;
+    floatNav.style.left = `${ element.offsetLeft }px`;
 }
