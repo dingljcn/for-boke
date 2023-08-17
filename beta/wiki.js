@@ -292,7 +292,7 @@ function showPages_002() {
             let page = context_002.list[pageName];
             return `<div class="dinglj-page">${
                 `<div class="page-title">
-                    ${ Object.keys(page.data).map(tabName => `<div class="page-name" id="page-name-${ tabName }">${ tabName }</div>`).join('') }
+                    ${ Object.keys(page.data).map(tabName => `<div class="page-name" onclick="changeTab_002('page-name-${ tabName.replace(' ', '') }', '${ Object.keys(page.data).indexOf(tabName) }')" id="page-name-${ tabName.replace(' ', '') }">${ tabName }</div>`).join('') }
                 </div>` + // 此处是拼接 tab 页的标题
                 `<div class="page-tables">${
                     genTables_002(pageName, page, styleModify)
@@ -313,6 +313,9 @@ function genTables_002(pageName, page, styleModify) {
             let display = calcFieldsToDisplay(page, tableKey, table);
             let func = () => {
                 for (let column of display) {
+                    if (column.en == context_002.config.columns.summary.en) {
+                        continue;
+                    }
                     let cells = getByClass(`cell-in-page-${ pageName } cell-in-tab-${ tableKey } cell-${ column.en }`);
                     let max = -1;
                     for (let cell of cells) {
@@ -340,7 +343,7 @@ function genTables_002(pageName, page, styleModify) {
                     }).join('')
                 }</div>
             </div>`;
-        }).join('')
+        }).join('') 
     }</div>`
 }
 
@@ -349,21 +352,21 @@ function calcFieldsToDisplay(item, tableKey, table) {
         display: Object.values(context_002.config.columns),
         ignore: [],
         toDisplay: function(column) {
-            let idx = this.ignore.indexOf(column);
+            let idx = indexOfPropInList(this.ignore, 'en', column);
             if (idx >= 0) {
                 this.ignore.splice(idx, 1);
             }
-            idx = this.display.indexOf(column);
+            idx = indexOfPropInList(this.display, 'en', column);
             if (idx == -1) {
                 this.display.push(column);
             }
         },
         toIgnore: function(column) {
-            let idx = this.display.indexOf(column);
+            let idx = indexOfPropInList(this.display, 'en', column);
             if (idx >= 0) {
                 this.display.splice(idx, 1);
             }
-            idx = this.ignore.indexOf(column);
+            idx = indexOfPropInList(this.ignore, 'en', column);
             if (idx == -1) {
                 this.ignore.push(column);
             }
@@ -378,4 +381,12 @@ function calcFieldsToDisplay(item, tableKey, table) {
         context_002.config.order.columns(colFilter.display);
     }
     return colFilter.display;
+}
+
+function changeTab_002(elementID, tabIdx) {
+    let container = getById(elementID)
+        .parentNode         // title 的容器
+        .nextElementSibling // title 的下一个节点就是 tables
+        .children[0]        // 0 是 box
+    container.style.left = `-${ tabIdx }00%`;
 }
