@@ -307,7 +307,7 @@ function showPages_002() {
 
 function genTables_002(pageName, page, styleModify) {
     let tabs = page.data;
-    return `<div id="dinglj-tables-view-box" style="width: ${ Object.keys(tabs).length }00%">${
+    return `<div class="dinglj-tables-view-box" style="width: ${ Object.keys(tabs).length }00%">${
         Object.keys(tabs).map(tableKey => {
             let table = tabs[tableKey];
             let display = calcFieldsToDisplay(page, tableKey, table);
@@ -326,10 +326,11 @@ function genTables_002(pageName, page, styleModify) {
             }
             styleModify.push(func);
             // 拼接每个表格的数据
-            return `<div id="dinglj-table-view" style="width: calc(100% / ${ Object.keys(tabs).length })">
+            return `<div class="dinglj-table-view" style="width: calc(100% / ${ Object.keys(tabs).length })">
                 <div class="dinglj-table-head">${ // 拼接表头字段
                     display.map(column => `<div class="dinglj-cell table-head cell-in-page-${ pageName } cell-in-tab-${ tableKey } cell-${ column.en }">${ column.zh }</div>`).join('')
-                }</div>${
+                }</div>
+                <div class="dinglj-table-line-box">${
                     // 拼接每一行数据
                     table.map(line => {
                         return `<div class="dinglj-table-line">${
@@ -337,7 +338,7 @@ function genTables_002(pageName, page, styleModify) {
                             display.map(column => `<div class="dinglj-cell table-line cell-in-page-${ pageName } cell-in-tab-${ tableKey } cell-${ column.en }">${ line[column.en] }</div>`).join('')
                         }</div>`
                     }).join('')
-                }
+                }</div>
             </div>`;
         }).join('')
     }</div>`
