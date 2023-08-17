@@ -230,6 +230,7 @@ function run(config = null) {
         sortGroupNames();
         drawUI();
         getById('footer') ? getById('footer').remove() : '';
+        bindKeyboardEvent();
     } else {
         console.log('当前网址不符合以下匹配规则:');
         console.log(context.config.matchList);
@@ -639,6 +640,7 @@ function addSpecialButton(ticket, cell) {
     element.innerHTML = `<div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="copyText('${ ticketId } ${ cell.innerText }')">复制</div>
     <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljSteps(${ ticketNumber })">用例步骤</div>
     <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljDB(${ ticketNumber })">数据库</div>
+    <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljInfo(${ ticketNumber })">报错信息</div>
     <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljStack(${ ticketNumber })">报错日志</div>
     <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljImg(${ ticketNumber })">变更截图</div>
     <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljAllImg(${ ticketNumber })">所有截图</div>`;
@@ -649,17 +651,35 @@ function addSpecialButton(ticket, cell) {
     });
 }
 
+const specialBtnMap = {
+    step: 0,
+    db: 1,
+    info: 2,
+    stack: 3,
+    img: 4
+}
+
+function invoke(key, ticketNumber) {
+    switch(key) {
+        case 'step': dingljSteps(ticketNumber); break;
+        case 'db': dingljDB(ticketNumber); break;
+        case 'info': dingljInfo(ticketNumber); break;
+        case 'stack': dingljStack(ticketNumber); break;
+        case 'img': dingljImg(ticketNumber); break;
+    }
+}
+
 function dingljSteps(ticketNumber) {
     dingljGetWikies(ticketNumber, wikies => {
         let flag = false;
         for (let wiki of wikies) {
             if (/\n((录入)|(操作)|(选择)|(查看)|(点击)):.*/.test(wiki)) {
-                dingljDisplayWiki(wiki);
+                dingljDisplayWiki(specialBtnMap.step, '步骤信息', ticketNumber, wiki);
                 flag = true;
             }
         }
         if (!flag) {
-            alert('未找到信息');
+            dingljDisplayWiki(specialBtnMap.step, '步骤信息', ticketNumber, 'js脚本在该变更中未找到你需要的信息, 请进入变更进行查看、确认');
         }
     });
 }
@@ -680,12 +700,12 @@ function dingljDB(ticketNumber) {
                     result = result.substring(1);
                     wiki += `\n\n环境变量: \n${ result }`;
                 }
-                dingljDisplayWiki(wiki);
+                dingljDisplayWiki(specialBtnMap.db, '数据库信息', ticketNumber, wiki);
                 flag = true;
             }
         }
         if (!flag) {
-            alert('未找到信息');
+            dingljDisplayWiki(specialBtnMap.db, '数据库信息', ticketNumber, 'js脚本在该变更中未找到你需要的信息, 请进入变更进行查看、确认');
         }
     });
 }
@@ -695,21 +715,73 @@ function dingljStack(ticketNumber) {
         let flag = false;
         for (let wiki of wikies) {
             if (/.*((java\.lang\..*Exception)|(at org.springframework.web.filter.RequestContextFilter.doFilterInternal)).*/.test(wiki)) {
-                dingljDisplayWiki(wiki);
+                dingljDisplayWiki(specialBtnMap.stack,'调用堆栈信息',  ticketNumber, wiki);
                 flag = true;
             }
         }
         if (!flag) {
-            alert('未找到信息');
+            dingljDisplayWiki(specialBtnMap.stack,'调用堆栈信息',  ticketNumber, 'js脚本在该变更中未找到你需要的信息, 请进入变更进行查看、确认');
         }
     });
 }
 
-function dingljDisplayWiki(wiki) {
-    let mask = newElement('div', {
+function dingljInfo(ticketNumber) {
+    dingljGetWikies(ticketNumber, wikies => {
+        let flag = false;
+        for (let wiki of wikies) {
+            if (/.*预期结果.*实际结果.*/.test(wiki.replace('\n', ''))) {
+                dingljDisplayWiki(specialBtnMap.info,'查看信息',  ticketNumber, wiki);
+                flag = true;
+            }
+        }
+        if (!flag) {
+            dingljDisplayWiki(specialBtnMap.info,'查看信息',  ticketNumber, 'js脚本在该变更中未找到你需要的信息, 请进入变更进行查看、确认');
+        }
+    });
+}
+
+function getDingljMask(current, ticketNumber) {
+    let mask = getById('dinglj-mask-view-for-ticket-list');
+    if (mask) {
+        mask.remove();
+    }
+    let box = newElement('div', {
         parentNode: document.body
     }, {
-        innerHTML: `<div id="dinglj-tmp-dialog" style="
+        innerHTML: `<div id="dinglj-mask-view-for-ticket-list" style="flex: 1; width: 100%"></div>
+            <div id="dinglj-special-btns" style="text-align: center">
+                <div id="dinglj-special-btn-prev" style="cursor: pointer; display: inline-block; background: rgb(6,114,254); color: white; padding: 6px 12px; border-radius: 7px; margin: 5px;">上一个(Left)</div>
+                <div id="dinglj-special-btn-next" style="cursor: pointer; display: inline-block; background: rgb(6,114,254); color: white; padding: 6px 12px; border-radius: 7px; margin: 5px;">下一个(Right)</div>
+            </div>`,
+    }, {
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 999,
+        background: 'rgba(0,0,0,0.5)',
+    });
+    box.addEventListener('click', e => {
+        box.remove();
+    });
+    let keys = Object.keys(specialBtnMap);
+    let next = (current + keys.length + 1) % keys.length;
+    let prev = (current + keys.length - 1) % keys.length;
+    getById('dinglj-special-btn-next').addEventListener('click', e => {
+        invoke(keys[next], ticketNumber);
+    })
+    getById('dinglj-special-btn-prev').addEventListener('click', e => {
+        invoke(keys[prev], ticketNumber);
+    })
+    return getById('dinglj-mask-view-for-ticket-list');
+}
+
+function dingljDisplayWiki(current, title, ticketNumber, wiki) {
+    let mask = getDingljMask(current, ticketNumber);
+    mask.innerHTML = `<div id="dinglj-tmp-dialog" style="
             box-shadow: 0 0 10px -3px #EEE;
             border-radius: 5px;
             width: 1000px;
@@ -723,21 +795,12 @@ function dingljDisplayWiki(wiki) {
             background: white;
             word-wrap: break-word;
             transform: translate(-50%, -50%);"
-        >${ wiki.replaceAll('\n', '<br>') }</div>`,
-    }, {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 999,
-        background: 'rgba(0,0,0,0.7)',
-    });
+        >
+            <h1>${ title }</h1>
+            <div>${ wiki.replaceAll('\n', '<br>') }</div>
+        </div>`;
     getById('dinglj-tmp-dialog').addEventListener('click', e => {
         e.stopPropagation();
-    });
-    mask.addEventListener('click', e => {
-        mask.remove();
     });
 }
 
@@ -750,24 +813,18 @@ function dingljAllImg(ticketNumber) {
 
 function dingljImg(ticketNumber) {
     $.get(`${ context.config.ticketURL }/${ ticketNumber }`).then(res => {
-        console.log(1);
         let result = /<img src="(.*)" alt=/.exec(res.replaceAll(/\n\s+/g, ''));
-        let mask = newElement('div', {
-            parentNode: document.body
-        }, {
-            innerHTML: `<img style="box-shadow: 0 0 10px -3px #EEE; border-radius: 5px; max-width: 95%; max-height: 95%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)" src="${ result[1] }"/>`,
-        }, {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            zIndex: 999,
-            background: 'rgba(0,0,0,0.7)',
-        });
-        mask.addEventListener('click', e => {
-            mask.remove();
-        })
+        let mask = getDingljMask(specialBtnMap.img, ticketNumber);
+        mask.innerHTML = `<img style="
+                box-shadow: 0 0 10px -3px #EEE;
+                border-radius: 5px;
+                max-width: 85%;
+                max-height: 85%;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%)" 
+            src="${ result[1] }"/>`;
     });
 }
 
@@ -796,5 +853,28 @@ function dingljGetWikies(ticketNumber, callback) {
             }
         }
         callback(wikies);
+    });
+}
+
+function bindKeyboardEvent() {
+    window.addEventListener('keydown', e => {
+        let key = (e.key).toUpperCase();
+        if (key == 'ESCAPE') {
+            let mask = getById('dinglj-mask-view-for-ticket-list');
+            if (mask) {
+                mask.parentNode.click();
+            }
+        }
+        if (key == 'ARROWRIGHT') {
+            let btn = getById('dinglj-special-btn-next');
+            if (btn) {
+                btn.click();
+            }
+        } else if (key == 'ARROWLEFT') {
+            let btn = getById('dinglj-special-btn-prev');
+            if (btn) {
+                btn.click();
+            }
+        }
     });
 }
