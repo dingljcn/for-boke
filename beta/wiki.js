@@ -311,6 +311,20 @@ function genTables_002(pageName, page, styleModify) {
         Object.keys(tabs).map(tableKey => {
             let table = tabs[tableKey];
             let display = calcFieldsToDisplay(page, tableKey, table);
+            let func = () => {
+                for (let column of display) {
+                    let cells = getByClass(`cell-in-page-${ pageName } cell-in-tab-${ tableKey } cell-${ column.en }`);
+                    let max = -1;
+                    for (let cell of cells) {
+                        max = Math.max(max, cell.offsetWidth);
+                    }
+                    for (let cell of cells) {
+                        cell.style.width = `${ max }px`;
+                    }
+
+                }
+            }
+            styleModify.push(func);
             // 拼接每个表格的数据
             return `<div id="dinglj-table-view" style="width: calc(100% / ${ Object.keys(tabs).length })">
                 <div class="dinglj-table-head">${ // 拼接表头字段
