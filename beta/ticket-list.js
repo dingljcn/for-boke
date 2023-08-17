@@ -639,6 +639,7 @@ function addSpecialButton(ticket, cell) {
     element.innerHTML = `<div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="copyText('${ ticketId } ${ cell.innerText }')">复制</div>
     <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljSteps(${ ticketNumber })">用例步骤</div>
     <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljDB(${ ticketNumber })">数据库</div>
+    <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljInfo(${ ticketNumber })">报错信息</div>
     <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljStack(${ ticketNumber })">报错日志</div>
     <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljImg(${ ticketNumber })">变更截图</div>
     <div style="display: inline-block; margin: 0 6px; cursor: pointer" onclick="dingljAllImg(${ ticketNumber })">所有截图</div>`;
@@ -695,6 +696,21 @@ function dingljStack(ticketNumber) {
         let flag = false;
         for (let wiki of wikies) {
             if (/.*((java\.lang\..*Exception)|(at org.springframework.web.filter.RequestContextFilter.doFilterInternal)).*/.test(wiki)) {
+                dingljDisplayWiki(wiki);
+                flag = true;
+            }
+        }
+        if (!flag) {
+            alert('未找到信息');
+        }
+    });
+}
+
+function dingljInfo(ticketNumber) {
+    dingljGetWikies(ticketNumber, wikies => {
+        let flag = false;
+        for (let wiki of wikies) {
+            if (/.*预期结果.*实际结果.*/.test(wiki)) {
                 dingljDisplayWiki(wiki);
                 flag = true;
             }

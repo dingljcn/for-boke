@@ -287,8 +287,14 @@ function showPages_002() {
             `<div class="page-title">
                 ${ Object.keys(tabs).map(k => `<div class="page-name" id="page-name-${ k }">${ k }</div>`).join('') }
             </div>` + // 此处是拼接 tab 页的标题
-            `<div class="page-table">
-            </div>` // 此处是拼接表格的数据, 过于复杂, 所以放到函数里
+            `<div class="page-tables">${
+                genTables_002(tabs)
+            }</div>` // 此处是拼接表格的数据, 过于复杂, 所以放到函数里
         }</div>`)
         .join('\n')
+}
+
+function genTables_002(tabs) {
+    return `<div id="dinglj-tables-view-box">
+    </div>`
 }
