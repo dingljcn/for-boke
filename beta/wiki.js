@@ -186,7 +186,12 @@ function drawUI_002() {
     </div>
     <div id="dinglj-global-right">
         <div id="dinglj-page-view">${
-            Object.values(context_002.list).map(i => `<div class="dinglj-page"><h1>'${ i.name }' 页面数据加载中</h1></div>`).join('')
+            Object.values(context_002.list).map(i => `<div class="dinglj-page">
+                <div id="dinglj-page-wait-box">
+                    <img style="width: 300px" src="https://dingljcn.github.io/for-boke/src/loading.gif"/>
+                    <div>'${ i.name }' 页面数据加载中</div>
+                </div>
+            </div>`).join('')
         }/div>
     </div>`;
     rmf(getById('footer'));
@@ -295,6 +300,15 @@ function showPages_002() {
 }
 
 function genTables_002(tabs) {
-    return `<div id="dinglj-tables-view-box">
-    </div>`
+    console.log(tabs);
+    return `<div id="dinglj-tables-view-box" style="width: ${ Object.keys(tabs).length }00%">${
+        Object.keys(tabs).map(tableKey => {
+            let table = tabs[tableKey];
+            return `<div id="dinglj-table-view" style="width: calc(100% / ${ Object.keys(tabs).length })">
+                <div class="dinglj-table-head">${
+                    Object.keys(table[0]).map(k => `<div class="dinglj-cell">${ k }</div>`).join('')
+                }</div>
+            </div>`;
+        }).join('')
+    }</div>`
 }
