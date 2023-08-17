@@ -303,10 +303,10 @@ function genTables_002(item) {
     return `<div id="dinglj-tables-view-box" style="width: ${ Object.keys(tabs).length }00%">${
         Object.keys(tabs).map(tableKey => {
             let table = tabs[tableKey];
-            let colFilter = calcFieldsToDisplay(item, tableKey, table);
+            let display = calcFieldsToDisplay(item, tableKey, table);
             return `<div id="dinglj-table-view" style="width: calc(100% / ${ Object.keys(tabs).length })">
                 <div class="dinglj-table-head">${
-                    colFilter.display.map(column => `<div class="dinglj-cell">${ column.zh }</div>`).join('')
+                    display.map(column => `<div class="dinglj-cell">${ column.zh }</div>`).join('')
                 }</div>
             </div>`;
         }).join('')
@@ -343,5 +343,9 @@ function calcFieldsToDisplay(item, tableKey, table) {
             filter(item.name, item, tableKey, table, colFilter);
         }
     }
-    return colFilter;
+    if (context_002.config.order && context_002.config.order.columns) {
+        context_002.config.order.columns(colFilter.display);
+    } else {
+        return colFilter.display;
+    }
 }
