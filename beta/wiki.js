@@ -405,7 +405,7 @@ function genTables_002(pageName, page, styleModify) {
     return `<div class="dinglj-tables-view-box" style="width: ${ Object.keys(tabs).length }00%">${
         Object.keys(tabs).map(tableKey => {
             let table = tabs[tableKey];
-            let display = calcFieldsToDisplay(page, tableKey, table);
+            let display = calcFieldsToDisplay(pageName, page, tableKey, table);
             let func = () => {
                 for (let column of display) {
                     if (column.en == context_002.config.columns.summary.en) {
@@ -442,7 +442,7 @@ function genTables_002(pageName, page, styleModify) {
     }</div>`
 }
 
-function calcFieldsToDisplay(page, tableKey, table) {
+function calcFieldsToDisplay(pageName, page, tableKey, table) {
     let colFilter = {
         display: Object.values(context_002.config.columns),
         ignore: [],
@@ -469,7 +469,7 @@ function calcFieldsToDisplay(page, tableKey, table) {
     }
     if (context_002.config.filters && context_002.config.filters.col) {
         for (let filter of context_002.config.filters.col) {
-            filter.resolve(page.name, page, tableKey, table, '', null, colFilter);
+            filter.resolve(pageName, page, tableKey, table, '', null, colFilter);
         }
     }
     if (context_002.config.order && context_002.config.order.columns) {
