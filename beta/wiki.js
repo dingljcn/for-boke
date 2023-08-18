@@ -174,25 +174,33 @@ function drawUI_002() {
     }, {
         innerText: context_002.config.css
     }, []);
-    getById('main').innerHTML = `<div id="dinglj-global-left">
-        <div id="dinglj-page-nav-box">
-            <div id="dinglj-nav-point"></div>
-            <div id="dinglj-navs"> ${
-                Object.keys(context_002.list)
-                .map(key => `<div class="dinglj-nav-item ${ context_002.runtime.activePage() == key ? 'dinglj-active-nav' : '' }" id="dinglj-nav-${ key }" onclick="changePage_002(id)">${ context_002.list[key].name }</div>`)
-                .join('') 
-            }</div>
-        </div>
+    getById('main').innerHTML = `<div id="dinglj-home-view">
     </div>
-    <div id="dinglj-global-right">
-        <div id="dinglj-page-view">${
-            Object.values(context_002.list).map(i => `<div class="dinglj-page">
-                <div id="dinglj-page-wait-box">
-                    <img style="width: 300px" src="https://dingljcn.github.io/for-boke/src/loading.gif"/>
-                    <div>'${ i.name }' 页面数据加载中</div>
+    <div  id="dinglj-global-tickes">
+        <div id="dinglj-ticket-area-head">
+        </div>
+        <div id="dinglj-ticket-area-container">
+            <div id="dinglj-global-left">
+                <div id="dinglj-page-nav-box">
+                    <div id="dinglj-nav-point"></div>
+                    <div id="dinglj-navs"> ${
+                        Object.keys(context_002.list)
+                        .map(key => `<div class="dinglj-nav-item ${ context_002.runtime.activePage() == key ? 'dinglj-active-nav' : '' }" id="dinglj-nav-${ key }" onclick="changePage_002(id)">${ context_002.list[key].name }</div>`)
+                        .join('') 
+                    }</div>
                 </div>
-            </div>`).join('')
-        }/div>
+            </div>
+            <div id="dinglj-global-right">
+                <div id="dinglj-page-view">${
+                    Object.values(context_002.list).map(i => `<div class="dinglj-page">
+                        <div id="dinglj-page-wait-box">
+                            <img style="width: 300px" src="https://dingljcn.github.io/for-boke/src/loading.gif"/>
+                            <div>'${ i.name }' 页面数据加载中</div>
+                        </div>
+                    </div>`).join('')
+                }/div>
+            </div>
+        </div>
     </div>`;
     rmf(getById('footer'));
 }
