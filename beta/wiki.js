@@ -498,7 +498,7 @@ function showTicketPages_002() {
 }
 
 function getSortedPageNames() {
-    Object.keys(context_002.list).sort((name1, name2) => {
+    return Object.keys(context_002.list).sort((name1, name2) => {
         let idx1 = context_002.config.order.pageNames.indexOf(name1);
         idx1 = idx1 == -1 ? 999999 : idx1;
         let idx2 = context_002.config.order.pageNames.indexOf(name2);
