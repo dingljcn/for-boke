@@ -31,15 +31,18 @@ class Matcher {
      */
     resolve(pageName = '', page = {}, tableName = '', lines = [], cellKey = '', cell = {}, extArgs = {}) {
         if (this.pageReg) { // 需要精确到 page
-            if (pageName && this.pageReg.test(page.name)) { // 如果传入了 pageName 则直接检查
-                return this.invokeIfTable(pageName, page, tableName, lines, cellKey, cell, extArgs);
-            }
-            let names = getSortedPageNames();
-            for (let index = 0; index < names.length; index++) { // 如果没有传入 pageName 则自动遍历所有页面
-                let key = names[index];
-                let name = context_002.list[key].name;
-                if (this.pageReg.test(name)) {
-                    return this.invokeIfTable(key, context_002.list[key], tableName, lines, cellKey, cell, extArgs);
+            if (pageName) {
+                if (this.pageReg.test(page.name)) { // 如果传入了 pageName 则直接检查
+                    return this.invokeIfTable(pageName, page, tableName, lines, cellKey, cell, extArgs);
+                }
+            } else {
+                let names = getSortedPageNames();
+                for (let index = 0; index < names.length; index++) { // 如果没有传入 pageName 则自动遍历所有页面
+                    let key = names[index];
+                    let name = context_002.list[key].name;
+                    if (this.pageReg.test(name)) {
+                        return this.invokeIfTable(key, context_002.list[key], tableName, lines, cellKey, cell, extArgs);
+                    }
                 }
             }
         } else { // 不需要精确到 page, 但是这样是没有意义的
@@ -48,15 +51,18 @@ class Matcher {
     }
     invokeIfTable(pageName, page, tableName = '', lines = [], cellKey = '', cell = {}, extArgs = {}) {
         if (this.tabReg) { // 需要精确到 table
-            if (tableName && this.tabReg.test(tableName)) { // 如果传入了 tableName 则直接检查
-                return this.invokeIfCell(pageName, page, tableName, lines, cellKey, cell, extArgs);
-            }
-            let data = context_002.list[pageName].data;
-            let names = Object.keys(data);
-            for (let index = 0; index < names.length; index++) { // 如果没传入 tableName 则自动遍历所有表格
-                let key = names[index];
-                if (this.tabReg.test(key)) { // 符合规范才执行
-                    return this.invokeIfCell(pageName, page, key, data[key], cellKey, cell, extArgs);
+            if (tableName) { // 如果传入了 tableName 则直接检查
+                if (this.tabReg.test(tableName)) {
+                    return this.invokeIfCell(pageName, page, tableName, lines, cellKey, cell, extArgs);
+                }
+            } else {
+                let data = context_002.list[pageName].data;
+                let names = Object.keys(data);
+                for (let index = 0; index < names.length; index++) { // 如果没传入 tableName 则自动遍历所有表格
+                    let key = names[index];
+                    if (this.tabReg.test(key)) { // 符合规范才执行
+                        return this.invokeIfCell(pageName, page, key, data[key], cellKey, cell, extArgs);
+                    }
                 }
             }
         } else {
@@ -65,17 +71,20 @@ class Matcher {
     }
     invokeIfCell(pageName, page, tableName, lines, cellKey = '', cell = {}, extArgs = {}) {
         if (this.cellReg) { // 需要精确到 cell
-            if (cellKey && this.cellReg.test(cellKey)) { // 如果传入了 cellKey 则直接检查
-                return this.invokeIfCell(pageName, page, tableName, lines, cellKey, cell, extArgs);
-            }
-            let data = context_002.list[pageName].data[tableName];
-            let names = Object.keys(data[0]);
-            for (let index = 0; index < names.length; index++) {
-                let key = names[index];
-                for (let idx = 0; idx < data.length; idx++) {
-                    let line = data[idx];
-                    if (this.cellReg.test(key)) {
-                        this.callback(extArgs, pageName, page, tableName, lines, idx, line, key, line[key]);
+            if (cellKey) { // 如果传入了 cellKey 则直接检查
+                if (this.cellReg.test(cellKey)) {
+                    return this.invokeIfCell(pageName, page, tableName, lines, cellKey, cell, extArgs);
+                }
+            } else {
+                let data = context_002.list[pageName].data[tableName];
+                let names = Object.keys(data[0]);
+                for (let index = 0; index < names.length; index++) {
+                    let key = names[index];
+                    for (let idx = 0; idx < data.length; idx++) {
+                        let line = data[idx];
+                        if (this.cellReg.test(key)) {
+                            this.callback(extArgs, pageName, page, tableName, lines, idx, line, key, line[key]);
+                        }
                     }
                 }
             }
