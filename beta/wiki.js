@@ -179,10 +179,12 @@ function drawUI_002() {
     <div  id="dinglj-global-tickes">
         <div id="dinglj-ticket-area-head">
         </div>
-        <div id="dinglj-ticket-area-container">
+        <div id="dinglj-ticket-area-container" onclick="showTicketPages_002()">
             <div id="dinglj-global-left">
                 <div id="dinglj-page-nav-box">
-                    <div id="dinglj-nav-point"></div>
+                    <div id="dinglj-nav-point">
+                        变更清单
+                    </div>
                     <div id="dinglj-navs"> ${
                         Object.keys(context_002.list)
                         .map(key => `<div class="dinglj-nav-item ${ context_002.runtime.activePage() == key ? 'dinglj-active-nav' : '' }" id="dinglj-nav-${ key }" onclick="changePage_002(id)">${ context_002.list[key].name }</div>`)
@@ -404,4 +406,13 @@ function changeTab_002(elementID, tabIdx) {
     container.style.left = `-${ tabIdx }00%`;
     floatNav.style.width = `${ element.offsetWidth }px`;
     floatNav.style.left = `${ element.offsetLeft }px`;
+}
+
+function showTicketPages_002() {
+    let element = getById('dinglj-ticket-area-container');
+    if (parseInt(element.style.bottom || '0') == 0) {
+        element.removeAttribute('style');
+    } else {
+        element.style.bottom = '0';
+    }
 }
