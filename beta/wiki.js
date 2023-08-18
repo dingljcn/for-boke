@@ -177,14 +177,13 @@ function drawUI_002() {
     getById('main').innerHTML = `<div id="dinglj-home-view">
     </div>
     <div  id="dinglj-global-tickes">
-        <div id="dinglj-ticket-area-head">
+        <div id="dinglj-ticket-area-head" onclick="showTicketPages_002()">
+            变更清单
         </div>
-        <div id="dinglj-ticket-area-container" onclick="showTicketPages_002()">
+        <div id="dinglj-ticket-area-container">
             <div id="dinglj-global-left">
                 <div id="dinglj-page-nav-box">
-                    <div id="dinglj-nav-point">
-                        变更清单
-                    </div>
+                    <div id="dinglj-nav-point"></div>
                     <div id="dinglj-navs"> ${
                         Object.keys(context_002.list)
                         .map(key => `<div class="dinglj-nav-item ${ context_002.runtime.activePage() == key ? 'dinglj-active-nav' : '' }" id="dinglj-nav-${ key }" onclick="changePage_002(id)">${ context_002.list[key].name }</div>`)
