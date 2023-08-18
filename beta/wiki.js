@@ -31,12 +31,13 @@ class Matcher {
      */
     resolve(pageName = '', page = {}, tableName = '', lines = [], cellKey = '', cell = {}, extArgs = {}) {
         if (this.pageReg) { // 需要精确到 page
-            if (pageName && this.pageReg.test(pageName)) { // 如果传入了 pageName 则直接检查
+            if (pageName && this.pageReg.test(page.name)) { // 如果传入了 pageName 则直接检查
                 return this.invokeIfTable(pageName, page, tableName, lines, cellKey, cell, extArgs);
             }
             let names = getSortedPageNames();
             for (let key of names) { // 如果没有传入 pageName 则自动遍历所有页面
-                if (this.pageReg.test(key)) {
+                let name = context_002.list[key].name;
+                if (this.pageReg.test(name)) {
                     return this.invokeIfTable(key, context_002.list[key], tableName, lines, cellKey, cell, extArgs);
                 }
             }
