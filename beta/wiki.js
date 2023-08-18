@@ -408,8 +408,8 @@ function changeTab_002(elementID, tabIdx) {
 }
 
 function showTicketPages_002() {
-    let element = getById('dinglj-ticket-area-container');
-    if (parseInt(element.style.bottom || '0') == 0) {
+    let element = getById('dinglj-global-tickes');
+    if (element.style.bottom == '0px') {
         element.removeAttribute('style');
     } else {
         element.style.bottom = '0';
