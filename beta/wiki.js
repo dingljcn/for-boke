@@ -35,7 +35,8 @@ class Matcher {
                 return this.invokeIfTable(pageName, page, tableName, lines, cellKey, cell, extArgs);
             }
             let names = getSortedPageNames();
-            for (let key of names) { // 如果没有传入 pageName 则自动遍历所有页面
+            for (let index = 0; index < names.length; index++) { // 如果没有传入 pageName 则自动遍历所有页面
+                let key = names[index];
                 let name = context_002.list[key].name;
                 if (this.pageReg.test(name)) {
                     return this.invokeIfTable(key, context_002.list[key], tableName, lines, cellKey, cell, extArgs);
@@ -51,7 +52,9 @@ class Matcher {
                 return this.invokeIfCell(pageName, page, tableName, lines, cellKey, cell, extArgs);
             }
             let data = context_002.list[pageName].data;
-            for (let key of Object.keys(data)) { // 如果没传入 tableName 则自动遍历所有表格
+            let names = Object.keys(data);
+            for (let index = 0; index < names.length; index++) { // 如果没传入 tableName 则自动遍历所有表格
+                let key = names[index];
                 if (this.tabReg.test(key)) { // 符合规范才执行
                     return this.invokeIfCell(pageName, page, key, data[key], cellKey, cell, extArgs);
                 }
@@ -66,7 +69,9 @@ class Matcher {
                 return this.invokeIfCell(pageName, page, tableName, lines, cellKey, cell, extArgs);
             }
             let data = context_002.list[pageName].data[tableName];
-            for (let key of Object.keys(data[0])) {
+            let names = Object.keys(data[0]);
+            for (let index = 0; index < names.length; index++) {
+                let key = names[index];
                 for (let idx = 0; idx < data.length; idx++) {
                     let line = data[idx];
                     if (this.cellReg.test(key)) {
