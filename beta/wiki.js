@@ -1,3 +1,84 @@
+class Matcher {
+    pageReg; tabReg; cellReg; callback;
+    /**
+     * @param {RegExp} pageReg 匹配页面
+     * @param {RegExp} tabReg 匹配Tab页
+     * @param {RegExp} cellReg 匹配单元格
+     * @param {Function} callback 回调函数, 最多 9 个参数
+     * @param {callback.extArgs} cellReg 额外参数
+     * @param {callback.pageName} cellReg 页面名称
+     * @param {callback.page} cellReg 页面数据
+     * @param {callback.tableName} cellReg 表格名称
+     * @param {callback.lines} cellReg 表格所有行数据
+     * @param {callback.idx} cellReg 当前行下标
+     * @param {callback.line} cellReg 当前行数据
+     * @param {callback.cellKey} cellReg 单元格名称
+     * @param {callback.cell} cellReg 单元格数据
+     */
+    constructor(pageReg = /.+/, tabReg = /.+/, cellReg = /.+/, callback = () => {}) {
+        this.pageReg = pageReg;
+        this.tabReg = tabReg;
+        this.cellReg = cellReg;
+        this.callback = callback;
+    }
+    /**
+     * @param {String} pageName 页面名称
+     * @param {any} page 页面数据
+     * @param {String} tableName 表格(Tab页)名称
+     * @param {Array[any]} lines 表格数据(一行一行的数据)
+     * @param {String} cellName 单元格名称
+     * @param {String} cell 单元格数据
+     */
+    resolve(pageName = '', page = {}, tableName = '', lines = [], cellKey = '', cell = {}, extArgs = {}) {
+        if (this.pageReg) { // 需要精确到 page
+            if (pageName && this.pageReg.test(pageName)) { // 如果传入了 pageName 则直接检查
+                return this.invokeIfTable(pageName, page, tableName, lines, cellKey, cell, extArgs);
+            }
+            let data = context_002.list;
+            for (let key of Object.keys(data)) { // 如果没有传入 pageName 则自动遍历所有页面
+                if (this.pageReg.test(key)) {
+                    return this.invokeIfTable(key, data[key], tableName, lines, cellKey, cell, extArgs);
+                }
+            }
+        } else { // 不需要精确到 page, 但是这样是没有意义的
+            this.callback(extArgs);
+        }
+    }
+    invokeIfTable(pageName, page, tableName = '', lines = [], cellKey = '', cell = {}, extArgs = {}) {
+        if (this.tabReg) { // 需要精确到 table
+            if (tableName && this.tabReg.test(tableName)) { // 如果传入了 tableName 则直接检查
+                return this.invokeIfCell(pageName, page, tableName, lines, cellKey, cell, extArgs);
+            }
+            let data = context_002.list[pageName].data;
+            for (let key of Object.keys(data)) { // 如果没传入 tableName 则自动遍历所有表格
+                if (this.tabReg.test(key)) { // 符合规范才执行
+                    return this.invokeIfCell(pageName, page, key, data[key], cellKey, cell, extArgs);
+                }
+            }
+        } else {
+            this.callback(extArgs, pageName, page); // 不需要精确到 table
+        }
+    }
+    invokeIfCell(pageName, page, tableName, lines, cellKey = '', cell = {}, extArgs = {}) {
+        if (this.cellReg) { // 需要精确到 cell
+            if (cellKey && this.cellReg.test(cellKey)) { // 如果传入了 cellKey 则直接检查
+                return this.invokeIfCell(pageName, page, tableName, lines, cellKey, cell, extArgs);
+            }
+            let data = context_002.list[pageName].data[tableName];
+            for (let key of Object.keys(data[0])) {
+                for (let idx = 0; idx < data.length; idx++) {
+                    let line = data[idx];
+                    if (this.cellReg.test(key)) {
+                        this.callback(extArgs, pageName, page, tableName, lines, idx, line, key, line[key]);
+                    }
+                }
+            }
+        } else {
+            this.callback(extArgs, pageName, page, tableName, lines); // 不需要精确到 cell
+        }
+    }
+}
+
 const context_002 = {
     list: {
         notResolve: {
@@ -361,7 +442,7 @@ function genTables_002(pageName, page, styleModify) {
     }</div>`
 }
 
-function calcFieldsToDisplay(item, tableKey, table) {
+function calcFieldsToDisplay(page, tableKey, table) {
     let colFilter = {
         display: Object.values(context_002.config.columns),
         ignore: [],
@@ -388,7 +469,7 @@ function calcFieldsToDisplay(item, tableKey, table) {
     }
     if (context_002.config.filters && context_002.config.filters.col) {
         for (let filter of context_002.config.filters.col) {
-            filter(item.name, item, tableKey, table, colFilter);
+            filter.resolve(page.name, page, tableKey, table, '', null, colFilter);
         }
     }
     if (context_002.config.order && context_002.config.order.columns) {
