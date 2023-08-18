@@ -34,10 +34,10 @@ class Matcher {
             if (pageName && this.pageReg.test(pageName)) { // 如果传入了 pageName 则直接检查
                 return this.invokeIfTable(pageName, page, tableName, lines, cellKey, cell, extArgs);
             }
-            let data = context_002.list;
-            for (let key of Object.keys(data)) { // 如果没有传入 pageName 则自动遍历所有页面
+            let names = getSortedPageNames();
+            for (let key of names) { // 如果没有传入 pageName 则自动遍历所有页面
                 if (this.pageReg.test(key)) {
-                    return this.invokeIfTable(key, data[key], tableName, lines, cellKey, cell, extArgs);
+                    return this.invokeIfTable(key, context_002.list[key], tableName, lines, cellKey, cell, extArgs);
                 }
             }
         } else { // 不需要精确到 page, 但是这样是没有意义的
@@ -139,7 +139,7 @@ const context_002 = {
     source: [], // 我的所有变更都存储在这里
     runtime: {
         realActive: '',
-        activePage: () => context_002.runtime.realActive || (context_002.runtime.realActive = Object.keys(context_002.list)[0]),
+        activePage: () => context_002.runtime.realActive || (context_002.runtime.realActive = getSortedPageNames()[0]),
     },
     config: {
         css: ''
@@ -266,7 +266,7 @@ function drawUI_002() {
                 <div id="dinglj-page-nav-box">
                     <div id="dinglj-nav-point"></div>
                     <div id="dinglj-navs"> ${
-                        Object.keys(context_002.list)
+                        getSortedPageNames()
                         .map(key => `<div class="dinglj-nav-item ${ context_002.runtime.activePage() == key ? 'dinglj-active-nav' : '' }" id="dinglj-nav-${ key }" onclick="changePage_002(id)">${ context_002.list[key].name }</div>`)
                         .join('') 
                     }</div>
@@ -274,10 +274,10 @@ function drawUI_002() {
             </div>
             <div id="dinglj-global-right">
                 <div id="dinglj-page-view">${
-                    Object.values(context_002.list).map(i => `<div class="dinglj-page">
+                    getSortedPageNames().map(key => `<div class="dinglj-page">
                         <div id="dinglj-page-wait-box">
                             <img style="width: 300px" src="https://dingljcn.github.io/for-boke/src/loading.gif"/>
-                            <div>'${ i.name }' 页面数据加载中</div>
+                            <div>'${ context_002.list[key].name }' 页面数据加载中</div>
                         </div>
                     </div>`).join('')
                 }/div>
@@ -321,7 +321,7 @@ function getNavItemHeight_002() {
 
 /** 当前导航元素的下标 */
 function indexOfNav_002(key) {
-    return Object.keys(context_002.list).indexOf(key);
+    return getSortedPageNames().indexOf(key);
 }
 
 function makePages_002() {
@@ -377,7 +377,7 @@ function getISubmitTickets_002() {
 
 function showPages_002() {
     let styleModify = [];
-    getById('dinglj-page-view').innerHTML = Object.keys(context_002.list)
+    getById('dinglj-page-view').innerHTML = getSortedPageNames()
         .map(pageName => {
             let page = context_002.list[pageName];
             return `<div class="dinglj-page">${
@@ -495,4 +495,17 @@ function showTicketPages_002() {
     } else {
         element.style.bottom = '0';
     }
+}
+
+function getSortedPageNames() {
+    Object.keys(context_002.list).sort((name1, name2) => {
+        let idx1 = context_002.config.order.pageNames.indexOf(name1);
+        idx1 = idx1 == -1 ? 999999 : idx1;
+        let idx2 = context_002.config.order.pageNames.indexOf(name2);
+        idx2 = idx2 == -1 ? 999999 : idx2;
+        if (idx1 == idx2) {
+            return name1 < name2 ? -1 : 1;
+        }
+        return idx1 - idx2;
+    })
 }
