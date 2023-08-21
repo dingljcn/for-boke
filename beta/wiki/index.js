@@ -186,8 +186,8 @@ function getMyTickets_002() {
         }
     }
     // 对变更列表进行整理, 如果配置中自定义了逻辑, 则调用自定义逻辑, 否则使用默认逻辑
-    if (context_002.config.defaultMakeTab.myTickets) {
-        context_002.list.myTickets.data = context_002.config.defaultMakeTab.myTickets(list);
+    if (context_002.config.makePage && context_002.config.makePage.myTickets) {
+        context_002.list.myTickets.data = context_002.config.makePage.myTickets(list);
     } else {
         context_002.list.myTickets.data = context_002.list.myTickets.defaultMakeTab(list);
     }
@@ -202,8 +202,8 @@ function getNotResolveTickets_002() {
         }
     }
     // 对变更列表进行整理, 如果配置中自定义了逻辑, 则调用自定义逻辑, 否则使用默认逻辑
-    if (context_002.config.defaultMakeTab.notResolve) {
-        context_002.list.notResolve.data = context_002.config.defaultMakeTab.notResolve(list);
+    if (context_002.config.makePage && context_002.config.makePage.notResolve) {
+        context_002.list.notResolve.data = context_002.config.makePage.notResolve(list);
     } else {
         context_002.list.notResolve.data = context_002.list.notResolve.defaultMakeTab(list);
     }
@@ -218,8 +218,8 @@ function getISubmitTickets_002() {
         }
     }
     // 对变更列表进行整理, 如果配置中自定义了逻辑, 则调用自定义逻辑, 否则使用默认逻辑
-    if (context_002.config.defaultMakeTab.iReport) {
-        context_002.list.iReport.data = context_002.config.defaultMakeTab.iReport(list);
+    if (context_002.config.makePage && context_002.config.makePage.iReport) {
+        context_002.list.iReport.data = context_002.config.makePage.iReport(list);
     } else {
         context_002.list.iReport.data = context_002.list.iReport.defaultMakeTab(list);
     }
@@ -233,9 +233,9 @@ function showPages_002() {
             return `<div class="dinglj-page">${
                 `<div class="page-title">
                     <div class="dinglj-float-nav"></div>
-                    ${ Object.keys(page.data)
+                    ${ getTableNames(pageName)
                         .map(tabName => `<div class="page-name" 
-                            onclick="changeTab_002('${ pageName }-${ tabName.replace(' ', '') }-table', '${ Object.keys(page.data).indexOf(tabName) }')" 
+                            onclick="changeTab_002('${ pageName }-${ tabName.replace(' ', '') }-table', '${ getTableNames(pageName).indexOf(tabName) }')" 
                             id="${ pageName }-${ tabName.replace(' ', '') }-table">${ tabName }</div>`)
                         .join('')
                     }
@@ -391,6 +391,9 @@ function getPageNames() {
         return idx1 - idx2;
     });
     return displayNames;
+}
+
+function getTableNames(pageName) {
 }
 
 function modifyAutoExpand() {
