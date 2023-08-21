@@ -333,9 +333,3 @@ function getTime() {
     let date = new Date();
     return `${ date.getHours() }:${ date.getMinutes() }:${ date.getSeconds() }, ${ date.getMilliseconds() }`
 }
-
-function loadScript(url) {
-    let utilScript = document.createElement('script');
-    utilScript.type = 'text/javascript';
-    utilScript.src = url + Math.random();
-}

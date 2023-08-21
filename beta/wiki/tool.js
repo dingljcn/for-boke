@@ -58,7 +58,7 @@ const context_002 = {
     source: [], // 我的所有变更都存储在这里
     runtime: {
         realActive: '',
-        activePage: () => context_002.runtime.realActive || (context_002.runtime.realActive = getSortedPageNames()[0]),
+        activePage: () => context_002.runtime.realActive || (context_002.runtime.realActive = getPageNames()[0]),
     },
     config: {
         css: ''
