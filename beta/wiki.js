@@ -271,6 +271,9 @@ function drawUI_002() {
         innerText: context_002.config.css
     }, []);
     getById('main').innerHTML = `<div id="dinglj-home-view">
+        <div id="dinglj-home-view-container">
+            <div id="dinglj-avatar">张三</div>
+        </div>
     </div>
     <div  id="dinglj-global-tickes">
         <div id="dinglj-ticket-area-head" onclick="showTicketPages_002()">
