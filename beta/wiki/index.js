@@ -312,7 +312,7 @@ function genTables_002(pageName, page, styleModify) {
 
 function calcFieldsToDisplay(pageName, page, tableKey, table) {
     let displayColumns = [];
-    for (let column of context_002.config.columns) {
+    for (let column of Object.values(context_002.config.columns)) {
         let ignore = false;
         for (let stratege of context_002.filters.col) {
             ignore = stratege.colFilter(pageName, page, tableKey, table, column.en, null);
