@@ -30,6 +30,7 @@ class Matcher {
      * @param {String} cell 单元格数据
      */
     resolve(pageName = '', page = {}, tableName = '', lines = [], cellKey = '', cell = {}, extArgs = {}) {
+        extArgs.return = false;
         if (this.pageReg) { // 需要精确到 page
             if (pageName) {
                 if (this.pageReg.test(page.name)) { // 如果传入了 pageName 则直接检查
@@ -41,12 +42,18 @@ class Matcher {
                     let key = names[index];
                     let name = context_002.list[key].name;
                     if (this.pageReg.test(name)) {
-                        return this.invokeIfTable(key, context_002.list[key], tableName, lines, cellKey, cell, extArgs);
+                        let result = this.invokeIfTable(key, context_002.list[key], tableName, lines, cellKey, cell, extArgs);
+                        if (extArgs.return) {
+                            return result;
+                        }
                     }
                 }
             }
         } else { // 不需要精确到 page, 但是这样是没有意义的
-            this.callback(extArgs);
+            let result = this.callback(extArgs);
+            if (extArgs.return) {
+                return result;
+            }
         }
     }
     invokeIfTable(pageName, page, tableName = '', lines = [], cellKey = '', cell = {}, extArgs = {}) {
@@ -61,12 +68,18 @@ class Matcher {
                 for (let index = 0; index < names.length; index++) { // 如果没传入 tableName 则自动遍历所有表格
                     let key = names[index];
                     if (this.tabReg.test(key)) { // 符合规范才执行
-                        return this.invokeIfCell(pageName, page, key, data[key], cellKey, cell, extArgs);
+                        let result = this.invokeIfCell(pageName, page, key, data[key], cellKey, cell, extArgs);
+                        if (extArgs.return) {
+                            return result;
+                        }
                     }
                 }
             }
         } else {
-            this.callback(extArgs, pageName, page); // 不需要精确到 table
+            let result = this.callback(extArgs, pageName, page); // 不需要精确到 table
+            if (extArgs.return) {
+                return result;
+            }
         }
     }
     invokeIfCell(pageName, page, tableName, lines, cellKey = '', cell = {}, extArgs = {}) {
@@ -83,13 +96,19 @@ class Matcher {
                     for (let idx = 0; idx < data.length; idx++) {
                         let line = data[idx];
                         if (this.cellReg.test(key)) {
-                            this.callback(extArgs, pageName, page, tableName, lines, idx, line, key, line[key]);
+                            let result = this.callback(extArgs, pageName, page, tableName, lines, idx, line, key, line[key]);
+                            if (extArgs.return) {
+                                return result;
+                            }
                         }
                     }
                 }
             }
         } else {
-            this.callback(extArgs, pageName, page, tableName, lines); // 不需要精确到 cell
+            let result = this.callback(extArgs, pageName, page, tableName, lines); // 不需要精确到 cell
+            if (extArgs.return) {
+                return result;
+            }
         }
     }
 }
