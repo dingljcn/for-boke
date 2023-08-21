@@ -311,37 +311,26 @@ function genTables_002(pageName, page, styleModify) {
 }
 
 function calcFieldsToDisplay(pageName, page, tableKey, table) {
-    let colFilter = {
-        display: Object.values(context_002.config.columns),
-        ignore: [],
-        toDisplay: function(column) {
-            let idx = indexOfPropInList(this.ignore, 'en', column);
-            if (idx >= 0) {
-                this.ignore.splice(idx, 1);
+    let displayColumns = [];
+    for (let column of context_002.config.columns) {
+        let ignore = false;
+        for (let stratege of context_002.filters.col) {
+            ignore = stratege.colFilter(pageName, page, tableKey, table, column.en, null);
+            if (ignore) {
+                break;
             }
-            idx = indexOfPropInList(this.display, 'en', column);
-            if (idx == -1) {
-                this.display.push(column);
-            }
-        },
-        toIgnore: function(column) {
-            let idx = indexOfPropInList(this.display, 'en', column);
-            if (idx >= 0) {
-                this.display.splice(idx, 1);
-            }
-            idx = indexOfPropInList(this.ignore, 'en', column);
-            if (idx == -1) {
-                this.ignore.push(column);
-            }
-        },
-    }
-    if (context_002.config.filters && context_002.config.filters.col) {
-        for (let filter of context_002.config.filters.col) {
-            filter.resolve(pageName, page, tableKey, table, '', null, colFilter);
         }
-    }
-    if (context_002.config.order && context_002.config.order.columns) {
-        context_002.config.order.columns(colFilter.display);
+        if (!ignore && context_002.config.filters && context_002.config.filters.col) {
+            for (let stratege of context_002.config.filters.col) {
+                ignore = stratege.colFilter(pageName, page, tableKey, table, column.en, null);
+                if (ignore) {
+                    break;
+                }
+            }
+        }
+        if (!ignore) {
+            displayColumns.push(column);
+        }
     }
     return colFilter.display;
 }

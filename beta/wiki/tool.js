@@ -69,69 +69,51 @@ const context_002 = {
         todo: [],
         finish: [],
         import: [],
+    },
+    filters: {
+        col: [
+            new Filter(/.*/, /.+/, /.+/, '', (pName, page, tName, table, cName, cell) => { // 如果所有行都为空, 则隐藏该列
+                let isBlank = true;
+                for (let line of table) {
+                    if (line[cName] != '') {
+                        isBlank = false;
+                        break;
+                    }
+                }
+                return isBlank;
+            }),
+            new Filter(/.*/, /.+/, /.+/, '', (pName, page, tName, table, cName, cell) => { // 如果此列与表格名称相同, 则隐藏该列
+                return context_002.config[cName].zh == tName;
+            }),
+        ]
     }
 }
 
-class Ignore02 {
-    regex; callback; scope;
-    constructor(page_regex, table_regex, column_regex, value_regex, scope, callback) {
+class Filter {
+    regex; expectValue; callback;
+    constructor(page_regex, table_regex, column_regex, expectValue, callback) {
         this.regex = {
             page: page_regex,
             table: table_regex,
             column: column_regex,
-            value: value_regex,
         };
-        this.scope = scope;
+        this.expectValue = Array.isArray(expectValue) ? expectValue : [ expectValue ];
         this.callback = callback;
     }
-    static forPage(page_regex, callback) {
-        return new Ignore02(page_regex, /^$/, /^$/, /^$/, 'page', callback);
-    }
-    static forTable(page_regex, table_regex, callback) {
-        return new Ignore02(page_regex, table_regex, /^$/, /^$/, 'table', callback);
-    }
-    static forColumn(page_regex, table_regex, column_regex, callback) {
-        return new Ignore02(page_regex, table_regex, column_regex, /^$/, 'column', callback);
-    }
-    static forRow(page_regex, table_regex, column_regex, value_regex, callback) {
-        return new Ignore02(page_regex, table_regex, column_regex, value_regex, 'row', callback);
-    }
-    resolve(pageName, pageData, tableName, tableData, cellName, cellData) {
-        if (!this.regex.page.test(pageName)) { // 页名不符合, 返回 false
-            return false;
-        }
-        if (this.scope == 'page') { // 只检查页
+    colFilter(pageName, pageData, tableName, tableData, cellName, cellData) {
+        if (this.regex.page.test(pageName) && this.regex.table.test(tableName) && this.regex.column.test(cellName)) {
             if (this.callback) {
-                return this.callback(pageName, pageData); // 回调存在, 按回调结果返回
+                return this.callback(pageName, pageData, tableName, tableData, cellName, cellData);
             }
-            return true; // 否则直接返回 true
+            return this.expectValue.includes(cellName);
         }
-        if (!this.regex.table.test(tableName)) { // 表名不符合, 返回 false
-            return false;
-        }
-        if (this.scope == 'table') {
+    }
+    rowFilter(pageName, pageData, tableName, tableData, cellName, cellData) {
+        if (this.regex.page.test(pageName) && this.regex.table.test(tableName) && this.regex.column.test(cellName)) {
             if (this.callback) {
-                return this.callback(pageName, pageData, tableName, tableData); // 回调存在, 按回调结果返回
+                return this.callback(pageName, pageData, tableName, tableData, cellName, cellData);
             }
-            return true;
-        }
-        if (!this.regex.column.test(cellName)) { // 列名不符合, 返回 false
-            return false;
-        }
-        if (this.scope == 'column') {
-            if (this.callback) {
-                return this.callback(pageName, pageData, tableName, tableData, cellName, cellData); // 回调存在, 按回调结果返回
-            }
-            return true;
-        }
-        if (!this.regex.value.test(cellData)) { // 数据不符合, 返回 false
-            return false;
-        }
-        if (this.scope == 'row') {
-            if (this.callback) {
-                return this.callback(pageName, pageData, tableName, tableData, cellName, cellData); // 回调存在, 按回调结果返回
-            }
-            return true;
+            return this.expectValue.includes(cellData);
         }
     }
 }
