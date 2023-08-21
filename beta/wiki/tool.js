@@ -146,26 +146,28 @@ class WikiTicket {
 
     static getInstance(element) {
         let data = element.split('\n');
-        this.id = WikiTicket.withA.exec(data[0])[1],
-        this.summary = WikiTicket.withA.exec(data[1])[1],
-        this.owner = WikiTicket.withSpan.exec(data[2])[1],
-        this.status = WikiTicket.simpleTd.exec(data[3])[1],
-        this.reporter = WikiTicket.withSpan.exec(data[4])[1],
-        this.type = WikiTicket.simpleTd.exec(data[5])[1],
-        this.priority = WikiTicket.simpleTd.exec(data[6])[1],
-        this.component = WikiTicket.simpleTd.exec(data[7])[1],
-        this.resolution = WikiTicket.simpleTd.exec(data[8])[1],
-        this.time = WikiTicket.withA.exec(data[9])[1],
-        this.changetime = WikiTicket.withA.exec(data[10])[1],
-        this.plandate = WikiTicket.simpleTd.exec(data[11])[1],
-        this.pingtai = WikiTicket.simpleTd.exec(data[12])[1],
-        this.project = WikiTicket.simpleTd.exec(data[13])[1],
-        this.ticketclass = WikiTicket.simpleTd.exec(data[14])[1],
-        this.testadjust = WikiTicket.simpleTd.exec(data[15])[1],
-        this.testreport = WikiTicket.simpleTd.exec(data[16])[1],
-        this.testower1 = WikiTicket.simpleTd.exec(data[17])[1],
-        this.keywords = WikiTicket.simpleTd.exec(data[18])[1],
-        this.cc = WikiTicket.simpleTd.exec(data[19])[1]
+        let instance = new WikiTicket();
+        instance.id = WikiTicket.withA.exec(data[0])[1],
+        instance.summary = WikiTicket.withA.exec(data[1])[1],
+        instance.owner = WikiTicket.withSpan.exec(data[2])[1],
+        instance.status = WikiTicket.simpleTd.exec(data[3])[1],
+        instance.reporter = WikiTicket.withSpan.exec(data[4])[1],
+        instance.type = WikiTicket.simpleTd.exec(data[5])[1],
+        instance.priority = WikiTicket.simpleTd.exec(data[6])[1],
+        instance.component = WikiTicket.simpleTd.exec(data[7])[1],
+        instance.resolution = WikiTicket.simpleTd.exec(data[8])[1],
+        instance.time = WikiTicket.withA.exec(data[9])[1],
+        instance.changetime = WikiTicket.withA.exec(data[10])[1],
+        instance.plandate = WikiTicket.simpleTd.exec(data[11])[1],
+        instance.pingtai = WikiTicket.simpleTd.exec(data[12])[1],
+        instance.project = WikiTicket.simpleTd.exec(data[13])[1],
+        instance.ticketclass = WikiTicket.simpleTd.exec(data[14])[1],
+        instance.testadjust = WikiTicket.simpleTd.exec(data[15])[1],
+        instance.testreport = WikiTicket.simpleTd.exec(data[16])[1],
+        instance.testower1 = WikiTicket.simpleTd.exec(data[17])[1],
+        instance.keywords = WikiTicket.simpleTd.exec(data[18])[1],
+        instance.cc = WikiTicket.simpleTd.exec(data[19])[1]
+        return instance;
     }
 }
 
