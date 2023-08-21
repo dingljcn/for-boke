@@ -277,6 +277,11 @@ function drawUI_002() {
                 <div id="dinglj-date"></div>
                 <div id="dinglj-week"></div>
                 <div id="dinglj-time"></div>
+                <div id="dinglj-hrefs">${
+                    Object.keys(context_002.config.hrefs).map(key => {
+                        return `<div class="dinglj-href-item" onclick="window.open('${ context_002.config.hrefs[key] }')">${ key }</div>`
+                    })
+                }</div>
             </div>
             <div id="home-view-right">
             </div>
