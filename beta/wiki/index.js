@@ -36,7 +36,7 @@ function run_002() {
 }
 
 function readMyTickets_002() {
-    $.get(context_002.config.url.myTickets).then(res => {
+    $.get(context_002.config.url).then(res => {
         console.log(1);
         let isTr = false;
         let item = '';
