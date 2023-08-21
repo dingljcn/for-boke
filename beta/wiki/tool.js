@@ -147,7 +147,7 @@ const context_002 = {
                 return isBlank;
             }),
             new Filter(/.*/, /.+/, /.+/, '', (pName, page, tName, table, cName, cell) => { // 如果此列与表格名称相同, 则隐藏该列
-                return context_002.config[cName].zh == tName;
+                return context_002.config.columns[cName].zh == tName;
             }),
         ]
     }
