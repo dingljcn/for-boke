@@ -280,7 +280,7 @@ function drawUI_002() {
     getById('main').innerHTML = `<div id="dinglj-home-view">
         <div id="dinglj-home-view-container">
             <div id="home-view-left">
-                <div id="dinglj-avatar">张三</div>
+                <div id="dinglj-avatar">${ context_002.config.whoami.zh.length == 1 ? context_002.config.whoami.zh : context_002.config.whoami.zh.substring(context_002.config.whoami.zh.length - 2) }</div>
                 <div id="dinglj-date"></div>
                 <div id="dinglj-week"></div>
                 <div id="dinglj-time"></div>
