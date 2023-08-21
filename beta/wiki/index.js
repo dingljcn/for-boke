@@ -1,215 +1,13 @@
-class Matcher {
-    pageReg; tabReg; cellReg; callback;
-    /**
-     * @param {RegExp} pageReg 匹配页面
-     * @param {RegExp} tabReg 匹配Tab页
-     * @param {RegExp} cellReg 匹配单元格
-     * @param {Function} callback 回调函数, 最多 9 个参数
-     * @param {callback.extArgs} cellReg 额外参数
-     * @param {callback.pageName} cellReg 页面名称
-     * @param {callback.page} cellReg 页面数据
-     * @param {callback.tableName} cellReg 表格名称
-     * @param {callback.lines} cellReg 表格所有行数据
-     * @param {callback.idx} cellReg 当前行下标
-     * @param {callback.line} cellReg 当前行数据
-     * @param {callback.cellKey} cellReg 单元格名称
-     * @param {callback.cell} cellReg 单元格数据
-     */
-    constructor(pageReg = /.+/, tabReg = /.+/, cellReg = /.+/, callback = () => {}) {
-        this.pageReg = pageReg;
-        this.tabReg = tabReg;
-        this.cellReg = cellReg;
-        this.callback = callback;
-    }
-    /**
-     * @param {String} pageName 页面名称
-     * @param {any} page 页面数据
-     * @param {String} tableName 表格(Tab页)名称
-     * @param {Array[any]} lines 表格数据(一行一行的数据)
-     * @param {String} cellName 单元格名称
-     * @param {String} cell 单元格数据
-     */
-    resolve(pageName = '', page = {}, tableName = '', lines = [], cellKey = '', cell = {}, extArgs = {}) {
-        extArgs.return = false;
-        if (this.pageReg) { // 需要精确到 page
-            if (pageName) {
-                if (this.pageReg.test(page.name)) { // 如果传入了 pageName 则直接检查
-                    return this.invokeIfTable(pageName, page, tableName, lines, cellKey, cell, extArgs);
-                }
-            } else {
-                let names = getSortedPageNames();
-                for (let index = 0; index < names.length; index++) { // 如果没有传入 pageName 则自动遍历所有页面
-                    let key = names[index];
-                    let name = context_002.list[key].name;
-                    if (this.pageReg.test(name)) {
-                        let result = this.invokeIfTable(key, context_002.list[key], tableName, lines, cellKey, cell, extArgs);
-                        if (extArgs.return) {
-                            return result;
-                        }
-                    }
-                }
-            }
-        } else { // 不需要精确到 page, 但是这样是没有意义的
-            let result = this.callback(extArgs);
-            if (extArgs.return) {
-                return result;
-            }
-        }
-    }
-    invokeIfTable(pageName, page, tableName = '', lines = [], cellKey = '', cell = {}, extArgs = {}) {
-        if (this.tabReg) { // 需要精确到 table
-            if (tableName) { // 如果传入了 tableName 则直接检查
-                if (this.tabReg.test(tableName)) {
-                    return this.invokeIfCell(pageName, page, tableName, lines, cellKey, cell, extArgs);
-                }
-            } else {
-                let data = context_002.list[pageName].data;
-                let names = Object.keys(data);
-                for (let index = 0; index < names.length; index++) { // 如果没传入 tableName 则自动遍历所有表格
-                    let key = names[index];
-                    if (this.tabReg.test(key)) { // 符合规范才执行
-                        let result = this.invokeIfCell(pageName, page, key, data[key], cellKey, cell, extArgs);
-                        if (extArgs.return) {
-                            return result;
-                        }
-                    }
-                }
-            }
-        } else {
-            let result = this.callback(extArgs, pageName, page); // 不需要精确到 table
-            if (extArgs.return) {
-                return result;
-            }
-        }
-    }
-    invokeIfCell(pageName, page, tableName, lines, cellKey = '', cell = {}, extArgs = {}) {
-        if (this.cellReg) { // 需要精确到 cell
-            if (cellKey) { // 如果传入了 cellKey 则直接检查
-                if (this.cellReg.test(cellKey)) {
-                    return this.invokeIfCell(pageName, page, tableName, lines, cellKey, cell, extArgs);
-                }
-            } else {
-                let data = context_002.list[pageName].data[tableName];
-                let names = Object.keys(data[0]);
-                for (let index = 0; index < names.length; index++) {
-                    let key = names[index];
-                    for (let idx = 0; idx < data.length; idx++) {
-                        let line = data[idx];
-                        if (this.cellReg.test(key)) {
-                            let result = this.callback(extArgs, pageName, page, tableName, lines, idx, line, key, line[key]);
-                            if (extArgs.return) {
-                                return result;
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            let result = this.callback(extArgs, pageName, page, tableName, lines); // 不需要精确到 cell
-            if (extArgs.return) {
-                return result;
-            }
-        }
-    }
+function prepare_scripts_002(loadScript, callback) {
+    loadScript('utils.js', () => {
+        loadScript('wiki/tool.js', () => {
+            context_002.config = callback();
+            run_002();
+        })
+    })
 }
 
-const context_002 = {
-    list: {
-        notResolve: {
-            name: '需要处理',
-            data: {},
-            defaultSort: (list = []) => { // return: { tabName, List<Ticket> }
-                let result = {
-                    '所有': []
-                };
-                for (let element of list) {
-                    let component = element.component; // 以模块进行分组
-                    let array = result[component];
-                    if (!array) {
-                        array = [];
-                        result[component] = array;
-                    }
-                    array.push(element);
-                    result['所有'].push(element);
-                }
-                return result;
-            }
-        },
-        myTickets: {
-            name: '我的所有变更',
-            data: {},
-            defaultSort: (list = []) => { // return: { tabName, List<Ticket> }
-                let result = {};
-                for (let element of list) {
-                    let reporter = element.reporter; // 以报告人进行分组
-                    let array = result[reporter];
-                    if (!array) {
-                        array = [];
-                        result[reporter] = array;
-                    }
-                    array.push(element);
-                }
-                return result;
-            }
-        },
-        iReport: {
-            name: '我提出的变更',
-            data: {},
-            defaultSort: (list = []) => { // return: { tabName, List<Ticket> }
-                let result = {};
-                for (let element of list) {
-                    let owner = element.owner; // 以属主进行分组
-                    let array = result[owner];
-                    if (!array) {
-                        array = [];
-                        result[owner] = array;
-                    }
-                    array.push(element);
-                }
-                return result;
-            }
-        },
-    },
-    source: [], // 我的所有变更都存储在这里
-    runtime: {
-        realActive: '',
-        activePage: () => context_002.runtime.realActive || (context_002.runtime.realActive = getSortedPageNames()[0]),
-    },
-    config: {
-        css: ''
-    },
-    waitting: true,
-    presist: {
-        isAutoExpand: false,
-        todo: [],
-        finish: [],
-        import: [],
-    }
-}
-
-function onload_002(callback) {
-    // 引入通用脚本
-    let utilScript = document.createElement('script');
-    utilScript.type = 'text/javascript';
-    utilScript.src = 'https://dingljcn.github.io/for-boke/beta/utils.js?' + Math.random();
-    // 成功
-    utilScript.onload = async function() {
-        localStorage.setItem(`dinglj-util.js`, utilScript.src); // 缓存本次成功 load 的 url
-        callback();
-    }
-    // 失败
-    utilScript.onerror = () => {
-        let lastURL = localStorage.getItem(`dinglj-util.js`);
-        console.error(`${ utilScript.src } 拉取失败, 拉取上次成功的地址 ${ lastURL }`);
-        utilScript.remove();
-        appendScript(callback);
-    }
-    document.head.appendChild(utilScript);
-}
-
-function run_002(config) {
-    // 检验配置
-    context_002.config = config;
+function run_002() {
     logln('传入的配置: ', context_002.config);
     if (!isMatch(context_002.config)) {
         console.error('不符合以下地址匹配规则');
@@ -217,13 +15,17 @@ function run_002(config) {
         return;
     }
     // 正式开始独立的逻辑
-    exec_002();
-}
-
-function exec_002() {
     readCache_002();
+    // 绘制整体界面
     drawUI_002();
-    readMyTickets_002(); // 先读数据, 如果出了错, 就不会往下走了, 顺便还能容个错
+    // 读取变更
+    readMyTickets_002();
+    // 监听时间
+    listenTime(getById('dinglj-date'), getById('dinglj-week'), getById('dinglj-time'));
+    // 自动展开
+    if (context_002.presist.isAutoExpand) {
+        getById('dinglj-ticket-area-head').children[0].click();
+    }
     let timer = setInterval(() => {
         if (context_002.waitting == false) {
             clearInterval(timer);
@@ -257,33 +59,9 @@ function readMyTickets_002() {
         // console.log(list); // 打开这行, 可以看第一个变更每个单元格的内容
         // 第二个 for 循环, 遍历每一行变更, 转换为对象
         let elementList = [];
-        const withA = /<td.*><a.*>(.*)<\/a><\/td>/;
-        const withSpan = /<td.*><span.*>(.*)<\/span><\/td>/;
-        const simpleTd = /<td.*>(.*)<\/td>/;
         for (let element of list) {
-            let data = element.split('\n');
-            elementList.push({
-                id: withA.exec(data[0])[1],
-                summary: withA.exec(data[1])[1],
-                owner: withSpan.exec(data[2])[1],
-                status: simpleTd.exec(data[3])[1],
-                reporter: withSpan.exec(data[4])[1],
-                type: simpleTd.exec(data[5])[1],
-                priority: simpleTd.exec(data[6])[1],
-                component: simpleTd.exec(data[7])[1],
-                resolution: simpleTd.exec(data[8])[1],
-                time: withA.exec(data[9])[1],
-                changetime: withA.exec(data[10])[1],
-                plandate: simpleTd.exec(data[11])[1],
-                pingtai: simpleTd.exec(data[12])[1],
-                project: simpleTd.exec(data[13])[1],
-                ticketclass: simpleTd.exec(data[14])[1],
-                testadjust: simpleTd.exec(data[15])[1],
-                testreport: simpleTd.exec(data[16])[1],
-                testower1: simpleTd.exec(data[17])[1],
-                keywords: simpleTd.exec(data[18])[1],
-                cc: simpleTd.exec(data[19])[1]
-            });
+            let ticket = WikiTicket.getInstance(element);
+            elementList.push(ticket);
         }
         context_002.source = elementList;
         context_002.waitting = false;
@@ -294,12 +72,17 @@ function drawUI_002() {
     newElement('style', {
         parentNode: document.head
     }, {
-        innerText: context_002.config.css
+        innerHTML: context_002.config.css
     }, []);
+    rmf(getById('footer'));
     getById('main').innerHTML = `<div id="dinglj-home-view">
         <div id="dinglj-home-view-container">
             <div id="home-view-left">
-                <div id="dinglj-avatar">${ context_002.config.whoami.zh.length == 1 ? context_002.config.whoami.zh : context_002.config.whoami.zh.substring(context_002.config.whoami.zh.length - 2) }</div>
+                <div id="dinglj-avatar">${
+                    context_002.config.whoami.zh.length == 1
+                        ? context_002.config.whoami.zh
+                        : context_002.config.whoami.zh.substring(context_002.config.whoami.zh.length - 2)
+                }</div>
                 <div id="dinglj-date"></div>
                 <div id="dinglj-week"></div>
                 <div id="dinglj-time"></div>
@@ -324,15 +107,17 @@ function drawUI_002() {
                 <div id="dinglj-page-nav-box">
                     <div id="dinglj-nav-point"></div>
                     <div id="dinglj-navs"> ${
-                        getSortedPageNames()
-                        .map(key => `<div class="dinglj-nav-item ${ context_002.runtime.activePage() == key ? 'dinglj-active-nav' : '' }" id="dinglj-nav-${ key }" onclick="changePage_002(id)">${ context_002.list[key].name }</div>`)
+                        getPageNames()
+                        .map(key => `<div class="dinglj-nav-item ${ context_002.runtime.activePage() == key ? 'dinglj-active-nav' : '' }" id="dinglj-nav-${ key }" onclick="changePage_002(id)">${
+                            context_002.list[key].name
+                        }</div>`)
                         .join('') 
                     }</div>
                 </div>
             </div>
             <div id="dinglj-global-right">
                 <div id="dinglj-page-view">${
-                    getSortedPageNames().map(key => `<div class="dinglj-page">
+                    getPageNames().map(key => `<div class="dinglj-page">
                         <div id="dinglj-page-wait-box">
                             <img style="width: 300px" src="https://dingljcn.github.io/for-boke/src/loading.gif"/>
                             <div>'${ context_002.list[key].name }' 页面数据加载中</div>
@@ -342,11 +127,6 @@ function drawUI_002() {
             </div>
         </div>
     </div>`;
-    listenTime(getById('dinglj-date'), getById('dinglj-week'), getById('dinglj-time'));
-    if (context_002.presist.isAutoExpand) {
-        getById('dinglj-ticket-area-head').children[0].click();
-    }
-    rmf(getById('footer'));
 }
 
 /** 导航元素点击事件 */
@@ -383,15 +163,21 @@ function getNavItemHeight_002() {
 
 /** 当前导航元素的下标 */
 function indexOfNav_002(key) {
-    return getSortedPageNames().indexOf(key);
+    return getPageNames().indexOf(key);
 }
 
+/** 分页 */
 function makePages_002() {
+    beforeMakePage_002();
     getMyTickets_002();
     getNotResolveTickets_002();
     getISubmitTickets_002();
 }
 
+/** 可以如果需要自己分页, 可以重写此方法 */
+function beforeMakePage_002() {}
+
+/** 我的所有变更 */
 function getMyTickets_002() {
     let list = [];
     for (let element of context_002.source) {
@@ -400,13 +186,14 @@ function getMyTickets_002() {
         }
     }
     // 对变更列表进行整理, 如果配置中自定义了逻辑, 则调用自定义逻辑, 否则使用默认逻辑
-    if (context_002.config.sort.myTickets) {
-        context_002.list.myTickets.data = context_002.config.sort.myTickets(list);
+    if (context_002.config.defaultMakeTab.myTickets) {
+        context_002.list.myTickets.data = context_002.config.defaultMakeTab.myTickets(list);
     } else {
-        context_002.list.myTickets.data = context_002.list.myTickets.defaultSort(list);
+        context_002.list.myTickets.data = context_002.list.myTickets.defaultMakeTab(list);
     }
 }
 
+/** 需要处理 */
 function getNotResolveTickets_002() {
     let list = [];
     for (let element of context_002.source) {
@@ -415,13 +202,14 @@ function getNotResolveTickets_002() {
         }
     }
     // 对变更列表进行整理, 如果配置中自定义了逻辑, 则调用自定义逻辑, 否则使用默认逻辑
-    if (context_002.config.sort.notResolve) {
-        context_002.list.notResolve.data = context_002.config.sort.notResolve(list);
+    if (context_002.config.defaultMakeTab.notResolve) {
+        context_002.list.notResolve.data = context_002.config.defaultMakeTab.notResolve(list);
     } else {
-        context_002.list.notResolve.data = context_002.list.notResolve.defaultSort(list);
+        context_002.list.notResolve.data = context_002.list.notResolve.defaultMakeTab(list);
     }
 }
 
+/** 我提出的变更 */
 function getISubmitTickets_002() {
     let list = [];
     for (let element of context_002.source) {
@@ -430,16 +218,16 @@ function getISubmitTickets_002() {
         }
     }
     // 对变更列表进行整理, 如果配置中自定义了逻辑, 则调用自定义逻辑, 否则使用默认逻辑
-    if (context_002.config.sort.iReport) {
-        context_002.list.iReport.data = context_002.config.sort.iReport(list);
+    if (context_002.config.defaultMakeTab.iReport) {
+        context_002.list.iReport.data = context_002.config.defaultMakeTab.iReport(list);
     } else {
-        context_002.list.iReport.data = context_002.list.iReport.defaultSort(list);
+        context_002.list.iReport.data = context_002.list.iReport.defaultMakeTab(list);
     }
 }
 
 function showPages_002() {
     let styleModify = [];
-    getById('dinglj-page-view').innerHTML = getSortedPageNames()
+    getById('dinglj-page-view').innerHTML = getPageNames()
         .map(pageName => {
             let page = context_002.list[pageName];
             return `<div class="dinglj-page">${
@@ -572,28 +360,32 @@ function showTicketPages_002() {
     }
 }
 
-function getSortedPageNames() {
-    return Object.keys(context_002.list).sort((name1, name2) => {
-        let idx1 = context_002.config.order.pageNames.indexOf(name1);
+function getPageNames() {
+    let originNames = Object.keys(context_002.list);
+    let displayNames = [];
+    for (let name of originNames) {
+        let flag = true;
+        for (let regex of context_002.config.page.ignore) {
+            if (regex.test(name)) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag) {
+            displayNames.push(name);
+        }
+    }
+    displayNames.sort((name1, name2) => {
+        let idx1 = context_002.config.order.page.indexOf(name1);
         idx1 = idx1 == -1 ? 999999 : idx1;
-        let idx2 = context_002.config.order.pageNames.indexOf(name2);
+        let idx2 = context_002.config.order.page.indexOf(name2);
         idx2 = idx2 == -1 ? 999999 : idx2;
         if (idx1 == idx2) {
             return name1 < name2 ? -1 : 1;
         }
         return idx1 - idx2;
-    })
-}
-
-function readCache_002() {
-    let string = localStorage.getItem('dinglj-script-002');
-    if (string) {
-        context_002.presist = JSON.parse(string);
-    }
-}
-
-function saveCache_002() {
-    localStorage.setItem('dinglj-script-002', JSON.stringify(context_002.presist));
+    });
+    return displayNames;
 }
 
 function modifyAutoExpand() {
