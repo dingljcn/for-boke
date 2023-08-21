@@ -215,7 +215,7 @@ function getTableNames(pageName) {
     let displayNames = [];
     for (let name of originNames) {
         let flag = true;
-        for (let regex of context_002.config.table.ignore[pageName]) {
+        for (let regex of ((context_002.config.table.ignore[pageName]) || ([]))) {
             if (regex.test(name)) {
                 flag = false;
                 break;
@@ -226,9 +226,9 @@ function getTableNames(pageName) {
         }
     }
     displayNames.sort((name1, name2) => {
-        let idx1 = context_002.config.table.order[pageName].indexOf(name1);
+        let idx1 = ((context_002.config.table.order[pageName]) || ([])).indexOf(name1);
         idx1 = idx1 == -1 ? 999999 : idx1;
-        let idx2 = context_002.config.table.order[pageName].indexOf(name2);
+        let idx2 = ((context_002.config.table.order[pageName]) || ([])).indexOf(name2);
         idx2 = idx2 == -1 ? 999999 : idx2;
         if (idx1 == idx2) {
             return name1 < name2 ? -1 : 1;
