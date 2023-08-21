@@ -233,7 +233,12 @@ function showPages_002() {
             return `<div class="dinglj-page">${
                 `<div class="page-title">
                     <div class="dinglj-float-nav"></div>
-                    ${ Object.keys(page.data).map(tabName => `<div class="page-name" onclick="changeTab_002('${ pageName }-${ tabName.replace(' ', '') }-table', '${ Object.keys(page.data).indexOf(tabName) }')" id="${ pageName }-${ tabName.replace(' ', '') }-table">${ tabName }</div>`).join('') }
+                    ${ Object.keys(page.data)
+                        .map(tabName => `<div class="page-name" 
+                            onclick="changeTab_002('${ pageName }-${ tabName.replace(' ', '') }-table', '${ Object.keys(page.data).indexOf(tabName) }')" 
+                            id="${ pageName }-${ tabName.replace(' ', '') }-table">${ tabName }</div>`)
+                        .join('')
+                    }
                 </div>` + // 此处是拼接 tab 页的标题
                 `<div class="page-tables">${
                     genTables_002(pageName, page, styleModify)
@@ -376,9 +381,9 @@ function getPageNames() {
         }
     }
     displayNames.sort((name1, name2) => {
-        let idx1 = context_002.config.order.page.indexOf(name1);
+        let idx1 = context_002.config.page.order.indexOf(name1);
         idx1 = idx1 == -1 ? 999999 : idx1;
-        let idx2 = context_002.config.order.page.indexOf(name2);
+        let idx2 = context_002.config.page.order.indexOf(name2);
         idx2 = idx2 == -1 ? 999999 : idx2;
         if (idx1 == idx2) {
             return name1 < name2 ? -1 : 1;
