@@ -401,7 +401,7 @@ function showPages_002() {
             return `<div class="dinglj-page">${
                 `<div class="page-title">
                     <div class="dinglj-float-nav"></div>
-                    ${ Object.keys(page.data).map(tabName => `<div class="page-name" onclick="changeTab_002('page-name-${ tabName.replace(' ', '') }', '${ Object.keys(page.data).indexOf(tabName) }')" id="page-name-${ tabName.replace(' ', '') }">${ tabName }</div>`).join('') }
+                    ${ Object.keys(page.data).map(tabName => `<div class="page-name" onclick="changeTab_002('${ pageName }-${ tabName.replace(' ', '') }-table', '${ Object.keys(page.data).indexOf(tabName) }')" id="${ pageName }-${ tabName.replace(' ', '') }-table">${ tabName }</div>`).join('') }
                 </div>` + // 此处是拼接 tab 页的标题
                 `<div class="page-tables">${
                     genTables_002(pageName, page, styleModify)
