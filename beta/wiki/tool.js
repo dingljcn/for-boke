@@ -14,8 +14,9 @@ class Filter {
             if (this.callback) {
                 return this.callback(pageName, pageData, tableName, tableData, cellName, cellData);
             }
-            return this.expectValue.includes(cellName);
+            return true;
         }
+        return false;
     }
     rowFilter(pageName, pageData, tableName, tableData, cellName, cellData) {
         if (this.regex.page.test(pageName) && this.regex.table.test(tableName) && this.regex.column.test(cellName)) {
@@ -24,6 +25,7 @@ class Filter {
             }
             return this.expectValue.includes(cellData);
         }
+        return false;
     }
 }
 
