@@ -1,3 +1,67 @@
+class Filter {
+    regex; expectValue; callback;
+    constructor(page_regex, table_regex, column_regex, expectValue, callback) {
+        this.regex = {
+            page: page_regex,
+            table: table_regex,
+            column: column_regex,
+        };
+        this.expectValue = Array.isArray(expectValue) ? expectValue : [ expectValue ];
+        this.callback = callback;
+    }
+    colFilter(pageName, pageData, tableName, tableData, cellName, cellData) {
+        if (this.regex.page.test(pageName) && this.regex.table.test(tableName) && this.regex.column.test(cellName)) {
+            if (this.callback) {
+                return this.callback(pageName, pageData, tableName, tableData, cellName, cellData);
+            }
+            return this.expectValue.includes(cellName);
+        }
+    }
+    rowFilter(pageName, pageData, tableName, tableData, cellName, cellData) {
+        if (this.regex.page.test(pageName) && this.regex.table.test(tableName) && this.regex.column.test(cellName)) {
+            if (this.callback) {
+                return this.callback(pageName, pageData, tableName, tableData, cellName, cellData);
+            }
+            return this.expectValue.includes(cellData);
+        }
+    }
+}
+
+class WikiTicket {
+
+    static withA = /<td.*><a.*>(.*)<\/a><\/td>/;
+    static withSpan = /<td.*><span.*>(.*)<\/span><\/td>/;
+    static simpleTd = /<td.*>(.*)<\/td>/;
+
+    id;summary;owner;status;reporter;type;priority;component;resolution;time;changetime;plandate;pingtai;project;ticketclass;testadjust;testreport;testower1;keywords;cc;
+
+    static getInstance(element) {
+        let data = element.split('\n');
+        let instance = new WikiTicket();
+        instance.id = WikiTicket.withA.exec(data[0])[1],
+        instance.summary = WikiTicket.withA.exec(data[1])[1],
+        instance.owner = WikiTicket.withSpan.exec(data[2])[1],
+        instance.status = WikiTicket.simpleTd.exec(data[3])[1],
+        instance.reporter = WikiTicket.withSpan.exec(data[4])[1],
+        instance.type = WikiTicket.simpleTd.exec(data[5])[1],
+        instance.priority = WikiTicket.simpleTd.exec(data[6])[1],
+        instance.component = WikiTicket.simpleTd.exec(data[7])[1],
+        instance.resolution = WikiTicket.simpleTd.exec(data[8])[1],
+        instance.time = WikiTicket.withA.exec(data[9])[1],
+        instance.changetime = WikiTicket.withA.exec(data[10])[1],
+        instance.plandate = WikiTicket.simpleTd.exec(data[11])[1],
+        instance.pingtai = WikiTicket.simpleTd.exec(data[12])[1],
+        instance.project = WikiTicket.simpleTd.exec(data[13])[1],
+        instance.ticketclass = WikiTicket.simpleTd.exec(data[14])[1],
+        instance.testadjust = WikiTicket.simpleTd.exec(data[15])[1],
+        instance.testreport = WikiTicket.simpleTd.exec(data[16])[1],
+        instance.testower1 = WikiTicket.simpleTd.exec(data[17])[1],
+        instance.keywords = WikiTicket.simpleTd.exec(data[18])[1],
+        instance.cc = WikiTicket.simpleTd.exec(data[19])[1]
+        return instance;
+    }
+}
+
 const context_002 = {
     list: {
         notResolve: {
@@ -86,70 +150,6 @@ const context_002 = {
                 return context_002.config[cName].zh == tName;
             }),
         ]
-    }
-}
-
-class Filter {
-    regex; expectValue; callback;
-    constructor(page_regex, table_regex, column_regex, expectValue, callback) {
-        this.regex = {
-            page: page_regex,
-            table: table_regex,
-            column: column_regex,
-        };
-        this.expectValue = Array.isArray(expectValue) ? expectValue : [ expectValue ];
-        this.callback = callback;
-    }
-    colFilter(pageName, pageData, tableName, tableData, cellName, cellData) {
-        if (this.regex.page.test(pageName) && this.regex.table.test(tableName) && this.regex.column.test(cellName)) {
-            if (this.callback) {
-                return this.callback(pageName, pageData, tableName, tableData, cellName, cellData);
-            }
-            return this.expectValue.includes(cellName);
-        }
-    }
-    rowFilter(pageName, pageData, tableName, tableData, cellName, cellData) {
-        if (this.regex.page.test(pageName) && this.regex.table.test(tableName) && this.regex.column.test(cellName)) {
-            if (this.callback) {
-                return this.callback(pageName, pageData, tableName, tableData, cellName, cellData);
-            }
-            return this.expectValue.includes(cellData);
-        }
-    }
-}
-
-class WikiTicket {
-
-    static withA = /<td.*><a.*>(.*)<\/a><\/td>/;
-    static withSpan = /<td.*><span.*>(.*)<\/span><\/td>/;
-    static simpleTd = /<td.*>(.*)<\/td>/;
-
-    id;summary;owner;status;reporter;type;priority;component;resolution;time;changetime;plandate;pingtai;project;ticketclass;testadjust;testreport;testower1;keywords;cc;
-
-    static getInstance(element) {
-        let data = element.split('\n');
-        let instance = new WikiTicket();
-        instance.id = WikiTicket.withA.exec(data[0])[1],
-        instance.summary = WikiTicket.withA.exec(data[1])[1],
-        instance.owner = WikiTicket.withSpan.exec(data[2])[1],
-        instance.status = WikiTicket.simpleTd.exec(data[3])[1],
-        instance.reporter = WikiTicket.withSpan.exec(data[4])[1],
-        instance.type = WikiTicket.simpleTd.exec(data[5])[1],
-        instance.priority = WikiTicket.simpleTd.exec(data[6])[1],
-        instance.component = WikiTicket.simpleTd.exec(data[7])[1],
-        instance.resolution = WikiTicket.simpleTd.exec(data[8])[1],
-        instance.time = WikiTicket.withA.exec(data[9])[1],
-        instance.changetime = WikiTicket.withA.exec(data[10])[1],
-        instance.plandate = WikiTicket.simpleTd.exec(data[11])[1],
-        instance.pingtai = WikiTicket.simpleTd.exec(data[12])[1],
-        instance.project = WikiTicket.simpleTd.exec(data[13])[1],
-        instance.ticketclass = WikiTicket.simpleTd.exec(data[14])[1],
-        instance.testadjust = WikiTicket.simpleTd.exec(data[15])[1],
-        instance.testreport = WikiTicket.simpleTd.exec(data[16])[1],
-        instance.testower1 = WikiTicket.simpleTd.exec(data[17])[1],
-        instance.keywords = WikiTicket.simpleTd.exec(data[18])[1],
-        instance.cc = WikiTicket.simpleTd.exec(data[19])[1]
-        return instance;
     }
 }
 
