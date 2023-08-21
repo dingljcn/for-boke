@@ -302,3 +302,33 @@ function rmf(element) {
         element.remove();
     }
 }
+
+function getWeek(prefix = '星期') {
+    let flag = (new Date()).getDate();
+    switch(flag) {
+        case 0: return `${ prefix }日`;
+        case 1: return `${ prefix }一`;
+        case 2: return `${ prefix }二`;
+        case 3: return `${ prefix }三`;
+        case 4: return `${ prefix }四`;
+        case 5: return `${ prefix }五`;
+        case 6: return `${ prefix }六`;
+    }
+}
+
+function listenTime(date = {}, time = {}) {
+    setInterval(() => {
+        date.innerText = getDate();
+        time.innerText = getTime();
+    }, 1);
+}
+
+function getDate() {
+    let date = new Date();
+    return `${ date.getFullYear }-${ date.getMonth() + 1 }-${ date.getDate() }`;
+}
+
+function getTime() {
+    let date = new Date();
+    return `${ date.getHours }:${ date.getMinutes() }:${ date.getSeconds() }, ${ date.getMilliseconds() }`
+}

@@ -272,7 +272,14 @@ function drawUI_002() {
     }, []);
     getById('main').innerHTML = `<div id="dinglj-home-view">
         <div id="dinglj-home-view-container">
-            <div id="dinglj-avatar">张三</div>
+            <div id="home-view-left">
+                <div id="dinglj-avatar">张三</div>
+                <div id="dinglj-date"></div>
+                <div id="dinglj-week">${ getWeek() }</div>
+                <div id="dinglj-time"></div>
+            </div>
+            <div id="home-view-right">
+            </div>
         </div>
     </div>
     <div  id="dinglj-global-tickes">
@@ -302,6 +309,7 @@ function drawUI_002() {
             </div>
         </div>
     </div>`;
+    listenTime(getById('dinglj-date'), getById('dinglj-time'));
     rmf(getById('footer'));
 }
 
