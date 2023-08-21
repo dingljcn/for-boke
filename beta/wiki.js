@@ -160,6 +160,12 @@ const context_002 = {
         css: ''
     },
     waitting: true,
+    presist: {
+        isAutoExpand: false,
+        todo: [],
+        finish: [],
+        import: [],
+    }
 }
 
 function onload_002(callback) {
@@ -196,6 +202,7 @@ function run_002(config) {
 }
 
 function exec_002() {
+    readCache_002();
     drawUI_002();
     readMyTickets_002(); // 先读数据, 如果出了错, 就不会往下走了, 顺便还能容个错
     let timer = setInterval(() => {
@@ -288,8 +295,10 @@ function drawUI_002() {
         </div>
     </div>
     <div  id="dinglj-global-tickes">
-        <div id="dinglj-ticket-area-head" onclick="showTicketPages_002()">
-            变更清单
+        <div id="dinglj-ticket-area-head">
+            <div onclick="showTicketPages_002()">变更清单</div>
+            <div onclick="showTicketPages_002()" style="flex: 1"></div>
+            <div><input type="checkbox" id="auto-expand" ${ context_002.presist.isAutoExpand ? 'checked="true"' : '' }/>自动展开</div>
         </div>
         <div id="dinglj-ticket-area-container">
             <div id="dinglj-global-left">
@@ -315,6 +324,9 @@ function drawUI_002() {
         </div>
     </div>`;
     listenTime(getById('dinglj-date'), getById('dinglj-week'), getById('dinglj-time'));
+    if (context_002.presist.isAutoExpand) {
+        getById('dinglj-ticket-area-head').children[0].click();
+    }
     rmf(getById('footer'));
 }
 
@@ -539,4 +551,15 @@ function getSortedPageNames() {
         }
         return idx1 - idx2;
     })
+}
+
+function readCache_002() {
+    let string = localStorage.getItem('dinglj-script-002');
+    if (string) {
+        context_002.presist = JSON.parse(string);
+    }
+}
+
+function saveCache_002() {
+    localStorage.setItem('dinglj-script-002', JSON.stringify(context_002.presist));
 }
