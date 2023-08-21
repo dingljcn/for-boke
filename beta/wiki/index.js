@@ -332,7 +332,7 @@ function calcFieldsToDisplay(pageName, page, tableKey, table) {
             displayColumns.push(column);
         }
     }
-    return colFilter.display;
+    return displayColumns;
 }
 
 function changeTab_002(elementID, tabIdx) {
