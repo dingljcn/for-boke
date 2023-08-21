@@ -325,10 +325,10 @@ function listenTime(date = {}, time = {}) {
 
 function getDate() {
     let date = new Date();
-    return `${ date.getFullYear }-${ date.getMonth() + 1 }-${ date.getDate() }`;
+    return `${ date.getFullYear() }-${ date.getMonth() + 1 }-${ date.getDate() }`;
 }
 
 function getTime() {
     let date = new Date();
-    return `${ date.getHours }:${ date.getMinutes() }:${ date.getSeconds() }, ${ date.getMilliseconds() }`
+    return `${ date.getHours() }:${ date.getMinutes() }:${ date.getSeconds() }, ${ date.getMilliseconds() }`
 }
