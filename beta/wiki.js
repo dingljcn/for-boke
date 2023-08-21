@@ -275,7 +275,7 @@ function drawUI_002() {
             <div id="home-view-left">
                 <div id="dinglj-avatar">张三</div>
                 <div id="dinglj-date"></div>
-                <div id="dinglj-week">${ getWeek() }</div>
+                <div id="dinglj-week"></div>
                 <div id="dinglj-time"></div>
             </div>
             <div id="home-view-right">
@@ -309,7 +309,7 @@ function drawUI_002() {
             </div>
         </div>
     </div>`;
-    listenTime(getById('dinglj-date'), getById('dinglj-time'));
+    listenTime(getById('dinglj-date'), getById('dinglj-week'), getById('dinglj-time'));
     rmf(getById('footer'));
 }
 

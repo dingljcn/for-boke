@@ -316,9 +316,10 @@ function getWeek(prefix = '星期') {
     }
 }
 
-function listenTime(date = {}, time = {}) {
+function listenTime(date = {}, week = {}, time = {}) {
     setInterval(() => {
         date.innerText = getDate();
+        week.innerText = getWeek();
         time.innerText = getTime();
     }, 1);
 }
