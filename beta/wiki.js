@@ -465,6 +465,19 @@ function genTables_002(pageName, page, styleModify) {
 
                 }
             }
+            if (context_002.config.order && context_002.config.order.rows) {
+                for (let order of context_002.config.order.rows) {
+                    table.sort((ticket1, ticket2) => {
+                        let order1 = order(pageName, page, tableKey, table, null, null, {
+                            idx: indexOfPropInList(table, context_002.config.columns.id.en, ticket1.id)
+                        });
+                        let order2 = order(pageName, page, tableKey, table, null, null, {
+                            idx: indexOfPropInList(table, context_002.config.columns.id.en, ticket2.id)
+                        });
+                        return order1 - order2;
+                    })
+                }
+            }
             styleModify.push(func);
             // 拼接每个表格的数据
             return `<div class="dinglj-table-view" style="width: calc(100% / ${ Object.keys(tabs).length })">
