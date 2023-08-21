@@ -298,7 +298,7 @@ function drawUI_002() {
         <div id="dinglj-ticket-area-head">
             <div onclick="showTicketPages_002()">变更清单</div>
             <div onclick="showTicketPages_002()" style="flex: 1"></div>
-            <div><input type="checkbox" id="auto-expand" ${ context_002.presist.isAutoExpand ? 'checked="true"' : '' }/>自动展开</div>
+            <div><input onclick="modifyAutoExpand()" type="checkbox" id="auto-expand" ${ context_002.presist.isAutoExpand ? 'checked="true"' : '' }/>自动展开</div>
         </div>
         <div id="dinglj-ticket-area-container">
             <div id="dinglj-global-left">
@@ -562,4 +562,9 @@ function readCache_002() {
 
 function saveCache_002() {
     localStorage.setItem('dinglj-script-002', JSON.stringify(context_002.presist));
+}
+
+function modifyAutoExpand() {
+    context_002.presist.isAutoExpand = !context_002.presist.isAutoExpand;
+    saveCache_002();
 }
