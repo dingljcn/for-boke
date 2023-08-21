@@ -304,7 +304,7 @@ function rmf(element) {
 }
 
 function getWeek(prefix = '星期') {
-    let flag = (new Date()).getDate();
+    let flag = (new Date()).getDay();
     switch(flag) {
         case 0: return `${ prefix }日`;
         case 1: return `${ prefix }一`;
