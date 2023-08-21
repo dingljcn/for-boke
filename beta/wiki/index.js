@@ -365,37 +365,6 @@ function showTicketPages_002() {
     }
 }
 
-function getPageNames() {
-    let originNames = Object.keys(context_002.list);
-    let displayNames = [];
-    for (let name of originNames) {
-        let flag = true;
-        for (let regex of context_002.config.page.ignore) {
-            if (regex.test(name)) {
-                flag = false;
-                break;
-            }
-        }
-        if (flag) {
-            displayNames.push(name);
-        }
-    }
-    displayNames.sort((name1, name2) => {
-        let idx1 = context_002.config.page.order.indexOf(name1);
-        idx1 = idx1 == -1 ? 999999 : idx1;
-        let idx2 = context_002.config.page.order.indexOf(name2);
-        idx2 = idx2 == -1 ? 999999 : idx2;
-        if (idx1 == idx2) {
-            return name1 < name2 ? -1 : 1;
-        }
-        return idx1 - idx2;
-    });
-    return displayNames;
-}
-
-function getTableNames(pageName) {
-}
-
 function modifyAutoExpand() {
     context_002.presist.isAutoExpand = !context_002.presist.isAutoExpand;
     saveCache_002();
