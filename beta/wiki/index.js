@@ -432,7 +432,7 @@ function readSubmitRecords_002(start, step = 100) {
             context_002.presist.submitList = context_002.presist.submitList || [];
             Object.values(result).map(obj => obj.list).forEach(list => {
                 for (let element of list) {
-                    if (findByPropInList(list, 'revision', element.revision) == -1) {
+                    if (indexOfPropInList(list, 'revision', element.revision) == -1) {
                         context_002.presist.submitList.push(element);
                     }
                 }
@@ -440,7 +440,7 @@ function readSubmitRecords_002(start, step = 100) {
             console.log(context_002.presist);
             saveCache_002();
         }
-    }, 1);
+    }, 1000);
 }
 
 function resolveResponse_002(response = '', list) {
