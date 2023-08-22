@@ -253,6 +253,17 @@ function showPages_002() {
     for (let func of styleModify) {
         func();
     }
+    // id 能够点击, 打开变更
+    for (let element of getByClass('table-line cell-id')) {
+        let number = element.innerText.substring(1);
+        if (!isNaN(number)) {
+            element.style.cursor = 'pointer';
+            element.style.color = context_002.config.css_const.themeColor;
+            element.addEventListener('click', () => {
+                window.open(`${ context_002.config.ticketURL }${ number }`);
+            })
+        }
+    }
 }
 
 function genTables_002(pageName, page, styleModify) {
