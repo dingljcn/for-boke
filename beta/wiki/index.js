@@ -257,51 +257,70 @@ function showPages_002() {
 
 function genTables_002(pageName, page, styleModify) {
     let tabs = page.data;
-    return `<div class="dinglj-tables-view-box" style="width: ${ Object.keys(tabs).length }00%">${
-        Object.keys(tabs).map(tableKey => {
+    let tableNames = getTableNames(pageName);
+    return `<div class="dinglj-tables-view-box" style="width: ${ tableNames.length }00%">${
+        tableNames.map(tableKey => {
             let table = tabs[tableKey];
-            let display = calcFieldsToDisplay(pageName, page, tableKey, table);
-            let func = () => {
-                for (let column of display) {
-                    if (column.en == context_002.config.columns.summary.en) {
+            let displayColumns = calcFieldsToDisplay(pageName, page, tableKey, table);
+            // 该函数用于调整最佳列宽, 在所有数据渲染完成之后才会被触发
+            styleModify.push(() => {
+                for (let column of displayColumns) { // 遍历所有列
+                    if (column.en == context_002.config.columns.summary.en) { // 除了概述列
                         continue;
                     }
-                    let cells = getByClass(`cell-in-page-${ pageName } cell-in-tab-${ tableKey } cell-${ column.en }`);
+                    let cells = getByClass(`cell-in-page-${ pageName } cell-in-tab-${ tableKey } cell-${ column.en }`); // 去除该页面, 该 table, 该列的所有单元格数据
                     let max = -1;
-                    for (let cell of cells) {
+                    for (let cell of cells) { // 遍历该列每个单元格, 取最大的宽度
                         max = Math.max(max, cell.offsetWidth);
                     }
-                    for (let cell of cells) {
+                    for (let cell of cells) { // 给该列设置统一的宽度
                         cell.style.width = `${ max }px`;
                     }
 
                 }
-            }
-            if (context_002.config.order && context_002.config.order.rows) {
-                for (let order of context_002.config.order.rows) {
-                    table.sort((ticket1, ticket2) => {
-                        let order1 = order.resolve(pageName, page, tableKey, table, null, null, {
-                            idx: indexOfPropInList(table, context_002.config.columns.id.en, ticket1.id)
-                        });
-                        let order2 = order.resolve(pageName, page, tableKey, table, null, null, {
-                            idx: indexOfPropInList(table, context_002.config.columns.id.en, ticket2.id)
-                        });
-                        return order1 - order2;
-                    })
+            });
+            // 行过滤
+            let displayLines = [];
+            if (context_002.config.filters && context_002.config.filters.row) {
+                for (let idx = 0; idx < table.length; idx++) { // 遍历每一行
+                    let ignore = false;
+                    for (let stratege of context_002.config.filters.row) { // 遍历每个过滤策略
+                        let result = stratege.rowFilter(pageName, page, tableKey, table, idx);
+                        if (result) { // 任意策略是隐藏, 就退出
+                            ignore = true;
+                            break;
+                        }
+                    }
+                    if (!ignore) { // 不隐藏才加入显示 list
+                        displayLines.push(table[idx]);
+                    }
                 }
+            } else {
+                displayLines = table;
             }
-            styleModify.push(func);
+            // 行排序
+            if (context_002.config.order && context_002.config.order.table) {
+                displayLines.sort((ticket1, ticket2) => {
+                    for (let order of context_002.config.order.table) { // 遍历所有排序策略
+                        let result = order.resolve(pageName, page, tableKey, displayLines, ticket1, ticket2);
+                        if (result != 0) { // 不为 0, 就是比较出了大小, 否则就继续比较
+                            return result;
+                        }
+                    }
+                    return parseInt(ticket2.id.substring(1)) - parseInt(ticket1.id.substring(1)); // 默认按照变更号倒序排列
+                })
+            }
             // 拼接每个表格的数据
-            return `<div class="dinglj-table-view" style="width: calc(100% / ${ Object.keys(tabs).length })">
+            return `<div class="dinglj-table-view" style="width: calc(100% / ${ tableNames.length })">
                 <div class="dinglj-table-head">${ // 拼接表头字段
-                    display.map(column => `<div class="dinglj-cell table-head cell-in-page-${ pageName } cell-in-tab-${ tableKey } cell-${ column.en }">${ column.zh }</div>`).join('')
+                    displayColumns.map(column => `<div class="dinglj-cell table-head cell-in-page-${ pageName } cell-in-tab-${ tableKey } cell-${ column.en }">${ column.zh }</div>`).join('')
                 }</div>
                 <div class="dinglj-table-line-box">${
                     // 拼接每一行数据
-                    table.map(line => {
+                    displayLines.map(line => {
                         return `<div class="dinglj-table-line">${
                             // 拼接每一行的每一列
-                            display.map(column => `<div class="dinglj-cell table-line cell-in-page-${ pageName } cell-in-tab-${ tableKey } cell-${ column.en }">${ line[column.en] }</div>`).join('')
+                            displayColumns.map(column => `<div class="dinglj-cell table-line cell-in-page-${ pageName } cell-in-tab-${ tableKey } cell-${ column.en }">${ line[column.en] }</div>`).join('')
                         }</div>`
                     }).join('')
                 }</div>
@@ -314,15 +333,9 @@ function calcFieldsToDisplay(pageName, page, tableKey, table) {
     let displayColumns = [];
     for (let column of Object.values(context_002.config.columns)) {
         let ignore = false;
-        for (let stratege of context_002.filters.col) {
-            ignore = stratege.colFilter(pageName, page, tableKey, table, column.en, null);
-            if (ignore) {
-                break;
-            }
-        }
-        if (!ignore && context_002.config.filters && context_002.config.filters.col) {
+        if (context_002.config.filters && context_002.config.filters.col) {
             for (let stratege of context_002.config.filters.col) {
-                ignore = stratege.colFilter(pageName, page, tableKey, table, column.en, null);
+                ignore = stratege.colFilter(pageName, page, tableKey, table, column.en);
                 if (ignore) {
                     break;
                 }

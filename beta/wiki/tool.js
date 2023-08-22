@@ -1,31 +1,71 @@
 class Filter {
-    regex; expectValue; callback;
-    constructor(page_regex, table_regex, column_regex, expectValue, callback) {
+    regex; column; expectValue; callback;
+    constructor(page_regex, table_regex, column, expectValue, callback) {
         this.regex = {
             page: page_regex,
             table: table_regex,
-            column: column_regex,
         };
+        this.column = column;
         this.expectValue = Array.isArray(expectValue) ? expectValue : [ expectValue ];
         this.callback = callback;
     }
-    colFilter(pageName, pageData, tableName, tableData, cellName, cellData) {
-        if (this.regex.page.test(pageName) && this.regex.table.test(tableName) && this.regex.column.test(cellName)) {
-            if (this.callback) {
-                return this.callback(pageName, pageData, tableName, tableData, cellName, cellData);
+    static forColumn(page_regex, table_regex, column, expectValue, callback) {
+        return new Filter(page_regex, table_regex, column, expectValue, callback);
+    }
+    static forRow(page_regex, table_regex, expectValue, callback) {
+        return new Filter(page_regex, table_regex, '', expectValue, callback);
+    }
+    colFilter(pageName, pageData, tableName, tableData, cellName) {
+        if (this.regex.page.test(pageName) && this.regex.table.test(tableName)) {
+            if (cellName == this.column) {
+                if (this.callback) {
+                    return this.callback(pageName, pageData, tableName, tableData, cellName);
+                }
+                return true;
             }
-            return true;
+            return false;
         }
         return false;
     }
-    rowFilter(pageName, pageData, tableName, tableData, cellName, cellData) {
-        if (this.regex.page.test(pageName) && this.regex.table.test(tableName) && this.regex.column.test(cellName)) {
+    rowFilter(pageName, pageData, tableName, tableData, idx) {
+        if (this.regex.page.test(pageName) && this.regex.table.test(tableName)) {
+            if (!this.column) {
+                alert('行过滤器中的 column 字段不能为空');
+            }
+            let cellData = tableData[idx][this.column];
             if (this.callback) {
-                return this.callback(pageName, pageData, tableName, tableData, cellName, cellData);
+                return this.callback(pageName, pageData, tableName, tableData, idx, this.column, cellData);
             }
             return this.expectValue.includes(cellData);
         }
         return false;
+    }
+}
+
+class Order {
+    regex; column; order; callback;
+    constructor(page_regex, table_regex, column, order, callback) {
+        this.regex = {
+            page: page_regex,
+            table: table_regex,
+        };
+        this.column = column;
+        this.order = Array.isArray(order) ? order : [ order ];
+        this.callback = callback;
+    }
+    resolve(pageName, pageData, tableName, tableData, ticket1, ticket2) {
+        if (this.regex.page.test(pageName) && this.regex.table.test(tableName)) {
+            if (this.callback) {
+                let n1 = this.callback(pageName, pageData, tableName, tableData, ticket1);
+                let n2 = this.callback(pageName, pageData, tableName, tableData, ticket1);
+                return n1 - n2;
+            } else {
+                let n1 = this.order.indexOf(ticket1[this.column]);
+                let n2 = this.order.indexOf(ticket2[this.column]);
+                return n1 - n2;
+            }
+        }
+        return 0;
     }
 }
 
@@ -135,23 +175,6 @@ const context_002 = {
         todo: [],
         finish: [],
         import: [],
-    },
-    filters: {
-        col: [
-            new Filter(/.*/, /.+/, /.+/, '', (pName, page, tName, table, cName, cell) => { // 如果所有行都为空, 则隐藏该列
-                let isBlank = true;
-                for (let line of table) {
-                    if (line[cName] != '') {
-                        isBlank = false;
-                        break;
-                    }
-                }
-                return isBlank;
-            }),
-            new Filter(/.*/, /.+/, /.+/, '', (pName, page, tName, table, cName, cell) => { // 如果此列与表格名称相同, 则隐藏该列
-                return context_002.config.columns[cName].zh == tName;
-            }),
-        ]
     }
 }
 
