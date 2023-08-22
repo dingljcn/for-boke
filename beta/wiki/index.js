@@ -33,6 +33,7 @@ function run_002() {
             showPages_002();
         }
     }, 200);
+    readFirstRevision_002();
 }
 
 function readMyTickets_002() {
@@ -381,4 +382,89 @@ function showTicketPages_002() {
 function modifyAutoExpand() {
     context_002.presist.isAutoExpand = !context_002.presist.isAutoExpand;
     saveCache_002();
+}
+
+function readFirstRevision_002() {
+    $.get(context_002.config.urls.root).then(res => {
+        let revisions = [];
+        for (let line of res.split('\n')) {
+            line = line.trim();
+            if (context_002.config.regex.getRevision.test(line)) {
+                revisions.push(context_002.config.regex.getRevision.exec(line)[1]);
+            }
+        }
+        let start = Math.max(...revisions);
+        readSubmitRecords_002(start);
+    })
+}
+
+function readSubmitRecords_002(start, step = 100) {
+    if (!context_002.config.urls.baseURL) {
+        return;
+    }
+    let end = 131000;
+    if (context_002.presist.submitList) { // 存在本地缓存, 则读取到最后一个版本即可
+        end = Math.max(...context_002.presist.submitList.map(i => i.revision));
+    }
+    let round = Math.ceil((start - end) / step);
+    let result = {};
+    let fromRev = start;
+    for (let i = 0; i < round; i++) {
+        let data = {
+            success: false,
+            list: [],
+        };
+        result[fromRev] = data;
+        let url = `${ context_002.config.urls.baseURL }/log/${ context_002.config.urls.relativeURL }?rev=${ fromRev }`;
+        $.get(url).then(response => {
+            resolveResponse_002(response, data.list);
+            data.success = true;
+        });
+        fromRev -= step;
+    }
+    let timer = setInterval(() => {
+        let flags = Object.values(result).map(obj => obj.success ? 1 : 0);
+        let sum = flags.reduce((prev, curr, idx, flags) => {
+            return prev + curr;
+        });
+        if (Object.keys(result).length == sum) {
+            clearInterval(timer);
+            context_002.presist.submitList = [];
+            Object.values(result).map(obj => obj.list).forEach(list => {
+                context_002.presist.submitList.push(...list);
+            });
+            console.log(context_002.presist);
+            saveCache_002();
+        }
+    }, 1);
+}
+
+function resolveResponse_002(response = '', list) {
+    let nameRegex = new RegExp(`.*${ context_002.config.whoami.zh }.*`);
+    let originHTML = '';
+    let merge = false;
+    for (let line of response.split('\n')) {
+        if (/<tr class="(odd)|(even)">/.test(line)) {
+            merge = true;
+            continue;
+        } else if (/<\/tr>/.test(line)) {
+            if (originHTML.trim()) {
+                if (nameRegex.test(originHTML)) {
+                    let element = {
+                        revision: / title="浏览版本 (\d+)">/.exec(originHTML)[1],
+                        author: /<td class="author"><span class="trac-author">(\S+)<\/span><\/td>/.exec(originHTML)[1],
+                        date: />(\d{4}年\d{1,2}月\d{1,2}日) ..\d{1,2}:\d{1,2}:\d{1,2}<\/a>/.exec(originHTML)[1],
+                        time: />\d{4}年\d{1,2}月\d{1,2}日 ..(\d{1,2}:\d{1,2}:\d{1,2})<\/a>/.exec(originHTML)[1]
+                    };
+                    list.push(element);
+                }
+                originHTML = '';
+            }
+            merge = false;
+            continue;
+        }
+        if (merge) {
+            originHTML += line + '\n';
+        }
+    }
 }
