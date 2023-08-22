@@ -11,7 +11,7 @@ class Filter {
         this.callback = callback;
     }
     static forColumn(page_regex, table_regex, column_regex, callback) {
-        return new Filter(page_regex, table_regex, column_regex, '', expectValue, callback);
+        return new Filter(page_regex, table_regex, column_regex, '', [], callback);
     }
     static forRow(page_regex, table_regex, column, expectValue, callback) {
         return new Filter(page_regex, table_regex, /.+/, column, expectValue, callback);
