@@ -260,7 +260,7 @@ function showPages_002() {
             element.style.cursor = 'pointer';
             element.style.color = context_002.config.css_const.themeColor;
             element.addEventListener('click', () => {
-                window.open(`${ context_002.config.ticketURL }${ number }`);
+                window.open(`${ context_002.config.ticketURL }/${ number }`);
             })
         }
     }
