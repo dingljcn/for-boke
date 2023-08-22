@@ -403,13 +403,13 @@ function readSubmitRecords_002(start, step = 100) {
         return;
     }
     let end = 131000;
-    if (context_002.presist.submitList) { // 存在本地缓存, 则读取到最后一个版本即可
+    if (context_002.presist.submitList && context_002.presist.submitList.length > 0) { // 存在本地缓存, 则读取到最后一个版本即可
         end = Math.max(...context_002.presist.submitList.map(i => i.revision));
     }
     let round = Math.ceil((start - end) / step);
     let result = {};
     let fromRev = start;
-    for (let i = 0; i < round; i++) {
+    for (let i = 0; i < round && fromRev > 0; i++) {
         let data = {
             success: false,
             list: [],
