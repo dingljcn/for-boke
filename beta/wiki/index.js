@@ -429,9 +429,13 @@ function readSubmitRecords_002(start, step = 100) {
         });
         if (Object.keys(result).length == sum) {
             clearInterval(timer);
-            context_002.presist.submitList = [];
+            context_002.presist.submitList = context_002.presist.submitList || [];
             Object.values(result).map(obj => obj.list).forEach(list => {
-                context_002.presist.submitList.push(...list);
+                for (let element of list) {
+                    if (findByPropInList(list, 'revision', element.revision) == -1) {
+                        context_002.presist.submitList.push(element);
+                    }
+                }
             });
             console.log(context_002.presist);
             saveCache_002();
@@ -456,9 +460,7 @@ function resolveResponse_002(response = '', list) {
                         date: />(\d{4}年\d{1,2}月\d{1,2}日) ..\d{1,2}:\d{1,2}:\d{1,2}<\/a>/.exec(originHTML)[1],
                         time: />\d{4}年\d{1,2}月\d{1,2}日 ..(\d{1,2}:\d{1,2}:\d{1,2})<\/a>/.exec(originHTML)[1]
                     };
-                    if (indexOfPropInList(list, 'revision', element.revision) == -1) {
-                        list.push(element);
-                    }
+                    list.push(element);
                 }
                 originHTML = '';
             }
