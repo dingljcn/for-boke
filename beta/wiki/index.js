@@ -299,9 +299,9 @@ function genTables_002(pageName, page, styleModify) {
                 displayLines = table;
             }
             // 行排序
-            if (context_002.config.order && context_002.config.order.table) {
+            if (context_002.config.line && context_002.config.line.order) {
                 displayLines.sort((ticket1, ticket2) => {
-                    for (let order of context_002.config.order.table) { // 遍历所有排序策略
+                    for (let order of context_002.config.line.order) { // 遍历所有排序策略
                         let result = order.resolve(pageName, page, tableKey, displayLines, ticket1, ticket2);
                         if (result != 0) { // 不为 0, 就是比较出了大小, 否则就继续比较
                             return result;
