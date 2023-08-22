@@ -1,29 +1,27 @@
 class Filter {
     regex; column; expectValue; callback;
-    constructor(page_regex, table_regex, column, expectValue, callback) {
+    constructor(page_regex, table_regex, column_regex, column, expectValue, callback) {
         this.regex = {
             page: page_regex,
             table: table_regex,
+            column: column_regex,
         };
         this.column = column;
         this.expectValue = Array.isArray(expectValue) ? expectValue : [ expectValue ];
         this.callback = callback;
     }
-    static forColumn(page_regex, table_regex, column, expectValue, callback) {
-        return new Filter(page_regex, table_regex, column, expectValue, callback);
+    static forColumn(page_regex, table_regex, column_regex, callback) {
+        return new Filter(page_regex, table_regex, column_regex, '', expectValue, callback);
     }
-    static forRow(page_regex, table_regex, expectValue, callback) {
-        return new Filter(page_regex, table_regex, '', expectValue, callback);
+    static forRow(page_regex, table_regex, column, expectValue, callback) {
+        return new Filter(page_regex, table_regex, /.+/, column, expectValue, callback);
     }
     colFilter(pageName, pageData, tableName, tableData, cellName) {
-        if (this.regex.page.test(pageName) && this.regex.table.test(tableName)) {
-            if (cellName == this.column) {
-                if (this.callback) {
-                    return this.callback(pageName, pageData, tableName, tableData, cellName);
-                }
-                return true;
+        if (this.regex.page.test(pageName) && this.regex.table.test(tableName) && this.regex.column.test(cellName)) {
+            if (this.callback) {
+                return this.callback(pageName, pageData, tableName, tableData, cellName);
             }
-            return false;
+            return true;
         }
         return false;
     }
