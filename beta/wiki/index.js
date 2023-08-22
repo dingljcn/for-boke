@@ -456,7 +456,9 @@ function resolveResponse_002(response = '', list) {
                         date: />(\d{4}年\d{1,2}月\d{1,2}日) ..\d{1,2}:\d{1,2}:\d{1,2}<\/a>/.exec(originHTML)[1],
                         time: />\d{4}年\d{1,2}月\d{1,2}日 ..(\d{1,2}:\d{1,2}:\d{1,2})<\/a>/.exec(originHTML)[1]
                     };
-                    list.push(element);
+                    if (indexOfPropInList(list, 'revision', element.revision) == -1) {
+                        list.push(element);
+                    }
                 }
                 originHTML = '';
             }
