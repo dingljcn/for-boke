@@ -594,6 +594,10 @@ function afterFill() {
 }
 
 async function onClickSomeDay_002(htmlElement, day4Event, date) {
+    getById('today-commit-container').innerHTML = `<div style="text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <img src="https://dingljcn.github.io/for-boke/src/loading.gif" style="max-width: 200px;">
+        <div style="position: relative; top: -17px;">读取中</div>
+    </div>`;
     let todayRevisions = getCommitStatistic(htmlElement, day4Event, date);
     let html = '';
     for (let element of todayRevisions) {
