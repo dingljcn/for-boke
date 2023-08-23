@@ -550,9 +550,10 @@ function getCommitStatistic(element, day4Event, date) {
     } else {
         element.style.background = context_002.config.css_const.minimap.level5;
     }
-    element.classList.add(`year-of-${ day4Event.getFullYear() + 1 }`)
+    element.classList.add(`year-of-${ day4Event.getFullYear() }`)
     element.classList.add(`month-of-${ day4Event.getMonth() + 1 }`)
-    element.classList.add(`day-of-${ day4Event.getDate() + 1 }`)
+    element.classList.add(`day-of-${ day4Event.getDate() }`)
+    element.title = `${ day4Event.getFullYear() }-${ day4Event.getMonth() + 1 }-${ day4Event.getDate() } 提交了 ${ context_002.minimap[date].length } 次`;
     return context_002.minimap[date];
 }
 
