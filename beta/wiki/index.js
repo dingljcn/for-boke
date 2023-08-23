@@ -33,7 +33,7 @@ function run_002() {
             showPages_002();
         }
     }, 200);
-    readFirstRevision_002();
+    readRevisions_002();
 }
 
 function readMyTickets_002() {
@@ -387,7 +387,10 @@ function modifyAutoExpand() {
     saveCache_002();
 }
 
-function readFirstRevision_002() {
+function readRevisions_002() {
+    if (!context_002.config.urls) {
+        return;
+    }
     $.get(context_002.config.urls.root).then(res => {
         let revisions = [];
         for (let line of res.split('\n')) {
@@ -397,18 +400,29 @@ function readFirstRevision_002() {
             }
         }
         let start = Math.max(...revisions);
-        readSubmitRecords_002(start);
+        if (context_002.presist.submitList && 
+            context_002.presist.submitList[context_002.config.whoami.en] && 
+            context_002.presist.submitList[context_002.config.whoami.en].length > 0) {
+                readSubmitRecords_002(start); // 本地缓存存在, 直接读取
+        } else {
+            // 本地缓存不存在, 先构建本地缓存, 再读取
+            context_002.presist.submitList[context_002.config.whoami.en] = [];
+            $.get(context_002.config.urls.svnlog).then(res => {
+                let json = /#this-is-the-svn-log-start-position#(.*)#this-is-the-svn-log-end-position#/.exec(res)[1];
+                let history = JSON.parse(json);
+                for (let element of history) {
+                    if (element.author == context_002.config.whoami.zh) {
+                        context_002.presist.submitList[context_002.config.whoami.en].push(element);
+                    }
+                }
+                readSubmitRecords_002(start);
+            })
+        }
     })
 }
 
 function readSubmitRecords_002(start, step = 100) {
-    if (!context_002.config.urls.baseURL) {
-        return;
-    }
-    let end = 131000;
-    if (context_002.presist.submitList && context_002.presist.submitList.length > 0) { // 存在本地缓存, 则读取到最后一个版本即可
-        end = Math.max(...context_002.presist.submitList.map(i => i.revision));
-    }
+    let end = Math.max(...context_002.presist.submitList[context_002.config.whoami.en].map(i => i.revision));
     let round = Math.ceil((start - end) / step);
     let result = {};
     let fromRev = start;
@@ -432,11 +446,11 @@ function readSubmitRecords_002(start, step = 100) {
         });
         if (Object.keys(result).length == sum) {
             clearInterval(timer);
-            context_002.presist.submitList = context_002.presist.submitList || [];
+            context_002.presist.submitList[context_002.config.whoami.en] = context_002.presist.submitList[context_002.config.whoami.en] || [];
             Object.values(result).map(obj => obj.list).forEach(list => {
                 for (let element of list) {
-                    if (indexOfPropInList(context_002.presist.submitList, 'revision', element.revision) == -1) {
-                        context_002.presist.submitList.push(element);
+                    if (indexOfPropInList(context_002.presist.submitList[context_002.config.whoami.en], 'revision', element.revision) == -1) {
+                        context_002.presist.submitList[context_002.config.whoami.en].push(element);
                     }
                 }
             });
@@ -521,7 +535,7 @@ function getCommitStatistic(element, day4Event, date) {
     if (context_002.minimap[date]) {
         return context_002.minimap[date];
     }
-    context_002.minimap[date] = findByPropInList(context_002.presist.submitList, 'date', date);
+    context_002.minimap[date] = findByPropInList(context_002.presist.submitList[context_002.config.whoami.en], 'date', date);
     if (context_002.minimap[date].length == 0) {
         element.style.background = context_002.config.css_const.minimap.level1;
     } else if (context_002.minimap[date].length < 5) {
