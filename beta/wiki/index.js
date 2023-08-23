@@ -94,6 +94,11 @@ function drawUI_002() {
                         return `<div class="dinglj-href-item" onclick="window.open('${ context_002.config.hrefs[key] }')">${ key }</div>`
                     }).join('')
                 }</div>
+                <div style="width: 100%; height: 200px;"></div>
+                <div id="dinglj-today-submit-statistic"></div>
+                <div id="dinglj-week-submit-statistic"></div>
+                <div id="dinglj-month-submit-statistic"></div>
+                <div id="dinglj-year-submit-statistic"></div>
             </div>
             <div id="home-view-right">
             </div>
@@ -462,6 +467,7 @@ function readSubmitRecords_002(start, step = 100) {
             drawMinimap();
             fillMinimap().click();
             afterFill();
+            doStatistic();
         }
     }, 1000);
 }
@@ -523,10 +529,22 @@ function fillMinimap(day = new Date(), curWeek = 0) {
     let date = `${ day4Event.getFullYear() }年${ day4Event.getMonth() + 1 }月${ day4Event.getDate() }日`;
     let element = getById(`day-${ curWeek }-${ weekday }`);
     element.style.display = 'block';
-    getCommitStatistic(element, day4Event, date);
+    let revisions = getCommitStatistic(element, day4Event, date);
     element.addEventListener('click', () => {
         onClickSomeDay_002(element, day4Event, date);
     });
+    if (context_002.statistic.today.equalDate(day)) {
+        context_002.statistic.todayList.push(...revisions);
+    }
+    if (context_002.statistic.today.equalWeek(day)) {
+        context_002.statistic.weekList.push(...revisions);
+    }
+    if (context_002.statistic.today.equalMonth(day)) {
+        context_002.statistic.monthList.push(...revisions);
+    }
+    if (context_002.statistic.today.equalYear(day)) {
+        context_002.statistic.yearList.push(...revisions);
+    }
     if (weekday == 0) {
         curWeek++;
     }
@@ -630,4 +648,11 @@ async function onClickSomeDay_002(htmlElement, day4Event, date) {
     }
     saveCache_002();
     getById('today-commit-container').innerHTML = html;
+}
+
+function doStatistic() {
+    getById("dinglj-today-submit-statistic").innerHTML = `今日提交次数: <span class="submit-count">${ context_002.statistic.todayList.length }</span>`;
+    getById("dinglj-week-submit-statistic").innerHTML = `本周提交次数: <span class="submit-count">${ context_002.statistic.weekList.length }</span>`;
+    getById("dinglj-month-submit-statistic").innerHTML = `本月提交次数: <span class="submit-count">${ context_002.statistic.monthList.length }</span>`;
+    getById("dinglj-year-submit-statistic").innerHTML = `年度提交次数: <span class="submit-count">${ context_002.statistic.yearList.length }</span>`;
 }

@@ -175,6 +175,13 @@ const context_002 = {
         import: [],
     },
     minimap: {},
+    statistic: {
+        today: new Date(),
+        todayList: [],
+        weekList: [],
+        monthList: [],
+        yearList: [],
+    }
 }
 
 function readCache_002() {
