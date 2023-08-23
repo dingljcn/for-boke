@@ -174,7 +174,8 @@ const context_002 = {
         finish: [],
         import: [],
     },
-    minimap: {}
+    minimap: {},
+    submitList: {}
 }
 
 function readCache_002() {
