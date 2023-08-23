@@ -460,7 +460,7 @@ function readSubmitRecords_002(start, step = 100) {
             saveCache_002();
             // 读取结束, 显示 minimap
             drawMinimap();
-            fillMinimap();
+            fillMinimap().click();
             afterFill();
         }
     }, 1000);
@@ -532,6 +532,7 @@ function fillMinimap(day = new Date(), curWeek = 0) {
     }
     day.setDate(day.getDate() - 1);
     fillMinimap(day, curWeek);
+    return element;
 }
 
 function getCommitStatistic(element, day4Event, date) {
@@ -553,7 +554,7 @@ function getCommitStatistic(element, day4Event, date) {
     element.classList.add(`year-of-${ day4Event.getFullYear() }`)
     element.classList.add(`month-of-${ day4Event.getMonth() + 1 }`)
     element.classList.add(`day-of-${ day4Event.getDate() }`)
-    element.title = `${ day4Event.getFullYear() }-${ day4Event.getMonth() + 1 }-${ day4Event.getDate() } (${ getWeek(day4Event.getDay()) }) 提交了 ${ context_002.minimap[date].length } 次`;
+    element.title = `${ day4Event.getFullYear() }-${ day4Event.getMonth() + 1 }-${ day4Event.getDate() } (${ getWeek(day4Event) }) 提交了 ${ context_002.minimap[date].length } 次`;
     return context_002.minimap[date];
 }
 
@@ -599,7 +600,7 @@ async function onClickSomeDay_002(htmlElement, day4Event, date) {
         <div style="position: relative; top: -17px;">读取中</div>
     </div>`;
     let todayRevisions = getCommitStatistic(htmlElement, day4Event, date);
-    if (todayRevisions.length) {
+    if (todayRevisions.length == 0) {
         getById('today-commit-container').innerHTML = `<div style="text-align: center; color: grey; ">${ date }未找到提交记录</div>`;
         return;
     }
