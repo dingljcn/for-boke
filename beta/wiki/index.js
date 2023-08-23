@@ -479,16 +479,14 @@ function resolveResponse_002(response = '', list) {
 const maxWeek = 53;
 
 function drawMinimap() {
-    let margin = 1;
-    let width = 15;
     let html = '';
     for (let i = 0; i <= maxWeek; i++) {
-        html = `<div id="week-${ i }" class="minimap-week">${ drawWeek(width, margin, i) }</div>${ html }`;
+        html = `<div id="week-${ i }" class="minimap-week">${ drawWeek(i) }</div>${ html }`;
     }
     getById('home-view-right').innerHTML = `<div id="minimap-container">${ html }</div>`;
 }
 
-function drawWeek(width, margin, weekNumber) {
+function drawWeek(weekNumber) {
     let html = `<div id="day-${ weekNumber }-${ 999 }" class="week-999 day-of-week"></div>`;
     for (let i = 0; i < 7; i++) {
         html += `<div id="day-${ weekNumber }-${ i }" class="week-${ i } day-of-week"></div>`;
