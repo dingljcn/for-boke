@@ -44,7 +44,7 @@ function readMyTickets_002() {
         let list = [];
         // 第一个 for 循环, 遍历返回的 response, 把每一行都提取出来
         for (let line of res.split('\n')) {
-            if (/^\s*<tr class="((odd)|(even)) prio[0-9]+">\s*$/.test(line)) { // 开始 tr
+            if (/^\s*<tr class="(.*(odd)|(even)).*prio[0-9]+.*">\s*$/.test(line)) { // 开始 tr
                 isTr = true;
             } else if (isTr) {
                 if (/^\s*<\/tr>\s*$/.test(line)) { // 结束 tr
