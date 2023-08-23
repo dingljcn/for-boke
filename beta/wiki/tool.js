@@ -181,6 +181,7 @@ function readCache_002() {
     let string = localStorage.getItem('dinglj-script-002');
     if (string) {
         context_002.presist = JSON.parse(string);
+        logln('缓存: ', context_002.presist);
     }
 }
 

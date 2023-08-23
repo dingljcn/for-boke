@@ -37,8 +37,8 @@ function run_002() {
 }
 
 function readMyTickets_002() {
+    logln('读取变更列表...');
     $.get(context_002.config.url).then(res => {
-        console.log(1);
         let isTr = false;
         let item = '';
         let list = [];
@@ -66,10 +66,12 @@ function readMyTickets_002() {
         }
         context_002.source = elementList;
         context_002.waitting = false;
+        logln('变更读取成功...');
     })
 }
 
 function drawUI_002() {
+    logln('绘制界面...');
     newElement('style', {
         parentNode: document.head
     }, {
@@ -128,6 +130,7 @@ function drawUI_002() {
             </div>
         </div>
     </div>`;
+    logln('绘制界面完成');
 }
 
 /** 导航元素点击事件 */
@@ -559,7 +562,6 @@ function afterFill() {
         if (i == 0) {
             continue;
         }
-        console.log(element.nextElementSibling.classList);
         for (let clazz of element.nextElementSibling.classList) {
             if (clazz.startsWith('month-of-')) {
                 let month = parseInt(clazz.replace('month-of-', ''));
