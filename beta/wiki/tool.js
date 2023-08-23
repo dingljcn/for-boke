@@ -173,7 +173,8 @@ const context_002 = {
         todo: [],
         finish: [],
         import: [],
-    }
+    },
+    minimap: {}
 }
 
 function readCache_002() {

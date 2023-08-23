@@ -437,8 +437,11 @@ function readSubmitRecords_002(start, step = 100) {
                     }
                 }
             });
-            console.log(context_002.presist);
             saveCache_002();
+            // 读取结束, 显示 minimap
+            drawMinimap();
+            fillMinimap();
+            afterFill();
         }
     }, 1000);
 }
@@ -469,6 +472,104 @@ function resolveResponse_002(response = '', list) {
         }
         if (merge) {
             originHTML += line + '\n';
+        }
+    }
+}
+
+const maxWeek = 53;
+
+function drawMinimap() {
+    let margin = 1;
+    let width = 15;
+    let html = '';
+    for (let i = 0; i <= maxWeek; i++) {
+        html = `<div id="week-${ i }" style="flex: 1; display: flex; flex-direction: column; margin: 0 1px">${ drawWeek(width, margin, i) }</div>${ html }`;
+    }
+    getById('home-view-right').innerHTML = `<div style="width: ${ (width + (margin * 2)) * 53 + 33 + (margin * 2) }px; display: flex">${ html }</div>`;
+}
+
+function drawWeek(width, margin, weekNumber) {
+    let html = `<div id="day-${ weekNumber }-${ 999 }" class="week-999" style="background: rgb(235,237,240); display: none; font-size: 12px; width: ${ width }px; height: ${ width }px; margin: ${ margin }px 0"></div>`;
+    for (let i = 0; i < 7; i++) {
+        html += `<div id="day-${ weekNumber }-${ i }" class="week-${ i }" style="background: rgb(235,237,240); display: none; font-size: 12px; width: ${ width }px; height: ${ width }px; margin: ${ margin }px 0"></div>`;
+    }
+    return html;
+}
+
+function fillMinimap(day = new Date(), curWeek = 0) {
+    if (curWeek >= maxWeek) {
+        return;
+    }
+    let weekday = day.getDay();
+    let day4Event = day.clone();
+    let date = `${ day4Event.getFullYear() }年${ day4Event.getMonth() + 1 }月${ day4Event.getDate() }日`;
+    let element = getById(`day-${ curWeek }-${ weekday }`);
+    element.style.display = 'block';
+    getCommitStatistic(element, day4Event, date);
+    element.addEventListener('click', () => {
+        alert(`${ date }提交了 ${ getCommitStatistic(element, day4Event, date).length } 次`);
+    });
+    if (weekday == 0) {
+        curWeek++;
+    }
+    day.setDate(day.getDate() - 1);
+    fillMinimap(day, curWeek);
+}
+
+function getCommitStatistic(element, day4Event, date) {
+    if (context_002.minimap[date]) {
+        return context_002.minimap[date];
+    }
+    context_002.minimap[date] = findByPropInList(context_002.presist.submitList, 'date', date);
+    let level = 200;
+    if (context_002.minimap[date].length == 0) {
+        element.style.background = `rgb(235,237,240)`;
+    } else {
+        if (context_002.minimap[date].length <= 20) {
+            level = Math.floor(context_002.minimap[date].length / 4) * 30;
+        }
+        element.style.background = `rgb(0,${ 250 - level },0)`;
+    }
+    element.classList.add(`month-of-${ day4Event.getMonth() + 1 }`)
+    element.classList.add(`year-of-${ day4Event.getFullYear() + 1 }`)
+    element.classList.add(`day-of-${ day4Event.getDate() + 1 }`)
+    return context_002.minimap[date];
+}
+
+function afterFill() {
+    let week = getById('week-53');
+    for (let i = 0; i <= 7; i++) {
+        let text = '';
+        switch(i) {
+            case 2: text = 'Mon'; break;
+            case 4: text = 'Wed'; break;
+            case 6: text = 'Fir'; break;
+        }
+        week.children[i].style.background = 'white';
+        week.children[i].style.display = 'block';
+        week.children[i].style.textAlign = 'right';
+        week.children[i].style.width = '33px';
+        week.children[i].style.fontSize = '12px';
+        week.children[i].innerText = text;
+    }
+    let prev = 0;
+    let list = getByClass('week-999');
+    for (let i = 0; i < list.length; i++) {
+        let element = list[i];
+        element.style.display = 'block';
+        element.style.background = 'white';
+        if (i == 0) {
+            continue;
+        }
+        console.log(element.nextElementSibling.classList);
+        for (let clazz of element.nextElementSibling.classList) {
+            if (clazz.startsWith('month-of-')) {
+                let month = parseInt(clazz.replace('month-of-', ''));
+                if (prev != month) {
+                    prev = month;
+                    element.innerText = month;
+                }
+            }
         }
     }
 }

@@ -333,3 +333,7 @@ function getTime() {
     let date = new Date();
     return `${ date.getHours() }:${ date.getMinutes() }:${ date.getSeconds() }, ${ date.getMilliseconds() }`
 }
+
+Date.prototype.clone = function() {
+    return new Date(this.valueOf());
+}
