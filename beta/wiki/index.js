@@ -616,5 +616,6 @@ async function onClickSomeDay_002(htmlElement, day4Event, date) {
             <div class="today-revision-column today-revision-info">${ element.info }</div>
         </div>`;
     }
+    saveCache_002();
     getById('today-commit-container').innerHTML = html;
 }
