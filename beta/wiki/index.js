@@ -521,17 +521,19 @@ function getCommitStatistic(element, day4Event, date) {
         return context_002.minimap[date];
     }
     context_002.minimap[date] = findByPropInList(context_002.presist.submitList, 'date', date);
-    let level = 200;
     if (context_002.minimap[date].length == 0) {
-        element.style.background = `rgb(235,237,240)`;
+        element.style.background = context_002.presist.config.minimap.level1;
+    } else if (context_002.minimap[date].length < 5) {
+        element.style.background = context_002.presist.config.minimap.level2;
+    } else if (context_002.minimap[date].length < 10) {
+        element.style.background = context_002.presist.config.minimap.level3;
+    } else if (context_002.minimap[date].length < 15) {
+        element.style.background = context_002.presist.config.minimap.level4;
     } else {
-        if (context_002.minimap[date].length <= 20) {
-            level = Math.floor(context_002.minimap[date].length / 4) * 30;
-        }
-        element.style.background = `rgb(0,${ 250 - level },0)`;
+        element.style.background = context_002.presist.config.minimap.level5;
     }
-    element.classList.add(`month-of-${ day4Event.getMonth() + 1 }`)
     element.classList.add(`year-of-${ day4Event.getFullYear() + 1 }`)
+    element.classList.add(`month-of-${ day4Event.getMonth() + 1 }`)
     element.classList.add(`day-of-${ day4Event.getDate() + 1 }`)
     return context_002.minimap[date];
 }
