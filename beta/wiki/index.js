@@ -545,7 +545,6 @@ function afterFill() {
             case 4: text = 'Wed'; break;
             case 6: text = 'Fir'; break;
         }
-        week.children[i].style.background = 'white';
         week.children[i].style.display = 'block';
         week.children[i].style.textAlign = 'right';
         week.children[i].style.width = '33px';
@@ -557,7 +556,6 @@ function afterFill() {
     for (let i = 0; i < list.length; i++) {
         let element = list[i];
         element.style.display = 'block';
-        element.style.background = 'white';
         if (i == 0) {
             continue;
         }
