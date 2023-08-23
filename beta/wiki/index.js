@@ -596,12 +596,14 @@ async function onClickSomeDay_002(htmlElement, day4Event, date) {
     let todayRevisions = getCommitStatistic(htmlElement, day4Event, date);
     let html = '';
     for (let element of todayRevisions) {
-        let url = `${ context_002.config.urls.baseURL }/log/${ context_002.config.urls.relativeURL }?rev=${ element.revision }&stop_rev=${ element.revision }`;
-        let rst = await $.get(url);
-        rst = rst.replaceAll(/\n\s+/g, '');
-        rst = /<td class="summary">(.*)<\/td>/.exec(rst)[1];
-        rst = rst.replaceAll(/<a class="[\S ]+?" href=".*?" title=".*?">(.*?)<\/a>/g, '$1');
-        element.info = rst;
+        if (!element.info) { // 没有 info 信息
+            let url = `${ context_002.config.urls.baseURL }/log/${ context_002.config.urls.relativeURL }?rev=${ element.revision }&stop_rev=${ element.revision }`;
+            let rst = await $.get(url);
+            rst = rst.replaceAll(/\n\s*/g, '');
+            rst = /<td class="summary">(.*)<\/td>/.exec(rst)[1];
+            rst = rst.replaceAll(/<a class="[\S ]+?" href=".*?" title=".*?">(.*?)<\/a>/g, '$1');
+            element.info = rst || '未找到信息';
+        }
         html += `<div class="today-revision-line">
             <div class="today-revision-coumn today-revision-number" id="today-revision-${ element.revision }">${ element.revision }</div>
             <div class="today-revision-coumn today-revision-author">${ element.author }</div>
