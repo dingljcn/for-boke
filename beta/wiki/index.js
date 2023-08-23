@@ -406,6 +406,9 @@ function readRevisions_002() {
                 readSubmitRecords_002(start); // 本地缓存存在, 直接读取
         } else {
             // 本地缓存不存在, 先构建本地缓存, 再读取
+            if (!context_002.presist.submitList) {
+                context_002.presist.submitList = {};
+            }
             context_002.presist.submitList[context_002.config.whoami.en] = [];
             $.get(context_002.config.urls.svnlog).then(res => {
                 let json = /#this-is-the-svn-log-start-position#(.*)#this-is-the-svn-log-end-position#/.exec(res)[1];
