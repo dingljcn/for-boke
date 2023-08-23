@@ -483,15 +483,15 @@ function drawMinimap() {
     let width = 15;
     let html = '';
     for (let i = 0; i <= maxWeek; i++) {
-        html = `<div id="week-${ i }" style="flex: 1; display: flex; flex-direction: column; margin: 0 1px">${ drawWeek(width, margin, i) }</div>${ html }`;
+        html = `<div id="week-${ i }" class="minimap-week">${ drawWeek(width, margin, i) }</div>${ html }`;
     }
-    getById('home-view-right').innerHTML = `<div style="width: ${ (width + (margin * 2)) * 53 + 33 + (margin * 2) }px; display: flex">${ html }</div>`;
+    getById('home-view-right').innerHTML = `<div id="minimap-container">${ html }</div>`;
 }
 
 function drawWeek(width, margin, weekNumber) {
-    let html = `<div id="day-${ weekNumber }-${ 999 }" class="week-999" style="background: rgb(235,237,240); display: none; font-size: 12px; width: ${ width }px; height: ${ width }px; margin: ${ margin }px 0"></div>`;
+    let html = `<div id="day-${ weekNumber }-${ 999 }" class="week-999 day-of-week"></div>`;
     for (let i = 0; i < 7; i++) {
-        html += `<div id="day-${ weekNumber }-${ i }" class="week-${ i }" style="background: rgb(235,237,240); display: none; font-size: 12px; width: ${ width }px; height: ${ width }px; margin: ${ margin }px 0"></div>`;
+        html += `<div id="day-${ weekNumber }-${ i }" class="week-${ i } day-of-week"></div>`;
     }
     return html;
 }
