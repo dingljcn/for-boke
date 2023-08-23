@@ -525,7 +525,7 @@ function fillMinimap(day = new Date(), curWeek = 0) {
     element.style.display = 'block';
     getCommitStatistic(element, day4Event, date);
     element.addEventListener('click', () => {
-        onClickSomeDay_002();
+        onClickSomeDay_002(element, day4Event, date);
     });
     if (weekday == 0) {
         curWeek++;
