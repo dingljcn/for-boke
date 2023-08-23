@@ -562,9 +562,10 @@ function afterFill() {
     for (let i = 0; i <= 7; i++) {
         let text = '';
         switch(i) {
-            case 2: text = 'Mon'; break;
-            case 4: text = 'Wed'; break;
-            case 6: text = 'Fir'; break;
+            case 1: text = 'Sun'; break;
+            case 3: text = 'Tue'; break;
+            case 5: text = 'Thu'; break;
+            case 7: text = 'Sat'; break;
         }
         week.children[i].style.display = 'block';
         week.children[i].style.textAlign = 'right';
@@ -605,11 +606,14 @@ async function onClickSomeDay_002(htmlElement, day4Event, date) {
             element.info = rst || '未找到信息';
         }
         html += `<div class="today-revision-line">
-            <div class="today-revision-coumn today-revision-number" id="today-revision-${ element.revision }">${ element.revision }</div>
-            <div class="today-revision-coumn today-revision-author">${ element.author }</div>
-            <div class="today-revision-coumn today-revision-info">${ element.info }</div>
-            <div class="today-revision-coumn today-revision-date">${ element.date }</div>
-            <div class="today-revision-coumn today-revision-time">${ element.time }</div>
+            <div class="today-revision-title">
+                <div class="today-revision-column today-revision-number" id="today-revision-${ element.revision }">${ element.revision }</div>
+                <div class="today-revision-column today-revision-author">${ element.author }</div>
+                <div style="flex: 1"></div>
+                <div class="today-revision-column today-revision-date">${ element.date }</div>
+                <div class="today-revision-column today-revision-time">${ element.time }</div>
+            </div>
+            <div class="today-revision-column today-revision-info">${ element.info }</div>
         </div>`;
     }
     getById('today-commit-container').innerHTML = html;
