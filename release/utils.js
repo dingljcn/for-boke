@@ -6,27 +6,6 @@ class LangItem {
     }
 }
 
-/** 新脚本 onload 函数格式 */
-function onload_xxx(callback) {
-    // 引入通用脚本
-    let utilScript = document.createElement('script');
-    utilScript.type = 'text/javascript';
-    utilScript.src = 'https://dingljcn.github.io/for-boke/beta/utils.js?' + Math.random();
-    // 成功
-    utilScript.onload = async function() {
-        localStorage.setItem(`dinglj-script-???`, utilScript.src); // 缓存本次成功 load 的 url
-        callback();
-    }
-    // 失败
-    utilScript.onerror = () => {
-        let lastURL = localStorage.getItem(`dinglj-script-???`);
-        console.error(`${ utilScript.src } 拉取失败, 拉取上次成功的地址 ${ lastURL }`);
-        utilScript.remove();
-        appendScript(callback);
-    }
-    document.head.appendChild(utilScript);
-}
-
 /** 判断当前网址是否启用脚本 */
 function isMatch(config) {
     if (config.matchList) { // 如果存在要匹配的网址, 则匹配, 匹配成功才进入
@@ -295,4 +274,65 @@ function logln() {
     for (let i = 0; i < arguments.length; i++) {
         console.log(arguments[i]);
     }
+}
+
+function rmf(element) {
+    if (element) {
+        element.remove();
+    }
+}
+
+function getWeek(date = new Date(), prefix = '星期') {
+    let flag = date.getDay();
+    switch(flag) {
+        case 0: return `${ prefix }日`;
+        case 1: return `${ prefix }一`;
+        case 2: return `${ prefix }二`;
+        case 3: return `${ prefix }三`;
+        case 4: return `${ prefix }四`;
+        case 5: return `${ prefix }五`;
+        case 6: return `${ prefix }六`;
+    }
+}
+
+function listenTime(date = {}, week = {}, time = {}) {
+    setInterval(() => {
+        date.innerText = getDate();
+        week.innerText = getWeek();
+        time.innerText = getTime();
+    }, 1);
+}
+
+function getDate() {
+    let date = new Date();
+    return `${ date.getFullYear() }-${ date.getMonth() + 1 }-${ date.getDate() }`;
+}
+
+function getTime() {
+    let date = new Date();
+    return `${ date.getHours() }:${ date.getMinutes() }:${ date.getSeconds() }, ${ date.getMilliseconds() }`
+}
+
+Date.prototype.clone = function() {
+    return new Date(this.valueOf());
+}
+
+Date.prototype.equalYear = function(that) {
+    return this.getFullYear() == that.getFullYear();
+}
+
+Date.prototype.equalMonth = function(that) {
+    return this.getFullYear() == that.getFullYear() && (this.getMonth() + 1) == (that.getMonth() + 1);
+}
+
+Date.prototype.equalWeek = function(that) {
+    let _this = this.clone();
+    let _that = that.clone();
+    _this.setDate(_this.getDate() - _this.getDay()); // 计算出周日
+    _that.setDate(_that.getDate() - _that.getDay()); // 计算出周日
+    return _this.equalDate(_that);
+}
+
+Date.prototype.equalDate = function(that) {
+    return this.getFullYear() == that.getFullYear() && (this.getMonth() + 1) == (that.getMonth() + 1) && this.getDate() == that.getDate();
 }
