@@ -599,6 +599,13 @@ async function onClickSomeDay_002(htmlElement, day4Event, date) {
         <div style="position: relative; top: -17px;">读取中</div>
     </div>`;
     let todayRevisions = getCommitStatistic(htmlElement, day4Event, date);
+    if (todayRevisions.length) {
+        getById('today-commit-container').innerHTML = `<div style="text-align: center; color: grey; ">${ date }未找到提交记录</div>`;
+        return;
+    }
+    todayRevisions.sort((n1, n2) => {
+        return n2.revision - n1.revision;
+    });
     let html = '';
     for (let element of todayRevisions) {
         if (!element.info) { // 没有 info 信息
