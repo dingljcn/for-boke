@@ -542,9 +542,7 @@ function fillMinimap(day = new Date(), curWeek = 0) {
     if (context_002.statistic.today.equalMonth(day)) {
         context_002.statistic.monthList.push(...revisions);
     }
-    if (context_002.statistic.today.equalYear(day)) {
-        context_002.statistic.yearList.push(...revisions);
-    }
+    context_002.statistic.yearList.push(...revisions);
     if (weekday == 0) {
         curWeek++;
     }
