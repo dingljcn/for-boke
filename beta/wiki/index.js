@@ -503,7 +503,7 @@ function drawMinimap() {
     for (let i = 0; i <= maxWeek; i++) {
         html = `<div id="week-${ i }" class="minimap-week">${ drawWeek(i) }</div>${ html }`;
     }
-    getById('home-view-right').innerHTML = `<div id="minimap-container">${ html }</div>`;
+    getById('home-view-right').innerHTML = `<div id="minimap-container">${ html }</div><div id="today-commit-container"></div>`;
 }
 
 function drawWeek(weekNumber) {
@@ -525,7 +525,7 @@ function fillMinimap(day = new Date(), curWeek = 0) {
     element.style.display = 'block';
     getCommitStatistic(element, day4Event, date);
     element.addEventListener('click', () => {
-        alert(`${ date }提交了 ${ getCommitStatistic(element, day4Event, date).length } 次`);
+        onClickSomeDay_002();
     });
     if (weekday == 0) {
         curWeek++;
@@ -589,4 +589,25 @@ function afterFill() {
             }
         }
     }
+}
+
+async function onClickSomeDay_002(htmlElement, day4Event, date) {
+    let todayRevisions = getCommitStatistic(htmlElement, day4Event, date);
+    let html = '';
+    for (let element of todayRevisions) {
+        let url = `${ context_002.config.urls.baseURL }/log/${ context_002.config.urls.relativeURL }?rev=${ element.revision }&stop_rev=${ element.revision }`;
+        let rst = await $.get(url);
+        rst = rst.replaceAll(/\n\s+/g, '');
+        rst = /<td class="summary">(.*)<\/td>/.exec(rst)[1];
+        rst = rst.replaceAll(/<a class="[\S ]+?" href=".*?" title=".*?">(.*?)<\/a>/g, '$1');
+        element.info = rst;
+        html += `<div class="today-revision-line">
+            <div class="today-revision-coumn today-revision-number" id="today-revision-${ element.revision }">${ element.revision }</div>
+            <div class="today-revision-coumn today-revision-author">${ element.author }</div>
+            <div class="today-revision-coumn today-revision-info">${ element.info }</div>
+            <div class="today-revision-coumn today-revision-date">${ element.date }</div>
+            <div class="today-revision-coumn today-revision-time">${ element.time }</div>
+        </div>`;
+    }
+    getById('today-commit-container').innerHTML = html;
 }
