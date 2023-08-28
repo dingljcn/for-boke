@@ -100,7 +100,7 @@ async function updateView_003(version, keyword, status) {
 async function readCaseList_003(version) {
     let caseList = [], tmp = [];
     if (version == -1) {
-        tmp = await getDefaultCases_003().testCaseTasks;
+        tmp = (await getDefaultCases_003()).testCaseTasks;
     } else {
         tmp = await getCases_003(context_003.versions[version]);
     }
