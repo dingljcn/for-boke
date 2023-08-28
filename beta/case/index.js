@@ -8,10 +8,10 @@ function prepare_scripts_003(loadScript, callback) {
 }
 
 async function run_003() {
-    logln('传入的配置: ', context_002.config);
-    if (!isMatch(context_002.config)) {
+    logln('传入的配置: ', context_003.config);
+    if (!isMatch(context_003.config)) {
         console.error('不符合以下地址匹配规则');
-        console.error(context_002.config.matchList);
+        console.error(context_003.config.matchList);
         return;
     }
     await getModules_003();
