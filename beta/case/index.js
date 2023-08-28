@@ -17,6 +17,7 @@ async function run_003() {
     await getModules_003();
     await getVersions_003();
     drawUI_003();
+    updateView_003(-1, '', []);
 }
 
 function drawUI_003() {
@@ -89,7 +90,7 @@ async function updateView_003(version, keyword, status) {
     if (context_003.dataOfVersion[version]) {
         caseList = context_003.dataOfVersion[version];
     } else {
-        caseList = await readCaseList_003();
+        caseList = await readCaseList_003(version);
     }
     context_003.currentFilters.version = version;
     context_003.currentFilters.keyword = keyword;
