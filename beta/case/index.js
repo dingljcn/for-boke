@@ -96,12 +96,12 @@ async function updateView_003(version, keyword, status) {
     context_003.currentFilters.status = status;
 }
 
-async function readCaseList_003() {
+async function readCaseList_003(version) {
     let caseList = [], tmp = [];
     if (version == -1) {
         tmp = await getDefaultCases_003().testCaseTasks;
     } else {
-        tmp = await getCases_003();
+        tmp = await getCases_003(context_003.versions[version]);
     }
     for (let originCase of tmp) {
         let case_ = new Case(originCase);
