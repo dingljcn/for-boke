@@ -89,7 +89,7 @@ async function updateView_003(version, keyword, status) {
     if (context_003.dataOfVersion[version]) {
         caseList = context_003.dataOfVersion[version];
     } else {
-        caseList = readCaseList_003();
+        caseList = await readCaseList_003();
     }
     context_003.currentFilters.version = version;
     context_003.currentFilters.keyword = keyword;
