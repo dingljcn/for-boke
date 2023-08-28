@@ -1,4 +1,4 @@
 @echo off
 git add .
-git commit -m 'wiki'
+git commit -m 'case-list'
 git push
