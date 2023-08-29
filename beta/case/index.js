@@ -41,7 +41,7 @@ function drawUI_003() {
                 </select>
                 <div style="flex: 1"></div>
                 <div class="filter-field-name">搜索: </div>
-                <input id="dinglj-keyword" onchange="updateView_003(undefined, value)" placeholder="请输入关键字(Regex)" type="text"/>
+                <input id="dinglj-keyword" oninput="updateView_003(undefined, value)" placeholder="请输入关键字(Regex)" type="text"/>
             </div>
         </div>
         <div class="filter-field">
