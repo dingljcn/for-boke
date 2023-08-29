@@ -17,7 +17,7 @@ async function run_003() {
     await getModules_003();
     await getVersions_003();
     drawUI_003();
-    updateView_003(-1, '', []);
+    updateView_003(-1, '');
 }
 
 function drawUI_003() {
@@ -33,7 +33,7 @@ function drawUI_003() {
         <div class="filter-field">
             <div class="filter-line">
                 <div class="filter-field-name">版本: </div>
-                <select id="dinglj-version" onchange="updateView_003(value, undefined, undefined)" value="-1">
+                <select id="dinglj-version" onchange="updateView_003(value, undefined)" value="-1">
                     <option value="-1">当前版本</option>
                     ${ context_003.versions.map(ele => {
                         return `<option value="${ context_003.versions.indexOf(ele) }">${ ele.erpVersion }</option>`;
@@ -41,7 +41,7 @@ function drawUI_003() {
                 </select>
                 <div style="flex: 1"></div>
                 <div class="filter-field-name">搜索: </div>
-                <input id="dinglj-keyword" onchange="updateView_003(undefined, value, undefined)" placeholder="请输入关键字(Regex)" type="text"/>
+                <input id="dinglj-keyword" onchange="updateView_003(undefined, getById('dinglj-keyword').value)" placeholder="请输入关键字(Regex)" type="text"/>
             </div>
         </div>
         <div class="filter-field">
@@ -71,11 +71,12 @@ function getFilterStatus_003() {
     return getByClass('filter-status active').map(i => i.title);
 }
 
-async function updateView_003(version, keyword, status) {
+async function updateView_003(version, keyword) {
     version = version || context_003.currentFilters.version;
     keyword = keyword || context_003.currentFilters.keyword;
-    status = status || context_003.currentFilters.status;
-    if (context_003.currentFilters.version == version && context_003.currentFilters.keyword == keyword && context_003.currentFilters.status == status) {
+    let filterStatus = getFilterStatus_003();
+    filterStatus.sort();
+    if (context_003.currentFilters.version == version && context_003.currentFilters.keyword == keyword && JSON.stringify(filterStatus) == JSON.stringify(context_003.currentFilters.status)) {
         return;
     }
     // 获取当前版本所有用例情况
@@ -86,7 +87,6 @@ async function updateView_003(version, keyword, status) {
         caseList = await readCaseList_003(version);
     }
     // 按照状态过滤
-    let filterStatus = getFilterStatus_003();
     if (filterStatus && filterStatus.length > 0) {
         caseList = caseList.filter(_case => filterStatus.includes(_case.status.en));
     }
@@ -102,21 +102,17 @@ async function updateView_003(version, keyword, status) {
     }
     displayCases_003(groups);
     // 计算要激活的模块下标
-    let idx;
-    if (!context_003.lastModule) { // 不存在上一个模块, 则取第一个模块
-        context_003.lastModule = modules[0];
-        idx = 0;
-    } else {
+    let idx = 0;
+    if (context_003.lastModule) {
         idx = modules.indexOf(context_003.lastModule);
         if (idx == -1) { // 上一个模块在当前过滤条件下不存在, 取第一个模块
-            context_003.lastModule = modules[0];
             idx = 0;
         }
     }
-    changeActiveModule_003(getById('left-navigator').children[idx], context_003.lastModule);
+    getById('left-navigator').children[idx].click();
     context_003.currentFilters.version = version;
     context_003.currentFilters.keyword = keyword;
-    context_003.currentFilters.status = status;
+    context_003.currentFilters.status = filterStatus;
 }
 
 async function readCaseList_003(version) {
@@ -141,7 +137,7 @@ function displayCases_003(groups) {
 }
 
 function changeActiveModule_003(element, moduleName) {
-    logln(element, moduleName)
+    alert(moduleName);
     if (context_003.lastModule == moduleName) {
         return;
     }
