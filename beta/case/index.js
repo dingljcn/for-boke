@@ -65,6 +65,7 @@ function filterStatus_003(element) {
     } else {
         element.classList.add('active');
     }
+    updateView_003();
 }
 
 function getFilterStatus_003() {
