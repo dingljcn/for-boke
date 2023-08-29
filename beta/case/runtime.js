@@ -40,7 +40,8 @@ const context_003 = {
     versions: [],
     config: {},
     currentFilters: {
-        status: []
+        status: [],
+        keyword: '',
     },
     dataOfVersion: {},
     const: {
