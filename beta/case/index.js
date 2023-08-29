@@ -98,6 +98,16 @@ async function updateView_003(version, keyword) {
         caseList = caseList.filter(_case => reg.test(_case.caseName));
     }
     let groups = groupBy(caseList, 'module');
+    groups.sort((module1, module2) => {
+        let idx1 = context_003.config.order.module.indexOf(module1);
+        idx1 = idx1 == -1 ? 999 : idx1;
+        let idx2 = context_003.config.order.module.indexOf(module2);
+        idx2 = idx2 == -1 ? 999 : idx2;
+        if (idx1 == idx2) {
+            return module1 < module2 ? -1 : 1;
+        }
+        return idx1 - idx2;
+    })
     let modules = Object.keys(groups);
     if (modules && modules.length == 0) {
         return;
