@@ -113,7 +113,7 @@ async function updateView_003(version, keyword, status) {
             idx = 0;
         }
     }
-    getById('left-navigator').children[idx].click();
+    changeActiveModule_003(getById('left-navigator').children[idx], context_003.lastModule);
     context_003.currentFilters.version = version;
     context_003.currentFilters.keyword = keyword;
     context_003.currentFilters.status = status;
@@ -141,6 +141,7 @@ function displayCases_003(groups) {
 }
 
 function changeActiveModule_003(element, moduleName) {
+    logln(element, moduleName)
     if (context_003.lastModule == moduleName) {
         return;
     }
