@@ -35,15 +35,6 @@ class Case {
         this.timeCost = origin.timeCost;
         this.ticket = origin.ticketId;
     }
-    parseStatus(status) {
-        switch(status) {
-            case '待发送': return context_003.const.NOTSEND;
-            case '执行中': return context_003.const.RUNNING;
-            case '待成功发送': return context_003.const.SUCCESS;
-            case '变更中断': return context_003.const.TICKET;
-            default: return new LangItem('UNKNOW', '未知状态');
-        }
-    }
 }
 
 const context_003 = {
@@ -56,10 +47,10 @@ const context_003 = {
     },
     dataOfVersion: {},
     const: {
-        NOTSEND: new LangItem('NOTSEND', '待发送'),
+        TICKET: new LangItem('TICKET', '变更中断'),
         SUCCESS: new LangItem('SUCCESS', '成功'),
         RUNNING: new LangItem('RUNNING', '执行中'),
-        TICKET: new LangItem('TICKET', '变更中断'),
+        NOTSEND: new LangItem('NOTSEND', '待发送'),
     }
 }
 

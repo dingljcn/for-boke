@@ -168,6 +168,20 @@ function changeActiveModule_003(element, moduleName, list) {
 function displayCasesOfThisModule_003(element, moduleName, list) {
     let groups = groupBy(list, '', item => item.status.en);
     let statusNames = Object.keys(groups);
+    let order = Object.keys(context_003.const);
+    if (context_003.config.order.status && context_003.config.order.status.length > 0) {
+        order = context_003.config.order.status;
+    }
+    statusNames.sort((name1, name2) => {
+        let idx1 = order.indexOf(name1);
+        idx1 = idx1 == -1 ? 999 : idx1;
+        let idx2 = order.indexOf(name2);
+        idx2 = idx2 == -1 ? 999 : idx2;
+        if (idx1 == idx2) {
+            return name1 < name2 ? -1 : 1;
+        }
+        return idx1 - idx2;
+    })
     getById('right-view').innerHTML = statusNames.map(statusName => {
         return `<div class="status-area" id="status-of-${ statusName }">
             <div class="status-area-title">
