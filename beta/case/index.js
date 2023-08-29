@@ -113,7 +113,7 @@ async function updateView_003(version, keyword) {
     if (modules && modules.length == 0) {
         return;
     }
-    displayModules_003(modules);
+    displayModules_003(modules, groups);
     // 计算要激活的模块下标
     let idx = 0;
     if (context_003.lastModule) {
@@ -143,17 +143,58 @@ async function readCaseList_003(version) {
     return caseList;
 }
 
-function displayModules_003(modules) {
+function displayModules_003(modules, groups) {
     getById('left-navigator').innerHTML = modules.map(module => {
-        return `<div class="module-name" id="module-${ module }" onclick="changeActiveModule_003(this, innerText)">${ module }</div>`;
+        return `<div class="module-name" id="module-${ module }">${ module }</div>`;
     }).join('');
+    for (let module of modules) {
+        getById(`module-${ module }`).addEventListener('click', () => {
+            changeActiveModule_003(element, module, groups[module]);
+        })
+    }
 }
 
-function changeActiveModule_003(element, moduleName) {
+function changeActiveModule_003(element, moduleName, list) {
     let oldActive = getByClass('module-name active');
     if (oldActive) {
         oldActive.forEach(ele => ele.classList.remove('active'));
     }
     element.classList.add('active');
     context_003.lastModule = moduleName;
+    displayCasesOfThisModule_003(element, moduleName, list);
+}
+
+function displayCasesOfThisModule_003(element, moduleName, list) {
+    let groups = groupBy(list, '', item => item.status.en);
+    let statusNames = Object.keys(groups);
+    getById('right-view').innerHTML = statusNames.map(statusName => {
+        return `<div class="status-area" id="status-of-${ statusName }">
+            <div class="status-area-title">
+                ${ context_003.const[statusName].zh }(${ groups[statusName].length })
+            </div>
+            <div class="case-viewer" id="case-list-of-${ statusName }">
+                ${ displayCasesOfThisStatus_003(element, statusName, groups[statusName]) }
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function displayCasesOfThisStatus_003(element, statusName, list) {
+    return list.map(item => {
+        return `<div class="case-card">
+            <div class="case-line-1">
+                ${ item.ticket ? `<div class="case-ticket-id">${ item.ticket }</div>` : '' }
+                <div class="case-name">${ item.caseName }</div>
+                <div class="dinglj-flex"></div>
+            </div>
+            <div class="case-line-2">
+                <div class="case-row">${ item.currentRow }/${ item.totalRow }</div>
+                <div class="dinglj-flex">
+                    <div class="progress-row"></div>
+                    <div class="progress-step"></div>
+                </div>
+                <div class="case-row">${ item.currentStep }/${ item.totalStep }</div>
+            </div>
+        </div>`
+    }).join('');
 }

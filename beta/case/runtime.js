@@ -1,17 +1,28 @@
 class Case {
+    /** 用例名称 */         caseName;
     /** 状态 */             status;
+    /** 模块 */             module;
+    /** 变更号 */           ticket;
     /** 当前行数 */         currentRow;
     /** 总行数 */           totalRow;
     /** 当前结束的步骤 */   currentStep;
     /** 总步骤 */           totalStep;
     /** 打包版本 */         zip;
     /** 等级 */             level;
-    /** 模块 */             module;
-    /** 用例名称 */         caseName;
     /** 用例路径 */         casePath;
     /** 耗费时间 */         timeCost;
     constructor(origin) {
-        this.status = this.parseStatus(origin.stats);
+        if (origin.stats == '待发送') {
+            this.status = context_003.const.NOTSEND;
+        } else if (origin.stats == '结束') {
+            if (origin.result == 'TICKET') {
+                this.status = context_003.const.TICKET;
+            } else if (origin.result == 'SUCCESS') {
+                this.status = context_003.const.SUCCESS;
+            }
+        } else if (origin.stats == '执行中') {
+            this.status = context_003.const.RUNNING;
+        }
         this.currentRow = origin.currentRow;
         this.zip = origin.erpVersion;
         this.level = origin.level || origin.clevel;
@@ -22,14 +33,14 @@ class Case {
         this.currentStep = origin.endStepNum;
         this.totalStep = origin.totalStepNum;
         this.timeCost = origin.timeCost;
-
+        this.ticket = origin.ticketId;
     }
     parseStatus(status) {
         switch(status) {
             case '待发送': return context_003.const.NOTSEND;
             case '执行中': return context_003.const.RUNNING;
             case '待成功发送': return context_003.const.SUCCESS;
-            case '变更中断': return context_003.const.NOTSEND;
+            case '变更中断': return context_003.const.TICKET;
             default: return new LangItem('UNKNOW', '未知状态');
         }
     }
