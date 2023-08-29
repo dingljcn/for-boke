@@ -92,10 +92,28 @@ async function updateView_003(version, keyword, status) {
     }
     // 按照关键字过滤
     if (keyword && keyword.trim()) {
-        let reg = new RegExp(`.*${ keyword }.*`);
+        let reg = new RegExp(`.*${ keyword.trim() }.*`, 'i');
         caseList = caseList.filter(_case => reg.test(_case.caseName));
     }
-    displayCases(caseList);
+    let groups = groupBy(caseList, 'module');
+    let modules = Object.keys(groups);
+    if (modules && modules.length == 0) {
+        return;
+    }
+    displayCases_003(groups);
+    // 计算要激活的模块下标
+    let idx;
+    if (!context_003.lastModule) { // 不存在上一个模块, 则取第一个模块
+        context_003.lastModule = modules[0];
+        idx = 0;
+    } else {
+        idx = modules.indexOf(context_003.lastModule);
+        if (idx == -1) { // 上一个模块在当前过滤条件下不存在, 取第一个模块
+            context_003.lastModule = modules[0];
+            idx = 0;
+        }
+    }
+    getById('left-navigator').children[idx].click();
     context_003.currentFilters.version = version;
     context_003.currentFilters.keyword = keyword;
     context_003.currentFilters.status = status;
@@ -116,7 +134,20 @@ async function readCaseList_003(version) {
     return caseList;
 }
 
-function displayCases(list) {
-    let groups = groupBy(list, 'module');
-    console.log(groups);
+function displayCases_003(groups) {
+    getById('left-navigator').innerHTML = Object.keys(groups).map(module => {
+        return `<div class="module-name" id="module-${ module }" onclick="changeActiveModule_003(this, innerText)">${ module }</div>`;
+    }).join('');
+}
+
+function changeActiveModule_003(element, moduleName) {
+    if (context_003.lastModule == moduleName) {
+        return;
+    }
+    let oldActive = getByClass('module-name active');
+    if (oldActive) {
+        oldActive.forEach(ele => ele.classList.remove('active'));
+    }
+    element.classList.add('active');
+    context_003.lastModule = moduleName;
 }
