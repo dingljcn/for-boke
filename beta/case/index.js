@@ -98,7 +98,8 @@ async function updateView_003(version, keyword) {
         caseList = caseList.filter(_case => reg.test(_case.caseName));
     }
     let groups = groupBy(caseList, 'module');
-    groups.sort((module1, module2) => {
+    let modules = Object.keys(groups);
+    modules.sort((module1, module2) => {
         let idx1 = context_003.config.order.module.indexOf(module1);
         idx1 = idx1 == -1 ? 999 : idx1;
         let idx2 = context_003.config.order.module.indexOf(module2);
@@ -108,11 +109,10 @@ async function updateView_003(version, keyword) {
         }
         return idx1 - idx2;
     })
-    let modules = Object.keys(groups);
     if (modules && modules.length == 0) {
         return;
     }
-    displayCases_003(groups);
+    displayModules_003(modules);
     // 计算要激活的模块下标
     let idx = 0;
     if (context_003.lastModule) {
@@ -142,8 +142,8 @@ async function readCaseList_003(version) {
     return caseList;
 }
 
-function displayCases_003(groups) {
-    getById('left-navigator').innerHTML = Object.keys(groups).map(module => {
+function displayModules_003(modules) {
+    getById('left-navigator').innerHTML = modules.map(module => {
         return `<div class="module-name" id="module-${ module }" onclick="changeActiveModule_003(this, innerText)">${ module }</div>`;
     }).join('');
 }
