@@ -27,12 +27,7 @@ function drawUI_003() {
         innerHTML: context_003.config.style.css
     });
     const filter = {
-        status: [
-            { key: 'NOTSEND', name: '待发送' },
-            { key: 'RUNNING', name: '执行中' },
-            { key: 'SUCCESS', name: '成功' },
-            { key: 'TICKET', name: '变更中断' },
-        ]
+        status: Object.values(context_003.const),
     };
     document.body.innerHTML = `<div id="filters">
         <div class="filter-field">
@@ -52,7 +47,7 @@ function drawUI_003() {
         <div class="filter-field">
             <div class="filter-field-name">状态: </div>
             ${ filter.status.map(ele => {
-                return `<div class="filter-status" title="${ ele.key }" onclick="filterStatus_003(this)">${ ele.name }</div>`
+                return `<div class="filter-status" title="${ ele.en }" onclick="filterStatus_003(this)">${ ele.zh }</div>`
             }).join('') }
         </div>
     </div>
@@ -73,9 +68,7 @@ function filterStatus_003(element) {
 }
 
 function getFilterStatus_003() {
-    let arr = [];
-    arr.push(...getByClass('filter-status active'));
-    return arr.map(i => i.title);
+    return getByClass('filter-status active').map(i => i.title);
 }
 
 async function updateView_003(version, keyword, status) {
@@ -92,6 +85,17 @@ async function updateView_003(version, keyword, status) {
     } else {
         caseList = await readCaseList_003(version);
     }
+    // 按照状态过滤
+    let filterStatus = getFilterStatus_003();
+    if (filterStatus && filterStatus.length > 0) {
+        caseList = caseList.filter(_case => filterStatus.includes(_case.status.en));
+    }
+    // 按照关键字过滤
+    if (keyword.trim()) {
+        let reg = new RegExp(`.*${ keyword }.*`);
+        caseList = caseList.filter(_case => reg.test(_case.caseName));
+    }
+    displayCases(caseList);
     context_003.currentFilters.version = version;
     context_003.currentFilters.keyword = keyword;
     context_003.currentFilters.status = status;
@@ -110,4 +114,9 @@ async function readCaseList_003(version) {
     }
     context_003.dataOfVersion[version] = caseList;
     return caseList;
+}
+
+function displayCases(list) {
+    let groups = groupBy(list, 'module');
+    console.log(groups);
 }
