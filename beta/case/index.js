@@ -198,8 +198,8 @@ function displayCasesOfThisStatus_003(element, statusName, list) {
     return list.map(item => {
         return `<div class="case-card">
             <div class="case-line-1">
-                ${ item.ticket ? `<div class="case-ticket-id">${ item.ticket }</div>` : '' }
-                <div class="case-name">${ item.caseName }</div>
+                ${ item.ticket ? `<div class="case-ticket-id" onclick="window.open(${ context_003.config.urls.ticket })">#${ item.ticket }</div>` : '' }
+                <div class="case-name">${ item.caseName.replace(/^2.0[-_]/, '') }</div>
                 <div class="dinglj-flex"></div>
             </div>
             <div class="case-line-2">
