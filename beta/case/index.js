@@ -91,7 +91,7 @@ async function updateView_003(version, keyword, status) {
         caseList = caseList.filter(_case => filterStatus.includes(_case.status.en));
     }
     // 按照关键字过滤
-    if (keyword.trim()) {
+    if (keyword && keyword.trim()) {
         let reg = new RegExp(`.*${ keyword }.*`);
         caseList = caseList.filter(_case => reg.test(_case.caseName));
     }
