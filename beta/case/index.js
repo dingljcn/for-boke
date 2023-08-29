@@ -148,7 +148,8 @@ function displayModules_003(modules, groups) {
         return `<div class="module-name" id="module-${ module }">${ module }</div>`;
     }).join('');
     for (let module of modules) {
-        getById(`module-${ module }`).addEventListener('click', () => {
+        let element = getById(`module-${ module }`);
+        element.addEventListener('click', () => {
             changeActiveModule_003(element, module, groups[module]);
         })
     }
