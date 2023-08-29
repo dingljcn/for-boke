@@ -41,7 +41,7 @@ function drawUI_003() {
                 </select>
                 <div style="flex: 1"></div>
                 <div class="filter-field-name">搜索: </div>
-                <input id="dinglj-keyword" onchange="updateView_003(undefined, getById('dinglj-keyword').value)" placeholder="请输入关键字(Regex)" type="text"/>
+                <input id="dinglj-keyword" onchange="updateView_003(undefined, value)" placeholder="请输入关键字(Regex)" type="text"/>
             </div>
         </div>
         <div class="filter-field">
@@ -73,10 +73,12 @@ function getFilterStatus_003() {
 
 async function updateView_003(version, keyword) {
     version = version || context_003.currentFilters.version;
-    keyword = keyword || context_003.currentFilters.keyword;
+    keyword = (keyword == undefined || keyword == null) ? '' : context_003.currentFilters.keyword;
     let filterStatus = getFilterStatus_003();
     filterStatus.sort();
-    if (context_003.currentFilters.version == version && context_003.currentFilters.keyword == keyword && JSON.stringify(filterStatus) == JSON.stringify(context_003.currentFilters.status)) {
+    if (context_003.currentFilters.version == version && 
+        context_003.currentFilters.keyword == keyword && 
+        JSON.stringify(filterStatus) == JSON.stringify(context_003.currentFilters.status)) {
         return;
     }
     // 获取当前版本所有用例情况
@@ -137,10 +139,6 @@ function displayCases_003(groups) {
 }
 
 function changeActiveModule_003(element, moduleName) {
-    alert(moduleName);
-    if (context_003.lastModule == moduleName) {
-        return;
-    }
     let oldActive = getByClass('module-name active');
     if (oldActive) {
         oldActive.forEach(ele => ele.classList.remove('active'));
