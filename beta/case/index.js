@@ -73,7 +73,7 @@ function getFilterStatus_003() {
 
 async function updateView_003(version, keyword) {
     version = version || context_003.currentFilters.version;
-    keyword = (keyword == undefined || keyword == null) ? '' : context_003.currentFilters.keyword;
+    keyword = keyword || ((keyword == undefined || keyword == null) ? '' : context_003.currentFilters.keyword);
     let filterStatus = getFilterStatus_003();
     filterStatus.sort();
     if (context_003.currentFilters.version == version && 
