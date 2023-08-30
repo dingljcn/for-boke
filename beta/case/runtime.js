@@ -23,6 +23,8 @@ class Case {
                 }
             } else if (origin.stats == '执行中') {
                 this.status = context_003.const.RUNNING;
+            } else if (origin.stats == '等待资源') {
+                this.status = context_003.const.WAITTING;
             }
         } else {
             if (origin.result == 'TICKET') {
@@ -59,6 +61,7 @@ const context_003 = {
         SUCCESS: new LangItem('SUCCESS', '成功'),
         RUNNING: new LangItem('RUNNING', '执行中'),
         NOTSEND: new LangItem('NOTSEND', '待发送'),
+        WAITTING: new LangItem('WAITTING', '等待资源'),
     }
 }
 

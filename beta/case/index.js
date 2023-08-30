@@ -231,9 +231,9 @@ function displayCasesOfThisStatus_003(element, statusName, list) {
                 <div class="case-row">${ item.currentStep }/${ item.totalStep }</div>
             </div>
             <div class="case-line-3">
-                <div class="download-zip" title="${ item.zip } onclick="window.open('${ item.zip }')">下载打包文件</div>
+                ${ item.erpVersion && item.erpVersion.toLowerCase.endsWith('.zip') ? `<div class="download-zip" title="${ item.zip } onclick="window.open('${ item.zip }')">下载打包文件</div>` : '' }
                 <div class="dinglj-flex"></div>
-                <div class="open-detail-window" onclick="showDetailModal_003('${ item.caseName }')">更多详情></div>
+                <div class="open-detail-window" onclick="showDetailModal_003('${ item.caseName }')">更多详情</div>
             </div>
         </div>`
     }).join('');
