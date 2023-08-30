@@ -213,6 +213,15 @@ function displayCasesOfThisModule_003(element, moduleName, list) {
 function displayCasesOfThisStatus_003(element, statusName, list) {
     return list.map(item => {
         return `<div class="case-card">
+            <div class="expand-card">
+                <div class="card-detail-line">
+                    <div class="card-field-head">status</div><div class="card-field-value">${ item.status.zh }</div>
+                </div>
+                ${ Object.keys(item)
+                    .filter(k => (typeof item[k]) == 'string') // 只要 string 类型的
+                    .map(k => `<div class="card-detail-line"><div class="card-field-head">${ k }</div><div class="card-field-value">${ item[k] }</div></div>`)
+                    .join('') }
+            </div>
             <div class="case-line-1">
                 ${ getBeforeCaseName_003(item) }
                 <div class="case-name">${ item.caseName.replace(/^2.0[-_]/, '').replace(/.xlsx?/i, '') }</div>
