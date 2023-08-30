@@ -259,7 +259,7 @@ function getAfterCaseName_003(item) {
     if (item.timeCost) {
         return `<div class="case-time-cost location-after-name" title=${ item.timeCost }>${ item.timeCost.replaceAll(/[时分]/g, ':').replace('秒', '') }</div>`
     } else {
-        return `<div class="case-level location-after-name">level: ${ item.level ? (isNaN(item.level) ? item.level : parseInt(item.level) + 1) : '?' }</div>`
+        return `<div class="case-level location-after-name">Lv.${ item.level ? (isNaN(item.level) ? item.level : parseInt(item.level) + 1) : '?' }</div>`
     }
 }
 
