@@ -211,7 +211,7 @@ function displayCasesOfThisModule_003(element, moduleName, list) {
 }
 
 function displayCasesOfThisStatus_003(element, statusName, list) {
-    return list.map(item => {
+    return list.sort().map(item => {
         return `<div class="case-card">
             <div class="expand-card">
                 <div class="card-detail-line">
