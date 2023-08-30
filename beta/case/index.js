@@ -185,7 +185,9 @@ function displayCasesOfThisModule_003(element, moduleName, list) {
     getById('right-view').innerHTML = statusNames.map(statusName => {
         return `<div class="status-area" id="status-of-${ statusName }">
             <div class="status-area-title">
-                ${ context_003.const[statusName].zh }(${ groups[statusName].length })
+                <div class="divide-line-before"></div>
+                <div>${ context_003.const[statusName].zh }(${ groups[statusName].length })</div>
+                <div class="divide-line-after"></div>
             </div>
             <div class="case-viewer" id="case-list-of-${ statusName }">
                 ${ displayCasesOfThisStatus_003(element, statusName, groups[statusName]) }
@@ -198,18 +200,39 @@ function displayCasesOfThisStatus_003(element, statusName, list) {
     return list.map(item => {
         return `<div class="case-card">
             <div class="case-line-1">
-                ${ item.ticket ? `<div class="case-ticket-id" onclick="window.open('${ context_003.config.urls.ticket }${ item.ticket }')">#${ item.ticket }</div>` : '' }
+                ${ getBeforeCaseName_003(item) }
                 <div class="case-name">${ item.caseName.replace(/^2.0[-_]/, '').replace(/.xlsx?/i, '') }</div>
                 <div class="dinglj-flex"></div>
+                ${ getAfterCaseName_003(item) }
             </div>
             <div class="case-line-2">
                 <div class="case-row">${ item.currentRow }/${ item.totalRow }</div>
-                <div class="dinglj-flex">
-                    <div class="progress-row"></div>
-                    <div class="progress-step"></div>
+                <div class="dinglj-flex" id="progress-container">
+                    <div class="progress-row" title="行数进度: ${ item.currentRow / item.totalRow } (${ item.currentRow }/${ item.totalRow })"></div>
+                    <div class="progress-step" title="步骤进度: ${ item.currentStep / item.totalStep } (${ item.currentStep }/${ item.totalStep })"></div>
                 </div>
                 <div class="case-row">${ item.currentStep }/${ item.totalStep }</div>
             </div>
         </div>`
     }).join('');
+}
+
+function getBeforeCaseName_003(item) {
+    if (item.ticket) {
+        return `<div class="case-ticket-id location-before-name" onclick="window.open('${ context_003.config.urls.ticket }${ item.ticket }')">#${ item.ticket }</div>`;
+    }
+    if (item.status == context_003.const.SUCCESS) {
+        return `<div class="case-success location-before-name">${ context_003.const.SUCCESS.en }</div>`;
+    }
+    if (item.status == context_003.const.RUNNING) {
+        return `<div class="case-running location-before-name">${ context_003.const.RUNNING.en }</div>`;
+    }
+}
+
+function getAfterCaseName_003(item) {
+    if (item.timeCost) {
+        return `<div class="case-time-cost location-after-name" title=${ item.timeCost }>${ item.timeCost.replaceAll(/[时分]/g, ':').replace('秒', '') }</div>`
+    } else {
+        return `<div class="case-level location-after-name">level: ${ item.level ? (isNaN(item.level) ? item.level : parseInt(item.level) + 1) : '?' }</div>`
+    }
 }
