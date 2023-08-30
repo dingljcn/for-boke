@@ -12,16 +12,24 @@ class Case {
     /** 用例路径 */         casePath;
     /** 耗费时间 */         timeCost;
     constructor(origin) {
-        if (origin.stats == '待发送') {
-            this.status = context_003.const.NOTSEND;
-        } else if (origin.stats == '结束') {
+        if (origin.stats) {
+            if (origin.stats == '待发送') {
+                this.status = context_003.const.NOTSEND;
+            } else if (origin.stats == '结束') {
+                if (origin.result == 'TICKET') {
+                    this.status = context_003.const.TICKET;
+                } else if (origin.result == 'SUCCESS') {
+                    this.status = context_003.const.SUCCESS;
+                }
+            } else if (origin.stats == '执行中') {
+                this.status = context_003.const.RUNNING;
+            }
+        } else {
             if (origin.result == 'TICKET') {
                 this.status = context_003.const.TICKET;
             } else if (origin.result == 'SUCCESS') {
                 this.status = context_003.const.SUCCESS;
             }
-        } else if (origin.stats == '执行中') {
-            this.status = context_003.const.RUNNING;
         }
         this.currentRow = origin.currentRow;
         this.zip = origin.erpVersion;
@@ -33,7 +41,7 @@ class Case {
         this.currentStep = origin.endStepNum;
         this.totalStep = origin.totalStepNum;
         this.timeCost = origin.timeCost;
-        this.ticket = origin.ticketId;
+        this.ticket = origin.ticketId || origin.log;
     }
 }
 
