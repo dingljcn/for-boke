@@ -46,7 +46,8 @@ class Case {
         this.currentStep = origin.endStepNum;
         this.totalStep = origin.totalStepNum;
         this.timeCost = origin.timeCost;
-        this.ticket = parseInt(origin.ticketId || origin.log);
+        let ticket = origin.ticketId || origin.log;
+        this.ticket = ticket ? parseInt(ticket) : ticket;
     }
 }
 
