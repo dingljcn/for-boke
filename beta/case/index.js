@@ -113,6 +113,8 @@ async function updateView_003(version, keyword) {
     if (modules && modules.length == 0) {
         return;
     }
+    groups.UNIT = findByPropInList(caseList, 'level', 0);
+    modules.unshift('UNIT');
     displayModules_003(modules, groups);
     // 计算要激活的模块下标
     let idx = 0;
