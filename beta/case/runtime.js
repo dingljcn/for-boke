@@ -33,7 +33,7 @@ class Case {
                 this.status = context_003.const.SUCCESS;
             }
         }
-        if (!origin.status) { // 没有状态, 打印原始数据
+        if (!this.status) { // 没有状态, 打印原始数据
             console.log(origin);
         }
         this.currentRow = origin.currentRow;
