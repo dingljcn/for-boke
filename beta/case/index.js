@@ -215,6 +215,7 @@ function displayCasesOfThisStatus_003(element, statusName, list) {
         return `<div class="case-card">
             <div class="expand-card">
                 <div class="card-detail-line">
+                    ${ item.ticket ? `<div class="case-ticket-id location-before-name" onclick="window.open('${ context_003.config.urls.ticket }${ item.ticket }')">#${ item.ticket }</div>` : '' }
                     <div class="card-detail-name">${ item.caseName }</div>
                 </div>
                 <div class="dinglj-flex"></div>
