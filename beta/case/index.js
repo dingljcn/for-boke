@@ -56,6 +56,14 @@ function drawUI_003() {
         </div>
         <div id="right-view">
         </div>
+        <div id="case-mask">
+            <div id="case-modal">
+                <div id="modal-title">
+                    <div id="modal-case-name"></div>
+                    <div class="dinglj-flex"></div>
+                    <div id="modal-close" onclick="getById('case-mask').style.display='none'">×</div></div>
+            </div>
+        </div>
     </div>`;
 }
 
@@ -222,6 +230,11 @@ function displayCasesOfThisStatus_003(element, statusName, list) {
                 </div>
                 <div class="case-row">${ item.currentStep }/${ item.totalStep }</div>
             </div>
+            <div class="case-line-3">
+                <div class="download-zip" title="${ item.zip } onclick="window.open('${ item.zip }')">下载打包文件</div>
+                <div class="dinglj-flex"></div>
+                <div class="open-detail-window" onclick="showDetailModal_003('${ item.caseName }')">更多详情></div>
+            </div>
         </div>`
     }).join('');
 }
@@ -245,4 +258,9 @@ function getAfterCaseName_003(item) {
     } else {
         return `<div class="case-level location-after-name">level: ${ item.level ? (isNaN(item.level) ? item.level : parseInt(item.level) + 1) : '?' }</div>`
     }
+}
+
+function showDetailModal_003(caseName) {
+    getById('modal-case-name').innerText = caseName;
+    getById('case-mask').style.display = 'block';
 }
