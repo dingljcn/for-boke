@@ -144,7 +144,7 @@ async function readCaseList_003(version) {
     if (version == -1) {
         tmp = (await getDefaultCases_003()).testCaseTasks;
     } else {
-        tmp = await getCases_003(context_003.versions[version]);
+        tmp = await getCases_003(context_003.versions[version].erpVersion);
     }
     for (let originCase of tmp) {
         let case_ = new Case(originCase);
