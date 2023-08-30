@@ -117,11 +117,12 @@ async function updateView_003(version, keyword) {
     modules.unshift('UNIT');
     displayModules_003(modules, groups);
     // 计算要激活的模块下标
-    let idx = 0;
+    let successUnitCount = groups.UNIT.filter(unit => unit.status == context_003.const.SUCCESS).length;
+    let idx = successUnitCount == groups.UNIT.length ? 1 : 0; // 相等表示所有单元测试都通过, 没啥好看的了, 直接看第2个, 反之, 单元测试都没完全通过, 就直接看单元测试
     if (context_003.lastModule) {
-        idx = modules.indexOf(context_003.lastModule);
-        if (idx == -1) { // 上一个模块在当前过滤条件下不存在, 取第一个模块
-            idx = 0;
+        let tmp = modules.indexOf(context_003.lastModule);
+        if (tmp > -1) {
+            idx = tmp; // 上一个模块还在, 取上一个模块
         }
     }
     getById('left-navigator').children[idx].click();
