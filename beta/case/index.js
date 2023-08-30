@@ -208,8 +208,14 @@ function displayCasesOfThisStatus_003(element, statusName, list) {
             <div class="case-line-2">
                 <div class="case-row">${ item.currentRow }/${ item.totalRow }</div>
                 <div class="dinglj-flex" id="progress-container">
-                    <div class="progress-row" title="行数进度: ${ (item.currentRow / item.totalRow * 100).toFixed(2) }% (${ item.currentRow }/${ item.totalRow })" style="width: ${ item.currentRow / item.totalRow * 100 }%"></div>
-                    <div class="progress-step" title="步骤进度: ${ (item.currentStep / item.totalStep * 100).toFixed(2) }% (${ item.currentStep }/${ item.totalStep })" style="width: ${ item.currentStep / item.totalStep * 100 }%"></div>
+                    <div class="progress-row" 
+                        title="行数进度: ${ item.totalRow == 0 ? 0 : ((item.currentRow / item.totalRow * 100).toFixed(2)) }% (${ item.currentRow }/${ item.totalRow })" 
+                        style="width: ${  item.currentRow == 0 ? 0 : (item.currentRow / item.totalRow * 100) }%">
+                    </div>
+                    <div class="progress-step" 
+                        title="步骤进度: ${ item.totalStep == 0 ? 0 : ((item.currentStep / item.totalStep * 100).toFixed(2)) }% (${ item.currentStep }/${ item.totalStep })" 
+                        style="width: ${  item.currentStep == 0 ? 0 : (item.currentStep / item.totalStep * 100) }%">
+                    </div>
                 </div>
                 <div class="case-row">${ item.currentStep }/${ item.totalStep }</div>
             </div>
@@ -227,6 +233,7 @@ function getBeforeCaseName_003(item) {
     if (item.status == context_003.const.RUNNING) {
         return `<div class="case-running location-before-name">${ context_003.const.RUNNING.en }</div>`;
     }
+    return '';
 }
 
 function getAfterCaseName_003(item) {
