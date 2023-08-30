@@ -216,7 +216,7 @@ function displayCasesOfThisStatus_003(element, statusName, list) {
                 <div class="dinglj-flex"></div>
                 ${ getAfterCaseName_003(item) }
             </div>
-            <div class="case-line-2">
+            <div class="case-line-2" style="display: ${ item.status == context_003.const.TICKET || item.status == context_003.const.SUCCESS ? 'flex' : 'none' }">
                 <div class="case-row">${ item.currentRow }/${ item.totalRow }</div>
                 <div class="dinglj-flex" id="progress-container">
                     <div class="progress-row" 
