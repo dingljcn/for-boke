@@ -215,12 +215,14 @@ function displayCasesOfThisStatus_003(element, statusName, list) {
         return `<div class="case-card">
             <div class="expand-card">
                 <div class="card-detail-line">
-                    <div class="card-field-head">status</div><div class="card-field-value">${ item.status.zh }</div>
+                    <div class="card-detail-name">${ item.caseName }</div>
                 </div>
-                ${ Object.keys(item)
-                    .filter(k => (typeof item[k]) == 'string') // 只要 string 类型的
-                    .map(k => `<div class="card-detail-line"><div class="card-field-head">${ k }</div><div class="card-field-value">${ item[k] }</div></div>`)
-                    .join('') }
+                <div class="dinglj-flex"></div>
+                <div class="card-detail-line">
+                    ${ item.zip && item.zip.toLowerCase().endsWith('.zip') ? `<div class="download-zip" title="${ item.zip }" onclick="window.open('${ item.zip }')">下载打包文件</div>` : '' }
+                    <div class="dinglj-flex"></div>
+                    <div class="open-detail-window" onclick="showDetailModal_003('${ item.caseName }')">更多详情</div>
+                </div>
             </div>
             <div class="case-line-1">
                 ${ getBeforeCaseName_003(item) }
@@ -241,11 +243,6 @@ function displayCasesOfThisStatus_003(element, statusName, list) {
                     </div>
                 </div>
                 <div class="case-row">${ item.currentStep }/${ item.totalStep }</div>
-            </div>
-            <div class="case-line-3">
-                ${ item.zip && item.zip.toLowerCase().endsWith('.zip') ? `<div class="download-zip" title="${ item.zip }" onclick="window.open('${ item.zip }')">下载打包文件</div>` : '' }
-                <div class="dinglj-flex"></div>
-                <div class="open-detail-window" onclick="showDetailModal_003('${ item.caseName }')">更多详情</div>
             </div>
         </div>`
     }).join('');
