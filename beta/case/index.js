@@ -186,7 +186,7 @@ function displayCasesOfThisModule_003(element, moduleName, list) {
         return `<div class="status-area" id="status-of-${ statusName }">
             <div class="status-area-title">
                 <div class="divide-line-before"></div>
-                <div>${ context_003.const[statusName].zh }(${ groups[statusName].length })</div>
+                <div class="status-area-name">${ context_003.const[statusName].zh }(${ groups[statusName].length })</div>
                 <div class="divide-line-after"></div>
             </div>
             <div class="case-viewer" id="case-list-of-${ statusName }">
