@@ -121,12 +121,15 @@ async function updateView_003(version, keyword) {
     if (modules && modules.length == 0) {
         return;
     }
-    groups.UNIT = findByPropInList(caseList, 'level', 0);
-    modules.unshift('UNIT');
+    let unitCases = findByPropInList(caseList, 'level', 0);
+    if (unitCases && unitCases.length > 0) {
+        groups.UNIT = unitCases;
+        modules.unshift('UNIT');
+    }
     displayModules_003(modules, groups);
     // 计算要激活的模块下标
-    let successUnitCount = groups.UNIT.filter(unit => unit.status == context_003.const.SUCCESS).length;
-    let idx = successUnitCount == groups.UNIT.length ? 1 : 0; // 相等表示所有单元测试都通过, 没啥好看的了, 直接看第2个, 反之, 单元测试都没完全通过, 就直接看单元测试
+    let successUnitCount = (unitCases && unitCases.length > 0) ? unitCases.filter(unit => unit.status == context_003.const.SUCCESS).length : -1; // 有单元变更才计算成功数量, 否则为 -1
+    let idx = successUnitCount == unitCases.length ? 1 : 0; // 相等表示所有单元测试都通过, 没啥好看的了, 直接看第2个, 反之, 单元测试都没完全通过, 就直接看单元测试
     if (context_003.lastModule) {
         let tmp = modules.indexOf(context_003.lastModule);
         if (tmp > -1) {
