@@ -198,7 +198,7 @@ function changeActiveModule_003(element, moduleName, groups) {
         }
     }
     context_003.lastModule = moduleName;
-    displayCasesOfThisModule_003(element, moduleName, list[moduleName]);
+    displayCasesOfThisModule_003(element, moduleName, groups[moduleName]);
 }
 
 function displayCasesOfThisModule_003(element, moduleName, list) {
