@@ -186,14 +186,14 @@ function displayModules_003(modules, groups) {
 function changeActiveModule_003(element, moduleName, list) {
     for (let moduleElement of getByClass('module-name')) {
         if (moduleElement == element) {
-            moduleElement.children[0].background = context_003.config.style.const.themeColor;
-            moduleElement.children[1].color = 'white';
-            moduleElement.children[1].fontWeight = 'bolder';
+            moduleElement.children[0].style.background = context_003.config.style.const.themeColor;
+            moduleElement.children[1].style.color = 'white';
+            moduleElement.children[1].style.fontWeight = 'bolder';
         } else {
-            moduleElement.children[0].background = context_003.config.style.const.hoverBackground;
-            moduleElement.children[0].width = `${ list.filter(i => i.status == context_003.const.SUCCESS).length / list.length * 100 }%`;
-            moduleElement.children[1].color = 'black';
-            moduleElement.children[1].fontWeight = 'normal';
+            moduleElement.children[0].style.background = context_003.config.style.const.hoverBackground;
+            moduleElement.children[0].style.width = `${ list.filter(i => i.status == context_003.const.SUCCESS).length / list.length * 100 }%`;
+            moduleElement.children[1].style.color = 'black';
+            moduleElement.children[1].style.fontWeight = 'normal';
         }
     }
     context_003.lastModule = moduleName;
