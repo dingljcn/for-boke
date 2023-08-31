@@ -40,15 +40,15 @@ class Case {
         if (!this.status) { // 没有状态, 打印原始数据
             console.log(origin);
         }
-        this.currentRow = origin.currentRow;
+        this.currentRow = parseInt(origin.currentRow || 0);
         this.zip = origin.erpVersion;
         this.level = origin.level || origin.clevel;
         this.module = origin.module;
         this.caseName = origin.testcaseName || origin.testCaseName;
         this.casePath = origin.testcasePath;
-        this.totalRow = origin.totalRow;
-        this.currentStep = origin.endStepNum;
-        this.totalStep = origin.totalStepNum;
+        this.totalRow = parseInt(origin.totalRow || 0);
+        this.currentStep = parseInt(origin.endStepNum || 0);
+        this.totalStep = parseInt(origin.totalStepNum || 0);
         this.timeCost = origin.timeCost;
         let ticket = origin.ticketId || origin.log;
         this.ticket = ticket ? parseInt(ticket) : ticket;

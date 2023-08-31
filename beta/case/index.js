@@ -61,7 +61,8 @@ function drawUI_003() {
                 <div id="modal-title">
                     <div id="modal-case-name"></div>
                     <div class="dinglj-flex"></div>
-                    <div id="modal-close" onclick="getById('case-mask').style.display='none'">×</div></div>
+                    <div id="modal-close" onclick="getById('case-mask').style.display='none'">×</div>
+                </div>
             </div>
         </div>
     </div>`;
@@ -226,6 +227,16 @@ function displayCasesOfThisStatus_003(element, statusName, list) {
                 <div class="dinglj-flex"></div>
                 <div class="card-detail-line">
                     ${ item.zip && item.zip.toLowerCase().endsWith('.zip') ? `<div class="download-zip" title="${ item.zip }" onclick="window.open('${ item.zip }')">下载打包文件</div>` : '' }
+                    <div class="card-detail-line card-detail-key">进度(当前行/总行数):</div>
+                    <div class="card-detail-line card-detail-value">${ item.currentRow }/${ item.totalRow } (${
+                        (item.totalRow == 0 ? 0 : (item.currentRow / item.totalRow)).toFixed(2)
+                    }%)</div>
+                    <div class="card-detail-line card-detail-key">进度(当前步骤/总步骤数):</div>
+                    <div class="card-detail-line card-detail-value">${ item.endStapNum }/${ item.totalStepNum } (${
+                        (item.totalStepNum == 0 ? 0 : (item.endStapNum / item.totalStepNum)).toFixed(2)
+                    }%)</div>
+                    ${ displayDetailIfExist_003(item, 'module', '模块') }
+                    ${ displayDetailIfExist_003(item, 'timeCost', '耗时') }
                     <div class="dinglj-flex"></div>
                     <div class="open-detail-window" onclick="showDetailModal_003('${ item.caseName }')">更多详情</div>
                 </div>
@@ -278,4 +289,16 @@ function getAfterCaseName_003(item) {
 function showDetailModal_003(caseName) {
     getById('modal-case-name').innerText = caseName;
     getById('case-mask').style.display = 'block';
+}
+
+function displayDetailIfExist_003(_case, field, name) {
+    if (_case[field]) {
+        return `<div class="card-detail-line card-detail-key">${
+            name
+        }</div>
+        <div class="card-detail-line card-detail-value">${
+            _case[field]
+        }</div>`;
+    }
+    return ``;
 }
