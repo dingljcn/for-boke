@@ -165,7 +165,10 @@ async function readCaseList_003(version) {
 
 function displayModules_003(modules, groups) {
     getById('left-navigator').innerHTML = modules.map(module => {
-        return `<div class="module-name" id="module-${ module }">${ module } (${ groups[module].length })</div>`;
+        return `<div class="module-name" id="module-${ module }">
+            <div class="module-name-progress" style="width: ${ groups[module].filter(i => i.success) / groups[module].length }%"></div>
+            <div class="module-name-text">${ module } (${ groups[module].length })</div>
+        </div>`;
     }).join('');
     for (let module of modules) {
         let element = getById(`module-${ module }`);
@@ -176,11 +179,11 @@ function displayModules_003(modules, groups) {
 }
 
 function changeActiveModule_003(element, moduleName, list) {
-    let oldActive = getByClass('module-name active');
+    let oldActive = getByClass('module-name-progress active');
     if (oldActive) {
         oldActive.forEach(ele => ele.classList.remove('active'));
     }
-    element.classList.add('active');
+    element.children[0].classList.add('active');
     context_003.lastModule = moduleName;
     displayCasesOfThisModule_003(element, moduleName, list);
 }
