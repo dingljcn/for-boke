@@ -178,26 +178,27 @@ function displayModules_003(modules, groups) {
             element.children[0].style.width = `${ groups[module].filter(i => i.status == context_003.const.SUCCESS).length / groups[module].length * 100 }%`;
         });
         element.addEventListener('click', () => {
-            changeActiveModule_003(element, module, groups[module]);
+            changeActiveModule_003(element, module, groups);
         })
     }
 }
 
-function changeActiveModule_003(element, moduleName, list) {
+function changeActiveModule_003(element, moduleName, groups) {
     for (let moduleElement of getByClass('module-name')) {
-        if (moduleElement == element) {
+        if (moduleElement.id == element.id) {
             moduleElement.children[0].style.background = context_003.config.style.const.themeColor;
             moduleElement.children[1].style.color = 'white';
             moduleElement.children[1].style.fontWeight = 'bolder';
         } else {
+            let thisModule = moduleElement.id.replace('module-', '');
             moduleElement.children[0].style.background = context_003.config.style.const.hoverBackground;
-            moduleElement.children[0].style.width = `${ list.filter(i => i.status == context_003.const.SUCCESS).length / list.length * 100 }%`;
+            moduleElement.children[0].style.width = `${ groups[thisModule].filter(i => i.status == context_003.const.SUCCESS).length / groups[thisModule].length * 100 }%`;
             moduleElement.children[1].style.color = 'black';
             moduleElement.children[1].style.fontWeight = 'normal';
         }
     }
     context_003.lastModule = moduleName;
-    displayCasesOfThisModule_003(element, moduleName, list);
+    displayCasesOfThisModule_003(element, moduleName, list[moduleName]);
 }
 
 function displayCasesOfThisModule_003(element, moduleName, list) {
