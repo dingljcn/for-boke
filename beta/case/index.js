@@ -235,7 +235,8 @@ function displayCasesOfThisStatus_003(element, statusName, list) {
                 ${ item.dbType 
                     ?  `<div class="card-detail-line card-detail-key">数据库:</div>
                         <div class="card-detail-line card-detail-value ${ item.ticket ? 'case-detail-database' : '' }" 
-                            ${ item.ticket ? `onclick="copyText('${ getDBLink(item.dbType, item.ticket) }')"` : '' }>${
+                            ${ item.ticket ? `onclick="copyText('${ getDBLink(item.dbType, item.ticket) }')"` : '' } 
+                            ${ item.ticket ? `title="${ getDBLink(item.dbType, item.ticket) }"` : '' }>${
                                 item.dbType
                             }</div>`
                     : ''
