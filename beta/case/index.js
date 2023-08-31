@@ -184,11 +184,17 @@ function displayModules_003(modules, groups) {
 }
 
 function changeActiveModule_003(element, moduleName, list) {
-    let oldActive = getByClass('module-name-progress active');
-    if (oldActive) {
-        oldActive.forEach(ele => ele.classList.remove('active'));
+    for (let moduleElement of getByClass('module-name')) {
+        if (moduleElement == element) {
+            moduleElement.children[0].background = context_003.config.cssConst.themeColor;
+            moduleElement.children[1].color = 'white';
+            moduleElement.children[1].fontWeight = 'bolder';
+        } else {
+            moduleElement.children[0].background = context_003.config.cssConst.hoverBackground;
+            moduleElement.children[1].color = 'black';
+            moduleElement.children[1].fontWeight = 'normal';
+        }
     }
-    element.children[0].classList.add('active');
     context_003.lastModule = moduleName;
     displayCasesOfThisModule_003(element, moduleName, list);
 }
