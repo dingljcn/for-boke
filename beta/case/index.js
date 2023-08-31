@@ -165,7 +165,7 @@ async function readCaseList_003(version) {
 
 function displayModules_003(modules, groups) {
     getById('left-navigator').innerHTML = modules.map(module => {
-        return `<div class="module-name" id="module-${ module }">${ module } (${ groups[modules].length })</div>`;
+        return `<div class="module-name" id="module-${ module }">${ module } (${ groups[module].length })</div>`;
     }).join('');
     for (let module of modules) {
         let element = getById(`module-${ module }`);
