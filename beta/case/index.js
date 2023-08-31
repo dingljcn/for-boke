@@ -121,6 +121,9 @@ async function updateView_003(version, keyword) {
     if (modules && modules.length == 0) {
         getById('left-navigator').innerHTML = '';
         getById('right-view').innerHTML = `<div class="case-list-not-found-tips">在${ version == -1 ? '当前版本' : `版本[${ context_003.versions[version].erpVersion }]` }中未找到${ (filterStatus && filterStatus.length > 0 || keyword && keyword.trim()) ? '符合条件的' : '' }用例清单</div>`;
+        context_003.currentFilters.version = version;
+        context_003.currentFilters.keyword = keyword;
+        context_003.currentFilters.status = filterStatus;
         return;
     }
     let unitCases = findByPropInList(caseList, 'level', 0);
