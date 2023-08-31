@@ -163,10 +163,18 @@ async function readCaseList_003(version) {
     return caseList;
 }
 
+function okCount_003(list) {
+    return list && list.length > 0 ? list.filter(i => i.status == context_003.const.SUCCESS) : 0;
+}
+
+function okPercent_003(list) {
+    return (list && list.length > 0 ? (okCount_003(list).length / list.length * 100) : 0).toFixed(2);
+}
+
 function displayModules_003(modules, groups) {
     getById('left-navigator').innerHTML = modules.map(module => {
-        return `<div class="module-name" id="module-${ module }" title="通过数(${ groups[module].filter(i => i.status == context_003.const.SUCCESS).length }) : 用例总数(${ groups[module].length }) = 进度(${ (groups[module].filter(i => i.status == context_003.const.SUCCESS).length / groups[module].length * 100).toFixed(2) }%)">
-            <div class="module-name-progress" style="width: ${ groups[module].filter(i => i.status == context_003.const.SUCCESS).length / groups[module].length * 100 }%"></div>
+        return `<div class="module-name" id="module-${ module }" title="通过数(${ okCount_003(groups[module]).length }) : 用例总数(${ groups[module].length }) = 进度(${ okPercent_003(groups[module]) }%)">
+            <div class="module-name-progress" style="width: ${ okPercent_003(groups[module]) }; ${ okPercent_003(groups[module]) == 100 ? `background: ${ context_003.config.style.const.successColor }; color: white;` : '' }%"></div>
             <div class="module-name-text">${ module } (${ groups[module].length })</div>
         </div>`;
     }).join('');
@@ -176,7 +184,7 @@ function displayModules_003(modules, groups) {
             element.children[0].style.width = '100%';
         }, (element, event) => {
             if (context_003.lastModule != module) {
-                element.children[0].style.width = `${ groups[module].filter(i => i.status == context_003.const.SUCCESS).length / groups[module].length * 100 }%`;
+                element.children[0].style.width = `${ okPercent_003(groups[module]) }%`;
             }
         });
         element.addEventListener('click', () => {
@@ -194,9 +202,10 @@ function changeActiveModule_003(element, moduleName, groups) {
             moduleElement.children[1].style.fontWeight = 'bolder';
         } else {
             let thisModule = moduleElement.id.replace('module-', '');
-            moduleElement.children[0].style.background = context_003.config.style.const.hoverBackground;
-            moduleElement.children[0].style.width = `${ groups[thisModule].filter(i => i.status == context_003.const.SUCCESS).length / groups[thisModule].length * 100 }%`;
-            moduleElement.children[1].style.color = 'black';
+            let progress = okPercent_003(groups[thisModule]);
+            moduleElement.children[0].style.background = progress == 100 ? context_003.config.style.const.successColor : context_003.config.style.const.hoverBackground;
+            moduleElement.children[0].style.width = `${ progress }%`;
+            moduleElement.children[1].style.color = progress == 100 ? 'white' : 'black';
             moduleElement.children[1].style.fontWeight = 'normal';
         }
     }
