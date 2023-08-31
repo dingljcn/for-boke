@@ -232,6 +232,14 @@ function displayCasesOfThisStatus_003(element, statusName, list) {
                 <div class="card-detail-line card-detail-value">${ item.currentStep }/${ item.totalStep } (${
                     (item.totalStep == 0 ? 0 : (item.currentStep / item.totalStep * 100)).toFixed(2)
                 }%)</div>
+                ${ item.dbType 
+                    ?  `<div class="card-detail-line card-detail-key">数据库:</div>
+                        <div class="card-detail-line card-detail-value ${ item.ticket ? 'case-detail-database' : '' }" 
+                            ${ item.ticket ? `onclick="copyText('${ getDBLink(item.dbType, item.ticket) }')"` : '' }>${
+                                item.dbType
+                            }</div>`
+                    : ''
+                }
                 ${ displayDetailIfExist_003(item, 'module', '模块') }
                 ${ displayDetailIfExist_003(item, 'timeCost', '耗时') }
                 <div class="dinglj-flex"></div>
@@ -263,6 +271,36 @@ function displayCasesOfThisStatus_003(element, statusName, list) {
             </div>
         </div>`
     }).join('');
+}
+
+function getDBLink(dbType, ticket) {
+    let args = [];
+    if (dbType == 'mysql') {
+        args = [
+            `DB_TYPE=MySQL`,
+            `DB_SERVER=${ context_003.config.db.mysql.server }`,
+            `DB_USER=${ context_003.config.db.mysql.user }`,
+            `DB_PASS=${ context_003.config.db.mysql.password }`,
+            `DB_NAME=ticket_${ ticket }`
+        ]
+    } else if (dbType == 'oracle') {
+        args = [
+            `DB_TYPE=ORACLE`,
+            `DB_SERVER=${ context_003.config.db.oracle.server }`,
+            `DB_USER=ticket_${ ticket }`,
+            `DB_PASS=${ context_003.config.db.oracle.password }`,
+            `DB_NAME=${ context_003.config.db.oracle.user }`
+        ]
+    } else if (dbType == 'sql') {
+        args = [
+            `DB_TYPE=SQL`,
+            `DB_SERVER=${ context_003.config.db.sql.server }`,
+            `DB_USER=${ context_003.config.db.sql.user }`,
+            `DB_PASS=${ context_003.config.db.sql.password }`,
+            `DB_NAME=ticket_${ ticket }`
+        ]
+    }
+    return args.join(';');
 }
 
 function getBeforeCaseName_003(item) {

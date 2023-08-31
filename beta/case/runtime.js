@@ -52,6 +52,7 @@ class Case {
         this.timeCost = origin.timeCost;
         let ticket = origin.ticketId || origin.log;
         this.ticket = ticket ? parseInt(ticket) : ticket;
+        this.dbType = origin.dbType || '';
     }
 }
 
