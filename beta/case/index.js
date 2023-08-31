@@ -175,7 +175,9 @@ function displayModules_003(modules, groups) {
         mouseIOEvent([ element ], (element, event) => {
             element.children[0].style.width = '100%';
         }, (element, event) => {
-            element.children[0].style.width = `${ groups[module].filter(i => i.status == context_003.const.SUCCESS).length / groups[module].length * 100 }%`;
+            if (context_003.lastModule != module) {
+                element.children[0].style.width = `${ groups[module].filter(i => i.status == context_003.const.SUCCESS).length / groups[module].length * 100 }%`;
+            }
         });
         element.addEventListener('click', () => {
             changeActiveModule_003(element, module, groups);
