@@ -191,6 +191,7 @@ function changeActiveModule_003(element, moduleName, list) {
             moduleElement.children[1].fontWeight = 'bolder';
         } else {
             moduleElement.children[0].background = context_003.config.cssConst.hoverBackground;
+            moduleElement.children[0].width = `${ list[moduleName].filter(i => i.status == context_003.const.SUCCESS).length / list[moduleName].length * 100 }%`;
             moduleElement.children[1].color = 'black';
             moduleElement.children[1].fontWeight = 'normal';
         }
