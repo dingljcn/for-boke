@@ -186,6 +186,7 @@ function displayModules_003(modules, groups) {
 function changeActiveModule_003(element, moduleName, groups) {
     for (let moduleElement of getByClass('module-name')) {
         if (moduleElement.id == element.id) {
+            moduleElement.children[0].style.width = '100%';
             moduleElement.children[0].style.background = context_003.config.style.const.themeColor;
             moduleElement.children[1].style.color = 'white';
             moduleElement.children[1].style.fontWeight = 'bolder';
