@@ -334,7 +334,7 @@ function displayDetailIfExist_003(_case, field, name) {
     if (_case[field]) {
         return `<div class="card-detail-line card-detail-key">${
             name
-        }</div>
+        }: </div>
         <div class="card-detail-line card-detail-value">${
             _case[field]
         }</div>`;
