@@ -166,12 +166,17 @@ async function readCaseList_003(version) {
 function displayModules_003(modules, groups) {
     getById('left-navigator').innerHTML = modules.map(module => {
         return `<div class="module-name" id="module-${ module }">
-            <div class="module-name-progress" style="width: ${ groups[module].filter(i => i.success) / groups[module].length }%"></div>
+            <div class="module-name-progress" style="width: ${ groups[module].filter(i => i.status == context_003.const.SUCCESS).length / groups[module].length * 100 }%"></div>
             <div class="module-name-text">${ module } (${ groups[module].length })</div>
         </div>`;
     }).join('');
     for (let module of modules) {
         let element = getById(`module-${ module }`);
+        mouseIOEvent([ element ], (element, event) => {
+            element.children[0].style.width = '100%';
+        }, (element, event) => {
+            element.children[0].style.width = `${ groups[module].filter(i => i.status == context_003.const.SUCCESS).length / groups[module].length * 100 }%`;
+        });
         element.addEventListener('click', () => {
             changeActiveModule_003(element, module, groups[module]);
         })
