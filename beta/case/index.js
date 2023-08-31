@@ -224,8 +224,6 @@ function displayCasesOfThisStatus_003(element, statusName, list) {
                     ${ item.ticket ? `<div class="case-ticket-id location-before-name" onclick="window.open('${ context_003.config.urls.ticket }${ item.ticket }')">#${ item.ticket }</div>` : '' }
                     <div class="card-detail-name">${ item.caseName }</div>
                 </div>
-                <div class="dinglj-flex"></div>
-                ${ item.zip && item.zip.toLowerCase().endsWith('.zip') ? `<div class="download-zip" title="${ item.zip }" onclick="window.open('${ item.zip }')">下载打包文件</div>` : '' }
                 <div class="card-detail-line card-detail-key">进度(当前行/总行数):</div>
                 <div class="card-detail-line card-detail-value">${ item.currentRow }/${ item.totalRow } (${
                     (item.totalRow == 0 ? 0 : (item.currentRow / item.totalRow * 100)).toFixed(2)
@@ -236,7 +234,9 @@ function displayCasesOfThisStatus_003(element, statusName, list) {
                 }%)</div>
                 ${ displayDetailIfExist_003(item, 'module', '模块') }
                 ${ displayDetailIfExist_003(item, 'timeCost', '耗时') }
+                <div class="dinglj-flex"></div>
                 <div class="card-detail-line">
+                    ${ item.zip && item.zip.toLowerCase().endsWith('.zip') ? `<div class="download-zip" title="${ item.zip }" onclick="window.open('${ item.zip }')">下载打包文件</div>` : '' }
                     <div class="dinglj-flex"></div>
                     <div class="open-detail-window" onclick="showDetailModal_003('${ item.caseName }')">更多详情</div>
                 </div>
