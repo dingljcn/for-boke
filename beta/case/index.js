@@ -165,7 +165,7 @@ async function readCaseList_003(version) {
 
 function displayModules_003(modules, groups) {
     getById('left-navigator').innerHTML = modules.map(module => {
-        return `<div class="module-name" id="module-${ module }">
+        return `<div class="module-name" id="module-${ module }" title="通过数(${ groups[module].filter(i => i.status == context_003.const.SUCCESS).length }) : 用例总数(${ groups[module].length }) = 进度(${ (groups[module].filter(i => i.status == context_003.const.SUCCESS).length / groups[module].length * 100).toFixed(2) }%)">
             <div class="module-name-progress" style="width: ${ groups[module].filter(i => i.status == context_003.const.SUCCESS).length / groups[module].length * 100 }%"></div>
             <div class="module-name-text">${ module } (${ groups[module].length })</div>
         </div>`;
