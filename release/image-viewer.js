@@ -161,7 +161,7 @@ function initLayout_001() {
 
 /** 绘制行号 */
 function drawLineNumber_001() {
-    let res = get(`${ getBaseURL() }/1`);
+    let res = get(`${ getBaseURL() }1`);
     let reg = /.*<a href="([0-9]+\/)".*/;
     context_001.lineNumbers = res.split('\n')
         .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
