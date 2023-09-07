@@ -160,7 +160,7 @@ function initLayout_001() {
 
 /** 绘制行号 */
 function drawLineNumber_001() {
-    let res = get('1');
+    let res = get(`${ getBaseURL() }/1`);
     let reg = /.*<a href="([0-9]+\/)".*/;
     context_001.lineNumbers = res.split('\n')
         .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
@@ -239,7 +239,7 @@ function toItem_001(oldScope, newScope, element, callback) {
 function drawSteps(element) {
     const lineNumber = element.innerText;
     let reg = /.*\.png">(.*.png)<\/a>.*/;
-    let res = get(`1/${ lineNumber }`);
+    let res = get(`${ getBaseURL() }/1/${ lineNumber }`);
     context_001.steps[lineNumber] = res.split('\n')
             .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
             .filter(href => href != '');
@@ -248,6 +248,29 @@ function drawSteps(element) {
         .join('');
     bindStepEvent_001();
     getById('dinglj-step-total').innerText = Object.keys(context_001.steps[lineNumber]).length;
+}
+
+function getBaseURL() {
+    if (context_001.baseURL != null) {
+        return context_001.baseURL;
+    }
+    if (context_001.config.specialGains == undefined) {
+        alert('请前往共享文档使用最新脚本 工具和脚本/js/github.ver/变更截图查看.js')
+    }
+    for (let specialGain of context_001.config.specialGains) {
+        if (specialGain.regExp.test(window.location.href)) {
+            specialGain.callback(specialGain);
+            return context_001.baseURL;
+        }
+    }
+    context_001.baseURL = '';
+    return context_001.baseURL;
+}
+
+function getUrlParam(parameter, name) {
+    const reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    const result = parameter.match(reg);
+    return result == null ? null : decodeURI(result[2])
 }
 
 /** 界面点击步骤事件 */
@@ -270,8 +293,8 @@ function toStep_001(oldScope, newScope, element, fromClick = true) {
     }
     getById('dinglj-step-input').value = parseInt(element.innerText);
     const lineNumber = getById('dinglj-line-input').value;
-    getById('dinglj-image').src = `1/${ lineNumber }/${ element.innerText }`;
-    getById('dinglj-full-screen-image').src = `1/${ lineNumber }/${ element.innerText }`;
+    getById('dinglj-image').src = `${ getBaseURL() }/1/${ lineNumber }/${ element.innerText }`;
+    getById('dinglj-full-screen-image').src = `${ getBaseURL() }/1/${ lineNumber }/${ element.innerText }`;
     addToHistory_001(lineNumber, element.innerText);
 }
 
@@ -507,7 +530,7 @@ function toHistory_001(element, e) {
     toItem_001(context_001.focus, 'history', element);
     context_001.focus = 'history';
     let data = /\[(\d+)] - (.*)/.exec(element.innerText);
-    let key = `1/${ data[1] }/${ data[2] }`;
+    let key = `${ getBaseURL() }/1/${ data[1] }/${ data[2] }`;
     getById('dinglj-image').src = key;
     getById('dinglj-full-screen-image').src = key;
 }
@@ -554,7 +577,7 @@ function getImgData() {
 
 /** 1/行号/步骤.png 转为 lineNumber, step */
 function pathTolineNumberAndStep(text) {
-    let data = /1\/(\d+)\/(.*)/.exec(text);
+    let data = /.*1\/(\d+)\/(.*)/.exec(text);
     return {
         lineNumber: data[1],
         step: data[2]
@@ -566,7 +589,7 @@ function toStar_001(element, e) {
     toItem_001(context_001.focus, 'star', element);
     context_001.focus = 'star';
     let data = /\[(\d+)] - (.*)/.exec(element.innerText);
-    let key = `1/${ data[1] }/${ data[2] }`;
+    let key = `${ getBaseURL() }/1/${ data[1] }/${ data[2] }`;
     getById('dinglj-image').src = key;
     getById('dinglj-full-screen-image').src = key;
 }

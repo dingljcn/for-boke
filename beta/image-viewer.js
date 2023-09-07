@@ -254,6 +254,9 @@ function getBaseURL() {
     if (context_001.baseURL != null) {
         return context_001.baseURL;
     }
+    if (context_001.config.specialGains == undefined) {
+        alert('请前往共享文档使用最新脚本 工具和脚本/js/github.ver/变更截图查看.js')
+    }
     for (let specialGain of context_001.config.specialGains) {
         if (specialGain.regExp.test(window.location.href)) {
             specialGain.callback(specialGain);

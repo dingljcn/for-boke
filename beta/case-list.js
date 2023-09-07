@@ -57,6 +57,7 @@ const context = {
 }
 
 function run(config = null) {
+    alert('该脚本将于 2023.10.31 删除, 请前往共享文档使用最新脚本 工具和脚本/js/github.ver/用例清单美化.js')
     if (config == null) {
         alert('未传入配置项, 脚本终止执行');
         return;

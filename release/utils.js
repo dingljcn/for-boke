@@ -150,7 +150,9 @@ function getById(id) {
 
 /** 根据 class 获取 html 元素 */
 function getByClass(className) {
-    return document.getElementsByClassName(className);
+    let result = [];
+    result.push(...document.getElementsByClassName(className))
+    return result;
 }
 
 /**
@@ -335,4 +337,19 @@ Date.prototype.equalWeek = function(that) {
 
 Date.prototype.equalDate = function(that) {
     return this.getFullYear() == that.getFullYear() && (this.getMonth() + 1) == (that.getMonth() + 1) && this.getDate() == that.getDate();
+}
+
+/** callback: 传入数组中的一个元素, 返回 key */
+function groupBy(list = [], prop, callback = null) {
+    let result = {};
+    for (let item of list) {
+        let key = callback == null ? item[prop] : callback(item);
+        let array = result[key];
+        if (!array) {
+            array = [];
+            result[key] = array;
+        }
+        array.push(item);
+    }
+    return result;
 }
