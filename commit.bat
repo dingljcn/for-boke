@@ -1,4 +1,4 @@
 @echo off
 git add .
-git commit -m 'case-list'
+git commit -m 'image-viewer'
 git push

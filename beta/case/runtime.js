@@ -73,7 +73,9 @@ const context_003 = {
         SENDED: new LangItem('SENDED', '已发送'),
         NOTSEND: new LangItem('NOTSEND', '待发送'),
         WAITTING: new LangItem('WAITTING', '等待资源'),
-    }
+    },
+    details: {},
+    onPostShow: []
 }
 
 async function getResponse_003(urls, prop = {}) {
@@ -103,5 +105,11 @@ async function getDefaultCases_003() {
 async function getCases_003(erpVersion) {
     return await getResponse_003(context_003.config.urls.cases, {
         'erpVersion': erpVersion
+    });
+}
+
+async function getOneCaseHistory_003(caseName) {
+    return await getResponse_003(context_003.config.urls.cases, {
+        'queryName': encodeURI(caseName).replaceAll(/%/g, '%25')
     });
 }

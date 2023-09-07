@@ -369,3 +369,33 @@ function displayDetailIfExist_003(_case, field, name) {
     }
     return ``;
 }
+
+async function readOneCaseHistory(caseName) {
+    let groups = {};
+    if (context_003.details[caseName]) {
+        groups = context_003.details[caseName];
+    } else {
+        let caseList = await getOneCaseHistory_003(caseName);
+        caseList = caseList.filter(i => i.batchCode).map(i => {
+            let date = /^(\d{8})/.exec(i.batchCode)[1];
+            date = date.replaceAll(/(\d{4})(\d{2})(\d{2})/g, '{"year":"$1","month":"$2","day":"$3"}');
+            date = JSON.parse(date);
+            return {
+                batch: /-(\d+)$/.exec(i.batchCode)[1],
+                year: date.year,
+                month: date.month,
+                day: date.day,
+                curRow: i.currentRow,
+                totalRow: i.totalRow,
+                curStep: i.endStepNum,
+                totalStep: i.totalStepNum,
+                dbType: i.dbType,
+                timeCost: i.timeCost,
+                version: /^[a-z]+_[a-z]+_[a-z0-9]+_\d{8}_(\d+)/i.exec(i.erpVersion)[1],
+            }
+        });
+        groups = groupBy(caseList, 'month');
+        context_003.details[caseName] = groups;
+    }
+    return groups;
+}
