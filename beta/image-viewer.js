@@ -15,7 +15,8 @@ const context_001 = {
     },
     shortcut: {
         alt: false
-    }
+    },
+    baseURL: null,
 };
 
 function onload_001(callback) {
@@ -239,7 +240,7 @@ function toItem_001(oldScope, newScope, element, callback) {
 function drawSteps(element) {
     const lineNumber = element.innerText;
     let reg = /.*\.png">(.*.png)<\/a>.*/;
-    let res = get(`${ getBaseURL() }/1/${ lineNumber }`);
+    let res = get(`${ getBaseURL() }1/${ lineNumber }`);
     context_001.steps[lineNumber] = res.split('\n')
             .map(line =>  reg.test(line) ? reg.exec(line)[1] : '')
             .filter(href => href != '');
@@ -260,6 +261,9 @@ function getBaseURL() {
     for (let specialGain of context_001.config.specialGains) {
         if (specialGain.regExp.test(window.location.href)) {
             specialGain.callback(specialGain);
+            if (!context_001.baseURL.endsWith('/')) {
+                context_001.baseURL += '/';
+            }
             return context_001.baseURL;
         }
     }
@@ -293,8 +297,8 @@ function toStep_001(oldScope, newScope, element, fromClick = true) {
     }
     getById('dinglj-step-input').value = parseInt(element.innerText);
     const lineNumber = getById('dinglj-line-input').value;
-    getById('dinglj-image').src = `${ getBaseURL() }/1/${ lineNumber }/${ element.innerText }`;
-    getById('dinglj-full-screen-image').src = `${ getBaseURL() }/1/${ lineNumber }/${ element.innerText }`;
+    getById('dinglj-image').src = `${ getBaseURL() }1/${ lineNumber }/${ element.innerText }`;
+    getById('dinglj-full-screen-image').src = `${ getBaseURL() }1/${ lineNumber }/${ element.innerText }`;
     addToHistory_001(lineNumber, element.innerText);
 }
 
@@ -530,7 +534,7 @@ function toHistory_001(element, e) {
     toItem_001(context_001.focus, 'history', element);
     context_001.focus = 'history';
     let data = /\[(\d+)] - (.*)/.exec(element.innerText);
-    let key = `${ getBaseURL() }/1/${ data[1] }/${ data[2] }`;
+    let key = `${ getBaseURL() }1/${ data[1] }/${ data[2] }`;
     getById('dinglj-image').src = key;
     getById('dinglj-full-screen-image').src = key;
 }
@@ -589,7 +593,7 @@ function toStar_001(element, e) {
     toItem_001(context_001.focus, 'star', element);
     context_001.focus = 'star';
     let data = /\[(\d+)] - (.*)/.exec(element.innerText);
-    let key = `${ getBaseURL() }/1/${ data[1] }/${ data[2] }`;
+    let key = `${ getBaseURL() }1/${ data[1] }/${ data[2] }`;
     getById('dinglj-image').src = key;
     getById('dinglj-full-screen-image').src = key;
 }
