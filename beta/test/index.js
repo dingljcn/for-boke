@@ -43,7 +43,7 @@ function readTickets_004() {
             for (let j = 0; j < cells.length; j++) {
                 object[context_004.fields.origin[j]] = cells[j];
             }
-            context_004.runtime.tickets.push(object);
+            context_004.rt.tickets.push(object);
         }
     }
     func($('.even'));
