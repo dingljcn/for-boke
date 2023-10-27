@@ -23,5 +23,12 @@ function doSelectComponents(id) {
 
 function invokeRefresh_004() {
     let components = getByClass('dinglj-filter-component active').map(ele => ele.innerText.trim());
-    refreshTickets_004(components);
+    let displayMode = getByClass('dinglj-filter-mode active')[0].innerText.trim();
+    refreshTickets_004(components, displayMode);
+}
+
+function doChangeMode(id) {
+    getByClass('dinglj-filter-mode active')[0].classList.remove('active');
+    getById(id).classList.add('active');
+    invokeRefresh_004();
 }
