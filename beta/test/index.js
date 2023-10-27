@@ -65,7 +65,7 @@ function drawFilter() {
     </div>
     <div class="filter-line">
         <div class="filter-name">显示模式: </div>
-        ${ modeList.map(mode => `<div class="dinglj-filter-mode ${ context_004.config.filter.defaultMode == mode.zh ? 'active' : '' }" id="mode-${ mode.en }" onclick="doChangeMode('mode-${ mode.zh }')">${ mode.zh }</div>`).join('') }
+        ${ modeList.map(mode => `<div class="dinglj-filter-mode ${ context_004.config.filter.defaultMode == mode.zh ? 'active' : '' }" id="mode-${ mode.en }" onclick="doChangeMode('mode-${ mode.en }')">${ mode.zh }</div>`).join('') }
     </div>
     `
 }
