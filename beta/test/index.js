@@ -20,7 +20,7 @@ async function run_004() {
 }
 
 async function loadRptData_004() {
-    let htmlText = await $.get('http://dev.bokesoft.com:8000/trac/eri-erp/report/22?max=1000');
+    let htmlText = await $.get(context_004.config.report_url);
     htmlText = htmlText.substring(htmlText.indexOf('<div id="banner">'), htmlText.indexOf('</body>') + '</body>'.length);
     htmlText = htmlText.replaceAll(/id="/g, 'id="dinglj-rpt-');
     $('#main')[0].innerHTML = `
