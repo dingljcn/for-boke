@@ -60,7 +60,7 @@ function drawFilter() {
     </div>
     <div class="filter-line">
         <div class="filter-name">组件: </div>
-        ${ components.map(comp => `<div class="dinglj-filter-component" id="comp-${ comp }" onclick="'comp-${ comp }'">${ comp }</div>`).join('') }
+        ${ components.map(comp => `<div class="dinglj-filter-component" id="comp-${ comp }" onclick="doSelectComponents('comp-${ comp }')">${ comp }</div>`).join('') }
     </div>
     `
 }
