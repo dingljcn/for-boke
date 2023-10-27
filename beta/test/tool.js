@@ -9,3 +9,9 @@ const context_004 = {
         zhCN: ['变更号', '概述', '状态', '优先级', '模块', '属主', '创建时间', '修改时间', '已创建天数', '截至上次修改天数'], /* 要显示的字段顺序名称 */
     }
 }
+
+function doSelectComponents(id) {
+    let element = getById(id);
+    element.classList.add('active');
+    // refreshTickets();
+}
