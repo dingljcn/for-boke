@@ -370,7 +370,7 @@ function onSelectionClicked(callback, id) {
     let val = click.parentNode.previousElementSibling;
     val.innerText = click.innerText.trim();
     if (callback.trim()) {
-        eval(`callback('${ val.innerText }')`);
+        eval(`${ callback }('${ val.innerText }')`);
     }
 }
 
