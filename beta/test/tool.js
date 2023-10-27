@@ -10,8 +10,13 @@ const context_004 = {
     }
 }
 
+/** 选择了组件, 如果已经激活, 则取消激活, 未激活则激活 */
 function doSelectComponents(id) {
     let element = getById(id);
-    element.classList.add('active');
-    // refreshTickets();
+    if (element.classList.contains('active')) {
+        element.classList.remove('active');
+    } else {
+        element.classList.add('active');
+    }
+    refreshTickets(getByClass('dinglj-filter-component active'));
 }
