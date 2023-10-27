@@ -1,6 +1,10 @@
 function prepare_scripts_004(loadScript, callback) {
     loadScript('utils.js', () => {
-        loadScript('test/index.css', () => {});
+        let link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://dingljcn.github.io/for-boke/beta/test/index.css?version=' + Math.random();
+        document.head.appendChild(link);
         loadScript('test/tool.js', () => {
             context_004.config = callback();
             run_004();
