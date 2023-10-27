@@ -33,3 +33,13 @@ function doChangeMode(id) {
     getById(id).classList.add('active');
     invokeRefresh_004();
 }
+
+function onOwnerFilterChange(value) {
+    console.log(`owner select: ${ value }`);
+    invokeRefresh_004();
+}
+
+function onGroupByChange(value) {
+    console.log(`mode select: ${ value }`);
+    invokeRefresh_004();
+}
