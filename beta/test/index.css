@@ -19,7 +19,7 @@ body {
 .dinglj-select-container { /* 选择器容器 */
     font-size: 14px;
     line-height: 18px;
-    width: 100px;
+    width: 200px;
     height: 20px;
     position: relative;
 }
@@ -33,6 +33,16 @@ body {
     transition: 0.3s;
     height: 0px;
     overflow: hidden;
+    width: 200px;
+}
+.select-item { /* 选择器的选项 */
+    transition: 0.3s;
+    line-height: 24px;
+    width: 200px;
+    cursor: pointer;
+}
+.select-item:hover {
+    color: #0078d7;
 }
 .dinglj-select-container:hover .select-items {
     height: 200px;
