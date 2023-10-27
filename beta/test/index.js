@@ -27,6 +27,7 @@ async function run_004() {
     drawFilter();
     await loadRptData_004();
     readTickets_004();
+    invokeRefresh_004();
 }
 
 async function loadRptData_004() {
@@ -55,7 +56,7 @@ function readTickets_004() {
 function drawFilter() {
     let selectOwner = generateSelect('dinglj-owner-filter', Array.from(new Set(context_004.rt.tickets.map(t => t.owner))));
     let components = Array.from(new Set(context_004.rt.tickets.map(t => t.component)));
-    let groupBy = generateSelect('dinglj-filter-group-by', components);
+    let groupBy = generateSelect('dinglj-filter-group-by', components, '模块');
     let modeList = [new LangItem('nav', '导航显示'), new LangItem('tab', '分页显示'), new LangItem('noti', '分栏显示')]
     $('#dinglj-filter')[0].innerHTML = `<div class="filter-line">
         <div class="filter-name">属主: </div>
@@ -76,11 +77,14 @@ function drawFilter() {
     `
 }
 
-function refreshTickets_004(components = [], mode = '导航显示', groupBy = 'component') {
+function refreshTickets_004(components = [], mode = '导航显示', groupByName = '模块') {
     console.log(`显示模式: ${ mode }`);
     let data = JSON.parse(JSON.stringify(context_004.rt.tickets));
     if (components.length > 0) { // 有数据, 根据组件过滤
         data = data.filter(t => components.includes(t.component))
     }
+    let groupIdx = context_004.fields.zhCN.indexOf(groupByName);
+    let groupField = context_004.fields.display[groupIdx];
+    data = groupBy(data, groupField);
     console.log(data);
 }
