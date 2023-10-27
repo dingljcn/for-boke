@@ -64,3 +64,11 @@ function drawFilter() {
     </div>
     `
 }
+
+function refreshTickets(components = []) {
+    let data = JSON.parse(JSON.stringify(context_004.rt.tickets));
+    if (data.length > 0) { // 有数据, 根据组件过滤
+        data = data.filter(t => components.includes(t.component))
+    }
+    console.log(data);
+}
