@@ -31,6 +31,7 @@ body {
     top: 20px;
     left: 0px;
     transition: 0.3s;
+    overflow: hidden;
     height: 0px;
     width: 200px;
 }
@@ -46,7 +47,7 @@ body {
     background: #EEE;
 }
 .dinglj-select-container:hover .select-items {
-    height: 200px;
+    height: 150px;
     overflow-y: scroll;
     overflow-x: hidden;
 }
