@@ -19,20 +19,21 @@ async function run_004() {
         console.error(context_004.config.matchList);
         return;
     }
+    $('#main')[0].innerHTML = `
+        <div id="dinglj-hidden-blocks" style="display: none"></div>
+        <div id="dinglj-filter"></div>
+        <div id="dinglj-main"></div>
+    `
+    drawFilter();
     await loadRptData_004();
     readTickets_004();
-    drawFilter();
 }
 
 async function loadRptData_004() {
     let htmlText = await $.get(context_004.config.report_url);
     htmlText = htmlText.substring(htmlText.indexOf('<div id="banner">'), htmlText.indexOf('</body>') + '</body>'.length);
     htmlText = htmlText.replaceAll(/id="/g, 'id="dinglj-rpt-');
-    $('#main')[0].innerHTML = `
-        <div id="dinglj-hidden-blocks" style="display: none">${ htmlText }</div>
-        <div id="dinglj-filter"></div>
-        <div id="dinglj-main"></div>
-    `;
+    getById('dinglj-hidden-blocks').innerHTML = htmlText;
 }
 
 function readTickets_004() {
@@ -54,6 +55,7 @@ function readTickets_004() {
 function drawFilter() {
     let selectOwner = generateSelect('dinglj-owner-filter', Array.from(new Set(context_004.rt.tickets.map(t => t.owner))));
     let components = Array.from(new Set(context_004.rt.tickets.map(t => t.component)));
+    let groupBy = generateSelect('dinglj-filter-group-by', components);
     let modeList = [new LangItem('nav', '导航显示'), new LangItem('tab', '分页显示'), new LangItem('noti', '分栏显示')]
     $('#dinglj-filter')[0].innerHTML = `<div class="filter-line">
         <div class="filter-name">属主: </div>
@@ -67,13 +69,17 @@ function drawFilter() {
         <div class="filter-name">显示模式: </div>
         ${ modeList.map(mode => `<div class="dinglj-filter-mode ${ context_004.config.filter.defaultMode == mode.zh ? 'active' : '' }" id="mode-${ mode.en }" onclick="doChangeMode('mode-${ mode.en }')">${ mode.zh }</div>`).join('') }
     </div>
+    <div class="filter-line">
+        <div class="filter-name">分组模式: </div>
+        <div class="filter-value">${ groupBy }</div>
+    </div>
     `
 }
 
-function refreshTickets_004(components = [], mode = '导航显示') {
+function refreshTickets_004(components = [], mode = '导航显示', groupBy = 'component') {
     console.log(`显示模式: ${ mode }`);
     let data = JSON.parse(JSON.stringify(context_004.rt.tickets));
-    if (data.length > 0) { // 有数据, 根据组件过滤
+    if (components.length > 0) { // 有数据, 根据组件过滤
         data = data.filter(t => components.includes(t.component))
     }
     console.log(data);
