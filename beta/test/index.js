@@ -53,8 +53,14 @@ function readTickets_004() {
 
 function drawFilter() {
     let selectOwner = generateSelect('dinglj-owner-filter', Array.from(new Set(context_004.rt.tickets.map(t => t.owner))));
+    let components = Array.from(new Set(context_004.rt.tickets.map(t => t.component)));
     $('#dinglj-filter')[0].innerHTML = `<div class="filter-line">
         <div class="filter-name">属主: </div>
         <div class="filter-value">${ selectOwner }</div>
-    </div>`
+    </div>
+    <div class="filter-line">
+        <div class="filter-name">组件: </div>
+        ${ components.map(comp => `<div class="dinglj-filter-component" id="comp-${ comp }" onclick="'comp-${ comp }'">${ comp }</div>`).join('') }
+    </div>
+    `
 }
