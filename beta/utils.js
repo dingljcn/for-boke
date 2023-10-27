@@ -357,7 +357,7 @@ function groupBy(list = [], prop, callback = null) {
 /** 绘制选择控件 */
 function generateSelect(id, list = []) {
     return `<div class="dinglj-select-container" id="${ id }-select-container">
-        <div class="select-value" id="${ id }-select-value">${ list[0] }</div>
+        <div class="select-value" id="${ id }-select-value">请选择</div>
         <div class="select-items" id="${ id }-select-items">
             ${ list.map(val => `<div class="select-item" id="${ id }-select-${ val }" onclick="onSelectionClicked('${ id }-select-${ val }')">${ val }</div>`).join('') }
         </div>
