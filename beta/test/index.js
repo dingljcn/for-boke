@@ -54,6 +54,7 @@ function readTickets_004() {
 function drawFilter() {
     let selectOwner = generateSelect('dinglj-owner-filter', Array.from(new Set(context_004.rt.tickets.map(t => t.owner))));
     let components = Array.from(new Set(context_004.rt.tickets.map(t => t.component)));
+    let modeList = [new LangItem('nav', '导航显示'), new LangItem('tab', '分页显示'), new LangItem('noti', '分栏显示')]
     $('#dinglj-filter')[0].innerHTML = `<div class="filter-line">
         <div class="filter-name">属主: </div>
         <div class="filter-value">${ selectOwner }</div>
@@ -62,10 +63,15 @@ function drawFilter() {
         <div class="filter-name">组件: </div>
         ${ components.map(comp => `<div class="dinglj-filter-component" id="comp-${ comp }" onclick="doSelectComponents('comp-${ comp }')">${ comp }</div>`).join('') }
     </div>
+    <div class="filter-line">
+        <div class="filter-name">显示模式: </div>
+        ${ modeList.map(mode => `<div class="dinglj-filter-mode ${ context_004.config.filter.defaultMode == mode.zh ? 'active' : '' }" id="mode-${ mode.en }" onclick="doChangeMode('mode-${ mode.zh }')">${ mode.zh }</div>`).join('') }
+    </div>
     `
 }
 
-function refreshTickets_004(components = []) {
+function refreshTickets_004(components = [], mode = '导航显示') {
+    console.log(`显示模式: ${ mode }`);
     let data = JSON.parse(JSON.stringify(context_004.rt.tickets));
     if (data.length > 0) { // 有数据, 根据组件过滤
         data = data.filter(t => components.includes(t.component))
