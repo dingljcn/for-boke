@@ -24,7 +24,8 @@ function doSelectComponents(id) {
 function invokeRefresh_004() {
     let components = getByClass('dinglj-filter-component active').map(ele => ele.innerText.trim());
     let displayMode = getByClass('dinglj-filter-mode active')[0].innerText.trim();
-    refreshTickets_004(components, displayMode);
+    let groupBy = getSelectValue('dinglj-filter-group-by');
+    refreshTickets_004(components, displayMode, groupBy);
 }
 
 function doChangeMode(id) {
