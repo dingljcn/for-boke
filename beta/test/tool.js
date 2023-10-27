@@ -18,5 +18,5 @@ function doSelectComponents(id) {
     } else {
         element.classList.add('active');
     }
-    refreshTickets(getByClass('dinglj-filter-component active'));
+    invokeRefresh_004();
 }
