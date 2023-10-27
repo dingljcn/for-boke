@@ -21,6 +21,7 @@ async function run_004() {
     }
     await loadRptData_004();
     readTickets_004();
+    drawFilter();
 }
 
 async function loadRptData_004() {
@@ -48,4 +49,12 @@ function readTickets_004() {
     }
     func($('.even'));
     func($('.odd'));
+}
+
+function drawFilter() {
+    let selectOwner = generateSelect('dinglj-owner-filter', Array.from(new Set(context_004.rt.tickets.map(t => t.owner))));
+    $('#dinglj-filter')[0].innerHTML = `<div class="filter-line">
+        <div class="filter-name">属主: </div>
+        <div class="filter-value">${ selectOwner }</div>
+    </div>`
 }
