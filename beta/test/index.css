@@ -4,7 +4,8 @@
 #footer {
     display: none;
 }
-.dinglj-filter-component {
+.dinglj-filter-component,
+.dinglj-filter-mode {
     border-radius: 3px;
     display: inline-block;
     margin: 0 3px;
