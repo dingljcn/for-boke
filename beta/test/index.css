@@ -48,3 +48,13 @@ body {
     height: 200px;
     overflow: scroll;
 }
+.filter-name,
+.filter-value {
+    display: inline-block;
+}
+.filter-name: {
+    width: 80px;
+}
+.filter-value {
+    width: 200px;
+}
