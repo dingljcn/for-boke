@@ -30,4 +30,11 @@ body {
     position: absolute;
     top: 20px;
     left: 0px;
+    transition: 0.3s;
+    height: 0px;
+    overflow: hidden;
+}
+.dinglj-select-container:hover .select-items {
+    height: 200px;
+    overflow: scroll;
 }
