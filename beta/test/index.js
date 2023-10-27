@@ -53,9 +53,9 @@ function readTickets_004() {
 }
 
 function drawFilter() {
-    let selectOwner = generateSelect('dinglj-owner-filter', Array.from(new Set(context_004.rt.tickets.map(t => t.owner))));
+    let selectOwner = generateSelect('dinglj-owner-filter', Array.from(new Set(context_004.rt.tickets.map(t => t.owner))), 'onOwnerFilterChange');
     let components = Array.from(new Set(context_004.rt.tickets.map(t => t.component)));
-    let groupBy = generateSelect('dinglj-filter-group-by', components, '模块');
+    let groupBy = generateSelect('dinglj-filter-group-by', context_004.fields.zhCN, 'onGroupByChange', '模块');
     let modeList = [new LangItem('nav', '导航显示'), new LangItem('tab', '分页显示'), new LangItem('noti', '分栏显示')]
     $('#dinglj-filter')[0].innerHTML = `<div class="filter-line">
         <div class="filter-name">属主: </div>
