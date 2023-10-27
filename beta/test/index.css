@@ -1,6 +1,33 @@
 * {
-  outline: none
+    outline: none
+}
+#footer {
+    display: none;
 }
 body {
-  margin: 0
+    margin: 0
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+#dinglj-filter {
+    height: 200px;
+    background: #DDD;
+    padding: 10px;
+}
+.dinglj-select-container { /* 选择器容器 */
+    font-size: 14px;
+    line-height: 18px;
+    width: 100px;
+    height: 20px;
+    position: relative;
+}
+.select-value { /* 选择器的值 */
+    
+}
+.select-items { /* 选择器的选项 */
+    position: absolute;
+    top: 20px;
+    left: 0px;
 }
