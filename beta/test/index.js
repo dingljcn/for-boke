@@ -65,7 +65,7 @@ function drawFilter() {
     `
 }
 
-function refreshTickets(components = []) {
+function refreshTickets_004(components = []) {
     let data = JSON.parse(JSON.stringify(context_004.rt.tickets));
     if (data.length > 0) { // 有数据, 根据组件过滤
         data = data.filter(t => components.includes(t.component))
