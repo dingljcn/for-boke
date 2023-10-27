@@ -20,3 +20,8 @@ function doSelectComponents(id) {
     }
     invokeRefresh_004();
 }
+
+function invokeRefresh_004() {
+    let components = getByClass('dinglj-filter-component active').map(ele => ele.innerText.trim());
+    refreshTickets_004(components);
+}
