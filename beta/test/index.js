@@ -19,14 +19,9 @@ async function run_004() {
         console.error(context_004.config.matchList);
         return;
     }
-    $('#main')[0].innerHTML = `
-        <div id="dinglj-hidden-blocks" style="display: none"></div>
-        <div id="dinglj-filter"></div>
-        <div id="dinglj-main"></div>
-    `
-    drawFilter();
     await loadRptData_004();
     readTickets_004();
+    drawFilter();
     invokeRefresh_004();
 }
 
@@ -34,7 +29,11 @@ async function loadRptData_004() {
     let htmlText = await $.get(context_004.config.report_url);
     htmlText = htmlText.substring(htmlText.indexOf('<div id="banner">'), htmlText.indexOf('</body>') + '</body>'.length);
     htmlText = htmlText.replaceAll(/id="/g, 'id="dinglj-rpt-');
-    getById('dinglj-hidden-blocks').innerHTML = htmlText;
+    getById('main').innerHTML = `
+        <div id="dinglj-hidden-blocks" style="display: none">${ htmlText }</div>
+        <div id="dinglj-filter"></div>
+        <div id="dinglj-main"></div>
+    `
 }
 
 function readTickets_004() {
