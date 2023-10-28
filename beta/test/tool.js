@@ -100,5 +100,8 @@ function onMouseIn(ele, ticket) {
     let newElement = document.createElement('div');
     newElement.id = `menu-for-${ ticket }`;
     newElement.classList.add('ticket-menu');
+    newElement.addEventListener('mouseout', () => {
+        getById(`menu-for-${ ticket }`).remove()
+    });
     ele.appendChild(newElement);
 }
