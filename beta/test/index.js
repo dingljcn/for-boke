@@ -165,7 +165,7 @@ function generateTableData_004(tableKey = '', list) {
         </div>`;
         for (let i = 1; i < context_004.fields.display.length; i++) {
             let key = context_004.fields.display[i];
-            lineHTML += `<div class="dinglj-cell dinglj-column-${ key }" ${ key == 'summary' ?  `onmouseover="onMouseIn(this,'${ ticketID }')"` : '' }>${ line[key] }</div>`;
+            lineHTML += `<div class="dinglj-cell dinglj-column-${ key }" ${ key == 'summary' ?  `onmouseenter="onMouseIn(this,'${ ticketID }')"` : '' }>${ line[key] }</div>`;
         }
         html.push(`<div class="dinglj-tr dinglj-data">${ lineHTML }</div>`);
     }
