@@ -18,6 +18,7 @@
 .dinglj-tr {
     display: flex;
     line-height: 36px;
+    transition: var(--default-transition);
 }
 .dinglj-cell {
     text-align: center;
@@ -37,6 +38,7 @@
     background: #223;
     color: white;
     font-weight: bolder;
+    margin-right: 15px;
 }
 #ticket-list-view {
     flex: 1;
@@ -189,4 +191,8 @@ body {
 .dinglj-tdata .dinglj-column-id {
     cursor: pointer;
     color: var(--theme-color);
+    font-weight: bold;
+}
+.dinglj-tr:hover {
+    background: #a0c5e8;
 }
