@@ -89,3 +89,8 @@ function encodeUID(m) {
 function decodeUID(m) {
     return context_004.rt.decodeUID[m];
 }
+
+function onTableCheckAll(tableKey) {
+    let checkAll = getById(`check-all-${ tableKey }`);
+    getByClass(`check-${ tableKey }`).forEach(ele => ele.checked = checkAll.checked);
+}
