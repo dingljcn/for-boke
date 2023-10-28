@@ -7,6 +7,54 @@
 * {
     outline: none
 }
+#dinglj-navigator {
+    height: 100%;
+    width: 200px;
+}
+#ticket-list-view {
+    flex: 1;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+#dinglj-navigator-display-mode {
+    height: 100%;
+    display: flex;
+}
+.dinglj-nav-item {
+    text-align: center;
+    margin: 5px;
+    border-radius: 5px;
+    padding: 5px;
+    position: relative;
+    overflow: hidden;
+    transition: var(--defalut-transition);
+    cursor: pointer;
+}
+.dinglj-nav-item:hover {
+    background: #EEE;
+}
+.nav-name {
+    position: relative;
+    z-index: 9;
+    transition: var(--defalut-transition);
+}
+.active-nav .nav-name {
+    color: white;
+    font-weight: bold;
+}
+.nav-mask {
+    position: absolute;
+    width: 0%;
+    height: 100%;
+    background: var(--theme-color);
+    top: 0;
+    left: 0;
+    transition: var(--defalut-transition);
+}
+.active-nav .nav-mask {
+    width: 100%;
+}
 #footer {
     display: none;
 }
