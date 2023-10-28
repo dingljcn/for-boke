@@ -60,6 +60,7 @@ function drawFilter() {
         callback: 'onOwnerFilterChange',
         className: 'dinglj-owner-filter-selector'
     });
+    context_004.fields.zhCN.filter(n => ['变更号', '概述', '修改时间'])
     let groupBy = generateSelect('dinglj-filter-group-by', context_004.fields.zhCN, {
         callback: 'onGroupByChange',
         defaultValue: '模块'
