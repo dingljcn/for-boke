@@ -114,7 +114,8 @@ function onMouseIn(ele, ticket) {
     newElement.id = `menu-for-${ ticket }`;
     newElement.classList.add('ticket-menu');
     newElement.addEventListener('mouseleave', () => {
-        getById(`menu-for-${ ticket }`).remove()
+        getById(`menu-for-${ ticket }`).remove();
+        invokeRefresh_004();
     });
     ele.appendChild(newElement);
 }
