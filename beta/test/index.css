@@ -46,6 +46,15 @@
 #dinglj-navigator-display-mode {
     height: 100%;
     display: flex;
+    overflow: hidden;
+}
+.dinglj-table-container {
+    height: 100%;
+    overflow: hidden;
+}
+.dinglj-tdata {
+    height: 100%;
+    overflow-y: scroll;
 }
 .dinglj-nav-item {
     text-align: center;
