@@ -21,11 +21,16 @@ function doSelectComponents(id) {
     invokeRefresh_004();
 }
 
+function getOwnerFilters() {
+    return getByClass('dinglj-owner-filter-selector').map(ele => ele.children[0].innerText);
+}
+
 function invokeRefresh_004() {
     let components = getByClass('dinglj-filter-component active').map(ele => ele.innerText.trim());
     let displayMode = getByClass('dinglj-filter-mode active')[0].innerText.trim();
     let groupBy = getSelectValue('dinglj-filter-group-by');
-    refreshTickets_004(components, displayMode, groupBy);
+    let owners = getOwnerFilters();
+    refreshTickets_004(owners, components, displayMode, groupBy);
 }
 
 function doChangeMode(id) {
@@ -42,4 +47,8 @@ function onOwnerFilterChange(value) {
 function onGroupByChange(value) {
     console.log(`mode select: ${ value }`);
     invokeRefresh_004();
+}
+
+function getTicketFieldValues(field = 'component') {
+    return Array.from(new Set(context_004.rt.tickets.map(t => t[field])));
 }
