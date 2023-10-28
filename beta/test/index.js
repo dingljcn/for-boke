@@ -169,5 +169,5 @@ function generateTableData_004(tableKey = '', list) {
         }
         html.push(`<div class="dinglj-tr dinglj-data">${ lineHTML }</div>`);
     }
-    return `<div class="dinglj-tdata">${ html.join('') }</div>`;
+    return `<div class="dinglj-tdata" onmouseleave="getByClass('ticket-menu').forEach(e => e.remove())">${ html.join('') }</div>`;
 }
