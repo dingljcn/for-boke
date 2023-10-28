@@ -38,7 +38,7 @@ function addDeleteIcon(list = []) {
 }
 
 function getOwnerFilters() {
-    return getByClass('dinglj-owner-filter-selector').map(ele => ele.children[0].innerText);
+    return getByClass('dinglj-owner-filter-selector').map(ele => ele.children[1].innerText);
 }
 
 function invokeRefresh_004() {
