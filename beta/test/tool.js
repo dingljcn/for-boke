@@ -62,7 +62,7 @@ function onNavChange_004(name) {
     getById(`mode-${ name }`).classList.add('active-nav');
     let key = decodeUID(name);
     let tickets = context_004.rt.filteredData[key];
-    getById('ticket-list-view').innerHTML = generateTable_004(tickets);
+    getById('ticket-list-view').innerHTML = generateTable_004(name, tickets);
     context_004.fields.display.forEach(key => {
         if (key == 'summary') {
             return;
