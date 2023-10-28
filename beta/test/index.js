@@ -87,17 +87,37 @@ function drawFilter() {
 function refreshTickets_004(ownerList = [], components = [], mode = '导航显示', groupByName = '模块') {
     console.log(`显示模式: ${ mode }`);
     let data = JSON.parse(JSON.stringify(context_004.rt.tickets));
-    if (components.length > 0) { // 有数据, 根据组件过滤
+    /************************** 组件过滤 *********************/
+    if (components.length > 0) {
         data = data.filter(t => components.includes(t.component));
     }
+    /************************** 属主过滤 *********************/
+    let ownerNames = getTicketFieldValues('owner');
+    ownerList = ownerList.filter(name => ownerNames.includes(name)); // 先把条件中不存在的名称过滤掉
     if (ownerList.length > 0) {
-        let ownerNames = getTicketFieldValues('owner');
-        ownerList = ownerList.filter(name => ownerNames.includes(name)); // 将不存在的名字过滤
         data = data.filter(t => ownerList.includes(t.owner)); // 正式对输入进行过滤
     }
-    // 分组
+    /************************** 分组 *********************/
     let groupIdx = context_004.fields.zhCN.indexOf(groupByName);
     let groupField = context_004.fields.display[groupIdx];
     data = groupBy(data, groupField);
-    console.log(data);
+    /************************** 显示 *********************/
+    switch (mode) {
+        case '导航模式': displayTickets_NavigatorMode(data); break;
+        case '分页显示': break;
+        case '分栏显示': break;
+    }
+}
+
+function displayTickets_NavigatorMode(data) {
+    let navHTML = getById('dinglj-navigator').innerHTML = Object.keys(dinglj).map(m => {
+        return `<div class="dinglj-nav-item" onclick="onNavChange_004('${ m.replace(' ', '-') }')" id="mode-${ m.replace(' ', '-') }">
+            <div class="nav-name">${ m }</div>
+            <div class="nav-mask"></div>
+        </div>`;
+    }).join('');
+    getById('dinglj-main').innerHTML = `<div id="dinglj-navigator-display-mode">
+        <div id="dinglj-navigator">${ navHTML }</div>
+        <div id="ticket-list-view"></div>
+    </div>`;
 }
