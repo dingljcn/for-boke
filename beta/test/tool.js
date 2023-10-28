@@ -105,3 +105,19 @@ function onMouseIn(ele, ticket) {
     });
     ele.appendChild(newElement);
 }
+
+function addNewOwner() {
+    let btnText = '<div class="dinglj-btn" id="add-new-owner-filter" onclick="addNewOwner()">添加属主</div>';
+    // 取元素
+    let parentNode = getById('add-new-owner-filter').parentNode;
+    // 添加元素
+    let owners = getTicketFieldValues('owner');
+    let size = getByClass('dinglj-owner-filter-selector').length;
+    let selectOwner = generateSelect(`dinglj-owner-filter-${ size + 1 }`, owners, {
+        callback: 'onOwnerFilterChange',
+        className: 'dinglj-owner-filter-selector'
+    });
+    let insertIdx = parentNode.innerHTML.indexOf(btnText);
+    parentNode.innerHTML = parentNode.innerHTML.replace(btnText, selectOwner + btnText);
+    console.log(1);
+}
