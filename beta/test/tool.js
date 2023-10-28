@@ -24,6 +24,16 @@ function doSelectComponents(id) {
     invokeRefresh_004();
 }
 
+function addDeleteIcon(list = []) {
+    for (let e of list) {
+        let newEle = document.createElement('div');
+        e.insertBefore(newEle, e.children[0]);
+        newEle.title = '移除该属主';
+        newEle.classList.add('dinglj-delete');
+        newEle.innerText = '×';
+    }
+}
+
 function getOwnerFilters() {
     return getByClass('dinglj-owner-filter-selector').map(ele => ele.children[0].innerText);
 }
@@ -119,5 +129,6 @@ function addNewOwner() {
     });
     let insertIdx = parentNode.innerHTML.indexOf(btnText);
     parentNode.innerHTML = parentNode.innerHTML.replace(btnText, selectOwner + btnText);
-    console.log(1);
+    let theNewSelect = getById(`dinglj-owner-filter-${ size + 1 }-select-container`);
+    addDeleteIcon([theNewSelect]);
 }
