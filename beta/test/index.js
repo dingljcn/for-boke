@@ -93,7 +93,7 @@ function refreshTickets_004(ownerList = [], components = [], mode = '导航显�
     if (ownerList.length > 0) {
         let ownerNames = getTicketFieldValues('owner');
         ownerList = ownerList.filter(name => ownerNames.includes(name)); // 将不存在的名字过滤
-        data = data.filter(t => ownerList.inlcudes(t.owner)); // 正式对输入进行过滤
+        data = data.filter(t => ownerList.includes(t.owner)); // 正式对输入进行过滤
     }
     // 分组
     let groupIdx = context_004.fields.zhCN.indexOf(groupByName);
