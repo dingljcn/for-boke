@@ -64,6 +64,7 @@ body {
     width: 200px;
     cursor: pointer;
     padding: 0 5px;
+    background: white;
 }
 .select-item:hover {
     color: var(--theme-color);
