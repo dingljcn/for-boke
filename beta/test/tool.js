@@ -63,6 +63,15 @@ function onNavChange_004(name) {
     let key = decodeUID(name);
     let tickets = context_004.rt.filteredData[key];
     getById('ticket-list-view').innerHTML = generateTable_004(tickets);
+    context_004.fields.display.forEach(key => {
+        if (key == 'summary') {
+            return;
+        }
+        let tickets = getByClass(`dinglj-column-${ key }`);
+        let widths = tickets.map(ele => ele.offsetWidth);
+        let max_width = Math.max(...widths);
+        tickets.forEach(ele => ele.style.width = `${ max_width + 20 }px`)
+    })
 }
 
 function encodeUID(m) {
