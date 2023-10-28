@@ -58,3 +58,19 @@ function onNavChange_004(name) {
     }
     getById(`mode-${ name }`).classList.add('active-nav');
 }
+
+function encodeUID(m) {
+    let result = context_004.rt.encodeUID[m];
+    if (result) {
+        return result;
+    } else {
+        result = uuid();
+        context_004.rt.encodeUID[m] = result;
+        context_004.rt.decodeUID[result] = m;
+        return result;
+    }
+}
+
+function decodeUID(m) {
+    return context_004.rt.decodeUID[m];
+}
