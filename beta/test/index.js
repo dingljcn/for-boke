@@ -55,14 +55,8 @@ function readTickets_004() {
 function drawFilter() {
     /********************** 模块过滤器 ************************/
     let components = getTicketFieldValues('component');
-    /********************** 属主过滤器 ************************/
-    let owners = getTicketFieldValues('owner');
     /********************** 显示方式切换 ************************/
     let modeList = [new LangItem('nav', '导航显示'), new LangItem('tab', '分页显示'), new LangItem('noti', '分栏显示')]
-    let selectOwner = generateSelect('dinglj-owner-filter', owners, {
-        callback: 'onOwnerFilterChange',
-        className: 'dinglj-owner-filter-selector'
-    });
     /********************** 分组方式切换 ************************/
     let groupByMethods =  context_004.fields.zhCN.filter(n => !(['变更号', '概述', '修改时间'].includes(n))); // 不允许以这几个进行分组, 因为可分组性太低了, 基本上都是唯一的
     let groupBy = generateSelect('dinglj-filter-group-by', groupByMethods, {
@@ -76,7 +70,9 @@ function drawFilter() {
     </div>
     <div class="filter-line">
         <div class="filter-name">属主: </div>
-        <div class="filter-value">${ selectOwner }</div>
+        <div class="filter-value">
+            <div class="dinglj-btn" id="add-new-owner-filter" onclick="addNewOwner()">添加属主</div>
+        </div>
     </div>
     <div class="filter-line">
         <div class="filter-name">显示模式: </div>
