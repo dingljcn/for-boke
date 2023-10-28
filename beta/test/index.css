@@ -207,14 +207,40 @@ body {
 .dinglj-tdata .dinglj-tr:hover {
     background: #a0c5e8;
 }
-
 .dinglj-btn {
     display: inline-block;
     background: var(--theme-color);
     color: white;
     padding: 0 10px;
     border-radius: 5px;
+    transition: var(--default-transition);
+    cursor: pointer;
+}
+.dinglj-btn:active {
+    background: #2d2dfd;
+}
+.dinglj-btn:hover {
+    background: #399fff;
 }
 .dinglj-owner-filter-selector {
-    margin-right: 7px;
+    margin-right: 5px;
+}
+.dinglj-delete {
+    position: absolute;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    line-height: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    top: -7px;
+    right: -7px;
+    display: none;
+}
+.dinglj-owner-filter-selector:hover .dinglj-delete {
+    display: block;
 }
