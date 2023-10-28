@@ -2,6 +2,9 @@ const context_004 = {
     config: {},
     rt: {
         tickets: [],
+        encodeUID: {},
+        decodeUID: {},
+        filteredData: [],
     },
     fields: {
         origin: ['id', 'priority', 'owner', 'create_time', 'modify_time', 'from_create', 'to_end', 'component', 'summary', 'status'], /* 变更报表原字段顺序 */
@@ -59,8 +62,7 @@ function onNavChange_004(name) {
     getById(`mode-${ name }`).classList.add('active-nav');
     let key = decodeID(name);
     let tickets = context_004.rt.filteredData[key];
-    let tableHTML = generateTable_004(tickets);
-    getById('ticket-list-view').innerHTML = tableHTML;
+    getById('ticket-list-view').innerHTML = generateTable_004(tickets);
 }
 
 function encodeUID(m) {
