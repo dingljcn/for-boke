@@ -31,6 +31,9 @@ function addDeleteIcon(list = []) {
         newEle.title = '移除该属主';
         newEle.classList.add('dinglj-delete');
         newEle.innerText = '×';
+        newEle.addEventListener('click', () => {
+            newEle.parentNode.remove();
+        })
     }
 }
 
