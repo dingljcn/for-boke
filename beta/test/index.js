@@ -64,8 +64,8 @@ function drawFilter() {
         className: 'dinglj-owner-filter-selector'
     });
     /********************** 分组方式切换 ************************/
-    let context_004.fields.zhCN.filter(n => !(['变更号', '概述', '修改时间'].includes(n))); // 不允许以这几个进行分组, 因为可分组性太低了, 基本上都是唯一的
-    let groupBy = generateSelect('dinglj-filter-group-by', context_004.fields.zhCN, {
+    let groupByMethods =  context_004.fields.zhCN.filter(n => !(['变更号', '概述', '修改时间'].includes(n))); // 不允许以这几个进行分组, 因为可分组性太低了, 基本上都是唯一的
+    let groupBy = generateSelect('dinglj-filter-group-by', groupByMethods, {
         callback: 'onGroupByChange',
         defaultValue: '模块'
     });
@@ -169,5 +169,5 @@ function generateTableData_004(tableKey = '', list) {
         }
         html.push(`<div class="dinglj-tr dinglj-data">${ lineHTML }</div>`);
     }
-    return html.join('');
+    return `<div class="dinglj-tdata">${ html.join('') }</div>`;
 }
