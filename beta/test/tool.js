@@ -102,14 +102,16 @@ function onTableCheckAll(tableKey) {
 }
 
 function onMouseIn(ele, ticket) {
-    getByClass('ticket-menu').forEach(e => e.remove());
-    let newElement = document.createElement('div');
-    newElement.id = `menu-for-${ ticket }`;
-    newElement.classList.add('ticket-menu');
-    newElement.addEventListener('mouseleave', () => {
-        getById(`menu-for-${ ticket }`).remove();
-    });
-    ele.appendChild(newElement);
+    setTimeout(() => {
+        getByClass('ticket-menu').forEach(e => e.remove());
+        let newElement = document.createElement('div');
+        newElement.id = `menu-for-${ ticket }`;
+        newElement.classList.add('ticket-menu');
+        newElement.addEventListener('mouseleave', () => {
+            getById(`menu-for-${ ticket }`).remove();
+        });
+        ele.appendChild(newElement);
+    }, 300);
 }
 
 function addNewOwner() {
