@@ -166,7 +166,7 @@ function generateTableData_004(tableKey = '', list) {
         for (let i = 1; i < context_004.fields.display.length; i++) {
             let key = context_004.fields.display[i];
             lineHTML += `<div class="dinglj-cell dinglj-column-${ key }" ${
-                key == 'summary' ?  `onmouseover="onMouseIn(this,'${ ticketID }')" onmouseout="getById('menu-for-${ ticketID }').remove()` : ''
+                key == 'summary' ?  `onmouseover="onMouseIn(this,'${ ticketID }')" onmouseout="getById('menu-for-${ ticketID }').remove()"` : ''
             }>${ line[key] }</div>`;
         }
         html.push(`<div class="dinglj-tr dinglj-data">${ lineHTML }</div>`);
