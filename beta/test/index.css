@@ -1,3 +1,9 @@
+:root {
+    --theme-color: #0078d7;
+    --filter-line-height: 28px;
+    --selector-height: 28px;
+    --defalut-transition: 0.3s;
+}
 * {
     outline: none
 }
@@ -13,7 +19,7 @@
     cursor: pointer;
 }
 .active {
-    background: #0078d7;
+    background: var(--theme-color);
     color: white;
 }
 body {
@@ -25,27 +31,31 @@ body {
 }
 #dinglj-filter {
     height: 200px;
-    border-bottom: 1px solid #EEE;
+    border-bottom: 1px solid #DDD;
     padding: 10px;
 }
 .dinglj-select-container { /* 选择器容器 */
     font-size: 14px;
-    line-height: 18px;
+    line-height: var(--selector-height);
     width: 200px;
-    height: 20px;
+    height: var(--selector-height);
     position: relative;
+    border-radius: 5px;
+    border: 1px solid #DDD;
 }
 .select-value { /* 选择器的值 */
     padding: 0 5px;
 }
 .select-items { /* 选择器的选项 */
     position: absolute;
-    top: 20px;
+    top: var(--selector-height);
     left: 0px;
     transition: 0.3s;
     overflow: hidden;
     height: 0px;
     width: 200px;
+    background: white;
+    border: 1px solid #DDD;
 }
 .select-item { /* 选择器的选项 */
     transition: 0.3s;
@@ -55,7 +65,7 @@ body {
     padding: 0 5px;
 }
 .select-item:hover {
-    color: #0078d7;
+    color: var(--theme-color);
     background: #EEE;
 }
 .dinglj-select-container:hover .select-items {
@@ -64,7 +74,8 @@ body {
     overflow-x: hidden;
 }
 .filter-line {
-    line-height: 24px;
+    line-height: var(--filter-line-height);
+    margin: 7px 0;
 }
 .filter-name,
 .filter-value {
