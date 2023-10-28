@@ -107,10 +107,10 @@
 }
 .dinglj-filter-component,
 .dinglj-filter-mode {
-    border-radius: 3px;
+    border-radius: 5px;
     display: inline-block;
     margin: 0 3px;
-    padding: 0px 5px;
+    padding: 0px 10px;
     cursor: pointer;
 }
 .active {
@@ -213,6 +213,7 @@ body {
     color: white;
     padding: 0 10px;
     border-radius: 5px;
+    margin: 0 3px;
     transition: var(--default-transition);
     cursor: pointer;
 }
