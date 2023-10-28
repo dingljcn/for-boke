@@ -96,7 +96,7 @@ function onTableCheckAll(tableKey) {
 }
 
 function onMouseIn(ele, ticket) {
-    console.log(ele);
+    getByClass('ticket-menu').forEach(e => e.remove());
     let newElement = document.createElement('div');
     newElement.id = `menu-for-${ ticket }`;
     newElement.classList.add('ticket-menu');
