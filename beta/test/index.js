@@ -56,7 +56,7 @@ function drawFilter() {
     let components = getTicketFieldValues('component');
     let owners = getTicketFieldValues('owner');
     let modeList = [new LangItem('nav', '导航显示'), new LangItem('tab', '分页显示'), new LangItem('noti', '分栏显示')]
-    let selectOwner = generateSelect('dinglj-owner-filter', owners), {
+    let selectOwner = generateSelect('dinglj-owner-filter', owners, {
         callback: 'onOwnerFilterChange',
         className: 'dinglj-owner-filter-selector'
     });
