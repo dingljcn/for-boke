@@ -7,9 +7,13 @@
 * {
     outline: none
 }
+.dinglj-nav-item:nth-child(1) {
+    margin-top: 0;
+}
 #dinglj-navigator {
     height: 100%;
     width: 200px;
+    overflow-y: scroll;
 }
 .dinglj-tr {
     display: flex;
@@ -111,6 +115,7 @@ body {
     flex: 1;
     padding: 10px;
     line-height: var(--selector-height);
+    overflow: hidden;
 }
 #dinglj-filter {
     border-bottom: 1px solid #DDD;
