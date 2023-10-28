@@ -33,6 +33,7 @@ function addDeleteIcon(list = []) {
         newEle.innerText = '×';
         newEle.addEventListener('click', () => {
             newEle.parentNode.remove();
+            invokeRefresh_004();
         })
     }
 }
@@ -115,7 +116,6 @@ function onMouseIn(ele, ticket) {
     newElement.classList.add('ticket-menu');
     newElement.addEventListener('mouseleave', () => {
         getById(`menu-for-${ ticket }`).remove();
-        invokeRefresh_004();
     });
     ele.appendChild(newElement);
 }
