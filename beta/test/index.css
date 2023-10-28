@@ -41,8 +41,7 @@
 #ticket-list-view {
     flex: 1;
     height: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 #dinglj-navigator-display-mode {
     height: 100%;
