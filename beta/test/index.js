@@ -53,14 +53,18 @@ function readTickets_004() {
 }
 
 function drawFilter() {
+    /********************** 模块过滤器 ************************/
     let components = getTicketFieldValues('component');
+    /********************** 属主过滤器 ************************/
     let owners = getTicketFieldValues('owner');
+    /********************** 显示方式切换 ************************/
     let modeList = [new LangItem('nav', '导航显示'), new LangItem('tab', '分页显示'), new LangItem('noti', '分栏显示')]
     let selectOwner = generateSelect('dinglj-owner-filter', owners, {
         callback: 'onOwnerFilterChange',
         className: 'dinglj-owner-filter-selector'
     });
-    context_004.fields.zhCN.filter(n => ['变更号', '概述', '修改时间'])
+    /********************** 分组方式切换 ************************/
+    let context_004.fields.zhCN.filter(n => !(['变更号', '概述', '修改时间'].includes(n))); // 不允许以这几个进行分组, 因为可分组性太低了, 基本上都是唯一的
     let groupBy = generateSelect('dinglj-filter-group-by', context_004.fields.zhCN, {
         callback: 'onGroupByChange',
         defaultValue: '模块'
@@ -79,7 +83,7 @@ function drawFilter() {
         ${ modeList.map(mode => `<div class="dinglj-filter-mode ${ context_004.config.filter.defaultMode == mode.zh ? 'active' : '' }" id="mode-${ mode.en }" onclick="doChangeMode('mode-${ mode.en }')">${ mode.zh }</div>`).join('') }
     </div>
     <div class="filter-line">
-        <div class="filter-name">组件: </div>
+        <div class="filter-name">模块: </div>
         ${ components.map(comp => `<div class="dinglj-filter-component" id="comp-${ comp }" onclick="doSelectComponents('comp-${ comp }')">${ comp }</div>`).join('') }
     </div>
     `
