@@ -112,7 +112,7 @@ function refreshTickets_004(ownerList = [], components = [], mode = '导航显�
 function displayTickets_NavigatorMode(data) {
     let navHTML = Object.keys(data).map(m => {
         return `<div class="dinglj-nav-item" onclick="onNavChange_004('${ encodeUID(m) }')" id="mode-${ encodeUID(m) }">
-            <div class="nav-name">${ m }</div>
+            <div class="nav-name">${ m }(${ data[m].length })</div>
             <div class="nav-mask"></div>
         </div>`;
     }).join('');
