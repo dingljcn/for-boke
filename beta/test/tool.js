@@ -94,3 +94,11 @@ function onTableCheckAll(tableKey) {
     let checkAll = getById(`check-all-${ tableKey }`);
     getByClass(`check-${ tableKey }`).forEach(ele => ele.checked = checkAll.checked);
 }
+
+function onMouseIn(ele, ticket) {
+    console.log(ele);
+    let newElement = document.createElement('div');
+    newElement.id = `menu-for-${ ticket }`;
+    newElement.classList.add('ticket-menu');
+    ele.appendChild(newElement);
+}
