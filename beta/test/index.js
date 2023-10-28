@@ -19,10 +19,20 @@ async function run_004() {
         console.error(context_004.config.matchList);
         return;
     }
+    beforeLoadData();
     await loadRptData_004();
     readTickets_004();
     drawFilter();
     invokeRefresh_004();
+}
+
+function beforeLoadData() {
+    for (let i = 0; i < document.head.children.length; i++) {
+        if (document.head.children[i].tagName == 'TITLE') {
+            document.head.children[i].innerText = '回归测试变更 - by dinglj';
+            break;
+        }
+    }
 }
 
 async function loadRptData_004() {
