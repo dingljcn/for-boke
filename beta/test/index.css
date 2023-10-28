@@ -15,13 +15,8 @@
     display: flex;
     line-height: 36px;
 }
-.dinglj-cell {
-    min-width: 80px;
-    max-width: 140px;
-}
 .dinglj-column-summary {
     flex: 1;
-    max-width: 100%;
 }
 .dinglj-thead {
     text-align: center;
