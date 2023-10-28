@@ -57,21 +57,22 @@ function drawFilter() {
     let components = Array.from(new Set(context_004.rt.tickets.map(t => t.component)));
     let groupBy = generateSelect('dinglj-filter-group-by', context_004.fields.zhCN, 'onGroupByChange', '模块');
     let modeList = [new LangItem('nav', '导航显示'), new LangItem('tab', '分页显示'), new LangItem('noti', '分栏显示')]
-    $('#dinglj-filter')[0].innerHTML = `<div class="filter-line">
-        <div class="filter-name">属主: </div>
-        <div class="filter-value">${ selectOwner }</div>
+    $('#dinglj-filter')[0].innerHTML = `
+    <div class="filter-line">
+        <div class="filter-name">分组模式: </div>
+        <div class="filter-value">${ groupBy }</div>
     </div>
     <div class="filter-line">
-        <div class="filter-name">组件: </div>
-        ${ components.map(comp => `<div class="dinglj-filter-component" id="comp-${ comp }" onclick="doSelectComponents('comp-${ comp }')">${ comp }</div>`).join('') }
+        <div class="filter-name">属主: </div>
+        <div class="filter-value">${ selectOwner }</div>
     </div>
     <div class="filter-line">
         <div class="filter-name">显示模式: </div>
         ${ modeList.map(mode => `<div class="dinglj-filter-mode ${ context_004.config.filter.defaultMode == mode.zh ? 'active' : '' }" id="mode-${ mode.en }" onclick="doChangeMode('mode-${ mode.en }')">${ mode.zh }</div>`).join('') }
     </div>
     <div class="filter-line">
-        <div class="filter-name">分组模式: </div>
-        <div class="filter-value">${ groupBy }</div>
+        <div class="filter-name">组件: </div>
+        ${ components.map(comp => `<div class="dinglj-filter-component" id="comp-${ comp }" onclick="doSelectComponents('comp-${ comp }')">${ comp }</div>`).join('') }
     </div>
     `
 }
