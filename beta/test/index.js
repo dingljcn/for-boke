@@ -132,19 +132,22 @@ function displayTickets_NavigatorMode(data) {
     }
 }
 
-function generateTable_004(list = []) {
+function generateTable_004(tableKey = '', list = []) {
     if (list.length == 0) {
         return '';
     }
     console.log(1);
-    let thead = generateTableHead_004();
-    let tbody = generateTableData_004(list);
-    return `<div class="dinglj-table-container">${ thead }${ tbody }</div>`;
+    let thead = generateTableHead_004(tableKey);
+    let tbody = generateTableData_004(tableKey, list);
+    return `<div id="table-of-${ tableKey }" class="dinglj-table-container">${ thead }${ tbody }</div>`;
 }
 
-function generateTableHead_004() {
-    let html = '';
-    for (let i = 0; i < context_004.fields.display.length; i++) {
+function generateTableHead_004(tableKey = '') {
+    let html = `<div class="dinglj-cell dinglj-column-id">
+        <input id="check-all-${ tableKey }" type="checkbox" style="margin-right: 20px" onclick="onTableCheckAll('${ tableKey }')"/>
+        <div>变更号</div>
+    </div>`;
+    for (let i = 1; i < context_004.fields.display.length; i++) {
         let key = context_004.fields.display[i];
         let caption = context_004.fields.zhCN[i];
         html += `<div class="dinglj-cell dinglj-column-${ key }">${ caption }</div>`
@@ -152,12 +155,12 @@ function generateTableHead_004() {
     return `<div class="dinglj-tr dinglj-thead">${ html }</div>`;
 }
 
-function generateTableData_004(list) {
+function generateTableData_004(tableKey = '', list) {
     let html = [];
     for (let line of list) {
         let ticketID = /.*#(\d+).*/.exec(line.id)[1];
         let lineHTML = `<div class="dinglj-cell dinglj-column-id">
-            <input id="check-${ ticketID }" type="checkbox"/>
+            <input class="check-${ tableKey }" id="check-${ ticketID }" type="checkbox"/>
             <div onclick="getById('check-${ ticketID }').checked = true; window.open('${ context_004.config.ticket_url }/${ ticketID }');">${ line.id }</div>
         </div>`;
         for (let i = 1; i < context_004.fields.display.length; i++) {
