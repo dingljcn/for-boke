@@ -23,14 +23,25 @@
     color: white;
 }
 body {
-    margin: 0
+    margin: 0;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100vh;
     overflow: hidden;
+    
+}
+#main {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+#dinglj-main {
+    flex: 1;
+    padding: 10px;
+    line-height: var(--selector-height);
 }
 #dinglj-filter {
-    height: 200px;
     border-bottom: 1px solid #DDD;
     padding: 10px;
 }
