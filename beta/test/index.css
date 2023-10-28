@@ -21,6 +21,9 @@
 .dinglj-column-summary {
     flex: 1;
 }
+.dinglj-cell {
+    margin: 0 8px;
+}
 .dinglj-thead {
     text-align: center;
     background: #223;
