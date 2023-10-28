@@ -15,6 +15,9 @@
     display: flex;
     line-height: 36px;
 }
+.dinglj-column-id {
+    display: inline;
+}
 .dinglj-column-summary {
     flex: 1;
 }
