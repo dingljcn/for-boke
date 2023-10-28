@@ -103,14 +103,14 @@ function refreshTickets_004(ownerList = [], components = [], mode = '导航显�
     data = groupBy(data, groupField);
     /************************** 显示 *********************/
     switch (mode) {
-        case '导航模式': displayTickets_NavigatorMode(data); break;
+        case '导航显示': displayTickets_NavigatorMode(data); break;
         case '分页显示': break;
         case '分栏显示': break;
     }
 }
 
 function displayTickets_NavigatorMode(data) {
-    let navHTML = getById('dinglj-navigator').innerHTML = Object.keys(dinglj).map(m => {
+    let navHTML = Object.keys(data).map(m => {
         return `<div class="dinglj-nav-item" onclick="onNavChange_004('${ m.replace(' ', '-') }')" id="mode-${ m.replace(' ', '-') }">
             <div class="nav-name">${ m }</div>
             <div class="nav-mask"></div>
@@ -120,4 +120,9 @@ function displayTickets_NavigatorMode(data) {
         <div id="dinglj-navigator">${ navHTML }</div>
         <div id="ticket-list-view"></div>
     </div>`;
+    context_004.rt.filteredData = data;
+    let navigators = getByClass('dinglj-nav-item');
+    if (navigators && navigators.length > 0) {
+        navigators[0].click();
+    }
 }
