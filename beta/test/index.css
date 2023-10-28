@@ -15,11 +15,15 @@
     display: flex;
     line-height: 36px;
 }
+.dinglj-cell {
+    text-align: center;
+}
 .dinglj-column-id div {
     display: inline;
 }
 .dinglj-column-summary {
     flex: 1;
+    text-align: left;
 }
 .dinglj-cell {
     margin: 0 8px;
