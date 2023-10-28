@@ -131,8 +131,10 @@ function generateTable_004(list = []) {
     if (list.length == 0) {
         return '';
     }
+    console.log(1);
     let thead = generateTableHead_004();
-    return thead;
+    let tbody = generateTableData_004(list);
+    return `<div class="dinglj-table-container">${ thead }${ tbody }</div>`;
 }
 
 function generateTableHead_004() {
@@ -143,4 +145,21 @@ function generateTableHead_004() {
         html += `<div class="dinglj-cell dinglj-column-${ key }">${ caption }</div>`
     }
     return `<div class="dinglj-tr dinglj-thead">${ html }</div>`;
+}
+
+function generateTableData_004(list) {
+    let html = [];
+    for (let line of list) {
+        let ticketID = /.*#(\d+).*/.exec(line.id)[1];
+        let lineHTML = `<div class="dinglj-cell dinglj-column-id">
+            <input id="check-${ ticketID }" type="checkbox"/>
+            <div onclick="getById('check-${ ticketID }').checked = true; window.open('${ context_004.config.ticket_url }/${ ticketID }');">${ line.id }</div>
+        </div>`;
+        for (let i = 1; i < context_004.fields.display.length; i++) {
+            let key = context_004.fields.display[i];
+            lineHTML += `<div class="dinglj-cell dinglj-column-${ key }">${ line[key] }</div>`;
+        }
+        html.push(`<div class="dinglj-tr">${ lineHTML }</div>`);
+    }
+    return html.join('');
 }
