@@ -15,7 +15,7 @@
     display: flex;
     line-height: 36px;
 }
-.dinglj-column-id {
+.dinglj-column-id div {
     display: inline;
 }
 .dinglj-column-summary {
