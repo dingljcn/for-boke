@@ -25,17 +25,9 @@ function doSelectComponents(id) {
 }
 
 function addDeleteIcon(list = []) {
-    for (let e of list) {
-        let newEle = document.createElement('div');
-        e.insertBefore(newEle, e.children[0]);
-        newEle.title = '移除该属主';
-        newEle.classList.add('dinglj-delete');
-        newEle.innerText = '×';
-        newEle.addEventListener('click', () => {
-            newEle.parentNode.remove();
-            invokeRefresh_004();
-        })
-    }
+    list.forEach(e => {
+        e.innerHTML = `<div class="dinglj-delete" title="移除该属主" onclick="parentNode.remove(); invokeRefresh_004();">×</div>${ e.innerHTML }`
+    });
 }
 
 function getOwnerFilters() {
