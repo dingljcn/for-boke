@@ -149,6 +149,7 @@ body {
     position: relative;
     border-radius: 5px;
     border: 1px solid #DDD;
+    display: inline-block;
 }
 .select-value { /* 选择器的值 */
     padding: 0 5px;
@@ -195,9 +196,6 @@ body {
 .filter-name {
     width: 80px;
 }
-.filter-value {
-    width: 200px;
-}
 .dinglj-tdata .dinglj-column-id {
     cursor: pointer;
     color: var(--theme-color);
@@ -208,4 +206,13 @@ body {
 }
 .dinglj-tdata .dinglj-tr:hover {
     background: #a0c5e8;
+}
+
+.dinglj-btn {
+    display: inline-block;
+    background: var(--theme-color);
+    color: white;
+    padding: 0 10px;
+    margin: 0 10px;
+    border-radius: 5px;
 }
