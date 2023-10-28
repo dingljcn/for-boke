@@ -60,7 +60,7 @@ function onNavChange_004(name) {
         last.forEach(ele => ele.classList.remove('active-nav'));
     }
     getById(`mode-${ name }`).classList.add('active-nav');
-    let key = decodeID(name);
+    let key = decodeUID(name);
     let tickets = context_004.rt.filteredData[key];
     getById('ticket-list-view').innerHTML = generateTable_004(tickets);
 }
