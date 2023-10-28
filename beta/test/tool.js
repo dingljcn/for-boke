@@ -40,15 +40,21 @@ function doChangeMode(id) {
 }
 
 function onOwnerFilterChange(value) {
-    console.log(`owner select: ${ value }`);
     invokeRefresh_004();
 }
 
 function onGroupByChange(value) {
-    console.log(`mode select: ${ value }`);
     invokeRefresh_004();
 }
 
 function getTicketFieldValues(field = 'component') {
     return Array.from(new Set(context_004.rt.tickets.map(t => t[field])));
+}
+
+function onNavChange_004(name) {
+    let last = getByClass('dinglj-nav-item active-nav');
+    if (last && last.length > 0) {
+        last.forEach(ele => ele.classList.remove('active-nav'));
+    }
+    getById(`mode-${ name }`).classList.add('active-nav');
 }
