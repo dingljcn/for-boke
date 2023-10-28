@@ -186,3 +186,7 @@ body {
 .filter-value {
     width: 200px;
 }
+.dinglj-tdata .dinglj-column-id {
+    cursor: pointer;
+    color: var(--theme-color);
+}
