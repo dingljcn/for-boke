@@ -355,8 +355,11 @@ function groupBy(list = [], prop, callback = null) {
 }
 
 /** 绘制选择控件 */
-function generateSelect(id, list = [], callback = '', defaultValue = '请选择') {
-    return `<div class="dinglj-select-container" id="${ id }-select-container">
+function generateSelect(id, list = [], config = {}) {
+    let callback = config.callback || '';
+    let defaultValue = config.defaultValue || '请选择';
+    let className = config.className || '';
+    return `<div class="dinglj-select-container ${ className }" id="${ id }-select-container">
         <div class="select-value" id="${ id }-select-value">${ defaultValue }</div>
         <div class="select-items" id="${ id }-select-items">
             ${ list.map(val => `<div class="select-item" id="${ id }-select-${ val }" onclick="onSelectionClicked('${ callback }', '${ id }-select-${ val }')">${ val }</div>`).join('') }
