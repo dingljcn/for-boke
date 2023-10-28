@@ -2,7 +2,7 @@
     --theme-color: #0078d7;
     --filter-line-height: 28px;
     --selector-height: 28px;
-    --defalut-transition: 0.3s;
+    --default-transition: 0.3s;
 }
 * {
     outline: none
@@ -75,7 +75,7 @@
     padding: 5px;
     position: relative;
     overflow: hidden;
-    transition: var(--defalut-transition);
+    transition: var(--default-transition);
     cursor: pointer;
 }
 .dinglj-nav-item:hover {
@@ -84,7 +84,7 @@
 .nav-name {
     position: relative;
     z-index: 9;
-    transition: var(--defalut-transition);
+    transition: var(--default-transition);
 }
 .active-nav .nav-name {
     color: white;
@@ -97,7 +97,7 @@
     background: var(--theme-color);
     top: 0;
     left: 0;
-    transition: var(--defalut-transition);
+    transition: var(--default-transition);
 }
 .active-nav .nav-mask {
     width: 100%;
@@ -209,8 +209,8 @@ body {
 }
 .dinglj-btn {
     display: inline-block;
-    background: var(--theme-color);
-    color: white;
+    color: var(--theme-color);
+    border: 1px solid #DDD;
     padding: 0 10px;
     border-radius: 5px;
     margin: 0 3px;
@@ -218,10 +218,10 @@ body {
     cursor: pointer;
 }
 .dinglj-btn:active {
-    background: #2d2dfd;
+    background: #DDD;
 }
 .dinglj-btn:hover {
-    background: #399fff;
+    background: #EEE;
 }
 .dinglj-owner-filter-selector {
     margin-right: 5px;
