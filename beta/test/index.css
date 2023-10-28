@@ -29,6 +29,7 @@
 .dinglj-column-summary {
     flex: 1;
     text-align: left;
+    position: relative;
 }
 .dinglj-cell {
     margin: 0 8px;
@@ -39,6 +40,14 @@
     color: white;
     font-weight: bolder;
     margin-right: 15px;
+}
+.ticket-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #A0C5E8;
 }
 #ticket-list-view {
     flex: 1;
@@ -193,9 +202,9 @@ body {
     color: var(--theme-color);
     font-weight: bold;
 }
-.dinglj-tr:hover {
-    background: #a0c5e8;
-}
 .dinglj-tdata .dinglj-tr:nth-child(even) {
     background: #EEE;
+}
+.dinglj-tdata .dinglj-tr:hover {
+    background: #a0c5e8;
 }
