@@ -101,7 +101,6 @@ function onMouseIn(ele, ticket) {
     newElement.id = `menu-for-${ ticket }`;
     newElement.classList.add('ticket-menu');
     newElement.addEventListener('mouseleave', () => {
-        console.log('移出: ' + ticket);
         getById(`menu-for-${ ticket }`).remove()
     });
     ele.appendChild(newElement);
