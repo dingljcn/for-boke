@@ -126,3 +126,21 @@ function displayTickets_NavigatorMode(data) {
         navigators[0].click();
     }
 }
+
+function generateTable_004(list = []) {
+    if (list.length == 0) {
+        return '';
+    }
+    let thead = generateTableHead_004();
+    return thead;
+}
+
+function generateTableHead_004() {
+    let html = '';
+    for (let i = 0; i < context_004.fields.display.length; i++) {
+        let key = context_004.fields.display[i];
+        let caption = context_004.fields.zhCN[i];
+        html += `<div class="dinglj-cell dinglj-column-${ key }">${ caption }</div>`
+    }
+    return `<div class="dinglj-tr dinglj-thead">${ html }</div>`;
+}
