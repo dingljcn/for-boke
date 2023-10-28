@@ -167,7 +167,7 @@ function generateTableData_004(tableKey = '', list) {
             let key = context_004.fields.display[i];
             lineHTML += `<div class="dinglj-cell dinglj-column-${ key }">${ line[key] }</div>`;
         }
-        html.push(`<div class="dinglj-tr">${ lineHTML }</div>`);
+        html.push(`<div class="dinglj-tr dinglj-data">${ lineHTML }</div>`);
     }
     return html.join('');
 }
