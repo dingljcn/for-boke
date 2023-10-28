@@ -57,6 +57,7 @@ body {
     background: white;
     border: 1px solid #DDD;
     display: none;
+    z-index: 99;
 }
 .select-item { /* 选择器的选项 */
     transition: 0.3s;
