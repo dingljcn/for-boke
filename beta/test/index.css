@@ -196,3 +196,6 @@ body {
 .dinglj-tr:hover {
     background: #a0c5e8;
 }
+.dinglj-tdata .dinglj-tr:nth-child(even) {
+    background: #EEE;
+}
