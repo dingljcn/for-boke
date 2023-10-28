@@ -53,10 +53,17 @@ function readTickets_004() {
 }
 
 function drawFilter() {
-    let selectOwner = generateSelect('dinglj-owner-filter', Array.from(new Set(context_004.rt.tickets.map(t => t.owner))), 'onOwnerFilterChange');
-    let components = Array.from(new Set(context_004.rt.tickets.map(t => t.component)));
-    let groupBy = generateSelect('dinglj-filter-group-by', context_004.fields.zhCN, 'onGroupByChange', '模块');
+    let components = getTicketFieldValues('component');
+    let owners = getTicketFieldValues('owner');
     let modeList = [new LangItem('nav', '导航显示'), new LangItem('tab', '分页显示'), new LangItem('noti', '分栏显示')]
+    let selectOwner = generateSelect('dinglj-owner-filter', owners), {
+        callback: 'onOwnerFilterChange',
+        className: 'dinglj-owner-filter-selector'
+    });
+    let groupBy = generateSelect('dinglj-filter-group-by', context_004.fields.zhCN, {
+        callback: 'onGroupByChange',
+        defaultValue: '模块'
+    });
     $('#dinglj-filter')[0].innerHTML = `
     <div class="filter-line">
         <div class="filter-name">分组模式: </div>
@@ -77,12 +84,18 @@ function drawFilter() {
     `
 }
 
-function refreshTickets_004(components = [], mode = '导航显示', groupByName = '模块') {
+function refreshTickets_004(ownerList = [], components = [], mode = '导航显示', groupByName = '模块') {
     console.log(`显示模式: ${ mode }`);
     let data = JSON.parse(JSON.stringify(context_004.rt.tickets));
     if (components.length > 0) { // 有数据, 根据组件过滤
-        data = data.filter(t => components.includes(t.component))
+        data = data.filter(t => components.includes(t.component));
     }
+    if (ownerList.length > 0) {
+        let ownerNames = getTicketFieldValues('owner');
+        ownerList = ownerList.filter(name => ownerNames.includes(name)); // 将不存在的名字过滤
+        data = data.filter(t => ownerList.inlcudes(t.owner)); // 正式对输入进行过滤
+    }
+    // 分组
     let groupIdx = context_004.fields.zhCN.indexOf(groupByName);
     let groupField = context_004.fields.display[groupIdx];
     data = groupBy(data, groupField);
