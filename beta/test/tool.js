@@ -150,15 +150,28 @@ function onFieldsChange_004(ele, fieldName) {
 }
 
 function toPrev_004(ele) {
-    let even = window.event || arguments.callee.caller.arguments[0];
-    even.preventDefault();
-    even.stopPropagation();
-    console.log(11);
+    prepareExchange(ele.parentNode, -1);
 }
 
 function toNext_004(ele) {
+    prepareExchange(ele.parentNode, 1);
+}
+
+function prepareExchange(currentElement, step = 1) {
     let even = window.event || arguments.callee.caller.arguments[0];
     even.preventDefault();
     even.stopPropagation();
-    
+    let list = getByClass('dinglj-filter-column changeable');
+    let thisIdx = list.indexOf(currentElement);
+    let nextIdx = (thisIdx + step + list.length) % list.length;
+    exchange(currentElement, list[nextIdx]);
+}
+
+function exchange(element1, element2){
+    let newNode = document.createElement('div');
+    let parentNode = element1.parentNode;
+    parentNode.insertBefore(newNode, element2);
+    parentNode.insertBefore(element2, element1);
+    parentNode.insertBefore(element1, newNode);
+    parentNode.removeChild(newNode);
 }
