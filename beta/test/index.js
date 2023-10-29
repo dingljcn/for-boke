@@ -92,6 +92,10 @@ function drawFilter() {
         <div class="filter-name">模块: </div>
         ${ components.map(comp => `<div class="dinglj-filter-component" id="comp-${ comp }" onclick="doSelectComponents('comp-${ comp }')">${ comp }</div>`).join('') }
     </div>
+    <div class="filter-line">
+        <div class="filter-name">字段顺序: </div>
+        ${ context_004.fields.zhCN.map(f => `<div class="dinglj-filter-fields ${ f == '变更号' ? '' : 'changeable' }" id="filter-field-${ f }" onclick="onFieldsChange_004(this, '${ f }')">${ f }</div>`).join('') }
+    </div>
     `
 }
 
