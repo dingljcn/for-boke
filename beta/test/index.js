@@ -164,8 +164,9 @@ function generateTableHead_004(tableKey = '', finalDisplayFields) {
         <div>变更号</div>
     </div>`;
     for (let i = 1; i < finalDisplayFields.length; i++) {
-        let key = finalDisplayFields[i];
-        let caption = context_004.fields.zhCN[i];
+        let zhIdx = context_004.fields.zhCN.indexOf(finalDisplayFields[i]);
+        let key = context_004.fields.origin[zhIdx];
+        let caption = context_004.fields.zhCN[zhIdx];
         html += `<div class="dinglj-cell dinglj-column-${ key }">${ caption }</div>`
     }
     return `<div class="dinglj-tr dinglj-thead">${ html }</div>`;
@@ -180,7 +181,8 @@ function generateTableData_004(tableKey = '', finalDisplayFields, list) {
             <div onclick="getById('check-${ ticketID }').checked = true; window.open('${ context_004.config.ticket_url }/${ ticketID }');">${ line.id }</div>
         </div>`;
         for (let i = 1; i < finalDisplayFields.length; i++) {
-            let key = finalDisplayFields[i];
+            let zhIdx = context_004.fields.zhCN.indexOf(finalDisplayFields[i]);
+            let key = context_004.fields.origin[zhIdx];
             lineHTML += `<div class="dinglj-cell dinglj-column-${ key }" ${ key == 'summary' ?  `onmouseenter="onMouseIn(this,'${ ticketID }')"` : '' }>${ line[key] }</div>`;
         }
         html.push(`<div class="dinglj-tr dinglj-data">${ lineHTML }</div>`);
