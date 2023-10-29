@@ -174,4 +174,5 @@ function exchange(element1, element2){
     parentNode.insertBefore(element2, element1);
     parentNode.insertBefore(element1, newNode);
     parentNode.removeChild(newNode);
+    invokeRefresh_004();
 }
