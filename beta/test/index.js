@@ -129,7 +129,7 @@ function displayTickets_NavigatorMode(data) {
     let keyList = Object.keys(data);
     for (let i = 0; i < keyList.length; i++) {
         m = keyList[i];
-        navHTML += `<div class="dinglj-nav-item" onclick="onNavChange_004(${i}, '${ encodeUID(m) }')" id="mode-${ encodeUID(m) }">
+        navHTML += `<div class="dinglj-nav-item" onclick="onNavChange_004('${ m }', '${ encodeUID(m) }')" id="mode-${ encodeUID(m) }">
             <div class="nav-name">${ m }(${ data[m].length })</div>
             <div class="nav-mask"></div>
         </div>`;
@@ -141,7 +141,12 @@ function displayTickets_NavigatorMode(data) {
     context_004.rt.filteredData = data;
     let navigators = getByClass('dinglj-nav-item');
     if (navigators && navigators.length > 0) {
-        navigators[context_004.rt.lastIdx].click();
+        let array = navigators.filter(e => e.innerText.includes(context_004.rt.lastNav));
+        if (array.length == 1) {
+            array[0].click();
+        } else {
+            navigators[0].click();;
+        }
     }
 }
 
