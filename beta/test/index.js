@@ -196,7 +196,7 @@ function generateTableData_004(tableKey = '', finalDisplayFields, list) {
         for (let i = 1; i < finalDisplayFields.length; i++) {
             let zhIdx = context_004.fields.zhCN.indexOf(finalDisplayFields[i]);
             let key = context_004.fields.display[zhIdx];
-            lineHTML += `<div class="dinglj-cell dinglj-column-${ key }" ${ key == 'summary' ?  `onmouseenter="onMouseIn(this,'${ ticketID }')"` : '' }>${ 
+            lineHTML += `<div class="dinglj-cell dinglj-column-${ key }">${ 
                 key == 'summary'
                     ? `<div class="dinglj-summary-text">${ line[key] }</div>
                         <div class="'ticket-menu" id="menu-for-${ ticketID }">
@@ -207,5 +207,5 @@ function generateTableData_004(tableKey = '', finalDisplayFields, list) {
         }
         html.push(`<div class="dinglj-tr dinglj-data">${ lineHTML }</div>`);
     }
-    return `<div class="dinglj-tdata" onmouseleave="getByClass('ticket-menu').forEach(e => e.remove())">${ html.join('') }</div>`;
+    return `<div class="dinglj-tdata">${ html.join('') }</div>`;
 }
