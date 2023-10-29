@@ -105,21 +105,6 @@ function onTableCheckAll(tableKey) {
     getByClass(`check-${ tableKey }`).forEach(ele => ele.checked = checkAll.checked);
 }
 
-function onMouseIn(ele, ticket) {
-    getByClass('ticket-menu').forEach(e => e.remove());
-    let newElement = document.createElement('div');
-    newElement.id = `menu-for-${ ticket }`;
-    newElement.classList.add('ticket-menu');
-    newElement.style.opacity = '0';
-    newElement.addEventListener('mouseleave', () => {
-        getById(`menu-for-${ ticket }`).remove();
-    });
-    ele.appendChild(newElement);
-    setTimeout(() => {
-        newElement.style.opacity = '1';
-    }, 300);
-}
-
 function addNewOwner() {
     let btnText = '<div class="dinglj-btn" id="add-new-owner-filter" onclick="addNewOwner()">添加属主</div>';
     // 取元素
