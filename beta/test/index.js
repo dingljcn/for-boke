@@ -94,7 +94,11 @@ function drawFilter() {
     </div>
     <div class="filter-line">
         <div class="filter-name">字段顺序: </div>
-        ${ context_004.fields.zhCN.map(f => `<div class="dinglj-filter-fields ${ f == '变更号' ? 'active' : 'changeable' }" id="filter-field-${ f }" onclick="onFieldsChange_004(this, '${ f }')">${ f }</div>`).join('') }
+        ${ context_004.fields.zhCN.map(f => `<div class="dinglj-filter-fields ${ f == '变更号' ? 'active' : 'changeable' }" id="filter-field-${ f }" onclick="onFieldsChange_004(this, '${ f }')">
+            ${ f == '变更号' ? '' : '<span class="change-order to-prev" title="向前移动" onclick="toPrev_004(this)">←</span>' }
+            <span>${ f }</span>
+            ${ f == '变更号' ? '' : '<span class="change-order to-next" title="向后移动" onclick="toNext_004(this)">→</span>' }
+        </div>`).join('') }
     </div>
     `
 }
