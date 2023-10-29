@@ -11,6 +11,9 @@
 .changeable:hover .change-order {
     opacity: 1;
 }
+.menu-item {
+    cursor: pointer;
+}
 .change-order {
     position: absolute;
     top: -1px;
