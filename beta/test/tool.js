@@ -5,7 +5,7 @@ const context_004 = {
         encodeUID: {},
         decodeUID: {},
         filteredData: [],
-        lastIdx: 0,
+        lastNav: '',
     },
     fields: {
         origin: ['id', 'priority', 'owner', 'create_time', 'modify_time', 'from_create', 'to_end', 'component', 'summary', 'status'], /* 变更报表原字段顺序 */
@@ -63,8 +63,8 @@ function getTicketFieldValues(field = 'component') {
     return Array.from(new Set(context_004.rt.tickets.map(t => t[field])));
 }
 
-function onNavChange_004(idx, name) {
-    context_004.rt.lastIdx = idx;
+function onNavChange_004(nav, name) {
+    context_004.rt.lastNav = nav;
     let last = getByClass('dinglj-nav-item active-nav');
     if (last && last.length > 0) {
         last.forEach(ele => ele.classList.remove('active-nav'));
