@@ -165,7 +165,7 @@ function generateTableHead_004(tableKey = '', finalDisplayFields) {
     </div>`;
     for (let i = 1; i < finalDisplayFields.length; i++) {
         let zhIdx = context_004.fields.zhCN.indexOf(finalDisplayFields[i]);
-        let key = context_004.fields.origin[zhIdx];
+        let key = context_004.fields.display[zhIdx];
         let caption = context_004.fields.zhCN[zhIdx];
         html += `<div class="dinglj-cell dinglj-column-${ key }">${ caption }</div>`
     }
@@ -182,7 +182,7 @@ function generateTableData_004(tableKey = '', finalDisplayFields, list) {
         </div>`;
         for (let i = 1; i < finalDisplayFields.length; i++) {
             let zhIdx = context_004.fields.zhCN.indexOf(finalDisplayFields[i]);
-            let key = context_004.fields.origin[zhIdx];
+            let key = context_004.fields.display[zhIdx];
             lineHTML += `<div class="dinglj-cell dinglj-column-${ key }" ${ key == 'summary' ?  `onmouseenter="onMouseIn(this,'${ ticketID }')"` : '' }>${ line[key] }</div>`;
         }
         html.push(`<div class="dinglj-tr dinglj-data">${ lineHTML }</div>`);
