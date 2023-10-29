@@ -30,9 +30,6 @@
 .dinglj-nav-item:nth-child(1) {
     margin-top: 0;
 }
-.dinglj-tr:hover .ticket-menu {
-    background: var(--table-hover-color);
-}
 #dinglj-navigator {
     height: 100%;
     width: 200px;
@@ -68,6 +65,16 @@
     font-weight: bolder;
     margin-right: 15px;
 }
+.dinglj-summary-text {
+    opacity: 1;
+    transition: var(--default-transition);
+}
+.dinglj-tr:hover .dinglj-summary-text {
+    opacity: 0;
+}
+.dinglj-tr:hover .ticket-menu {
+    opacity: 1;
+}
 .ticket-menu {
     position: absolute;
     top: 0;
@@ -75,7 +82,10 @@
     width: 100%;
     height: 100%;
     z-index: 9;
-    background: var(--table-hover-color);
+    color: white;
+    font-weight: bold;
+    opacity: 0;
+    transition: var(--default-transition);
 }
 #ticket-list-view {
     flex: 1;
