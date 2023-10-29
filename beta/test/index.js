@@ -163,7 +163,8 @@ function generateTable_004(tableKey = '', list = []) {
     if (selectedFields && selectedFields.length > 0) {
         finalDisplayFields.push(...selectedFields);
     } else {
-        finalDisplayFields = context_004.fields.zhCN;
+        selectedFields = Array.from(new Set(getByClass('dinglj-filter-column changeable').map(e => e.children[1].innerHTML)));
+        finalDisplayFields.push(...selectedFields);
     }
     let thead = generateTableHead_004(tableKey, finalDisplayFields);
     let tbody = generateTableData_004(tableKey, finalDisplayFields, list);
