@@ -160,7 +160,7 @@ function generateTable_004(tableKey = '', list = []) {
     }
     let selectedFields = getFieldsFilter();
     let finalDisplayFields = ['变更号'];
-    if (selectedFields.length > 0) {
+    if (selectedFields && selectedFields.length > 0) {
         finalDisplayFields.push(...selectedFields);
     } else {
         finalDisplayFields = context_004.fields.zhCN;
