@@ -20,7 +20,6 @@
 .dinglj-filter-fields {
     position: relative;
     padding: 0 16px;
-    user-select: none;
 }
 .to-next {
     right:  3px;
@@ -33,9 +32,6 @@
 }
 .dinglj-tr:hover .ticket-menu {
     background: var(--table-hover-color);
-}
-.dinglj-filter-fields {
-    padding: 0 18px;
 }
 #dinglj-navigator {
     height: 100%;
@@ -138,6 +134,7 @@
 }
 .dinglj-filter-component,
 .dinglj-filter-fields,
+.dinglj-filter-column,
 .dinglj-filter-mode {
     border-radius: 5px;
     display: inline-block;
@@ -145,9 +142,11 @@
     padding: 0px 10px;
     cursor: pointer;
     transition: var(--default-transition);
+    user-select: none;
 }
 .dinglj-filter-component:not(.active):hover,
 .dinglj-filter-fields:not(.active):hover,
+.dinglj-filter-column:not(.active):hover,
 .dinglj-filter-mode:not(.active):hover {
     background: #EEE;
 }
@@ -282,4 +281,9 @@ body {
 }
 .dinglj-owner-filter-selector:hover .dinglj-delete {
     display: block;
+}
+
+.dinglj-filter-column {
+    position: relative;
+    padding: 0 18px;
 }
