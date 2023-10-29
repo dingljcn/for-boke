@@ -94,7 +94,7 @@ function drawFilter() {
     </div>
     <div class="filter-line">
         <div class="filter-name">字段顺序: </div>
-        ${ context_004.fields.zhCN.map(f => `<div class="dinglj-filter-fields ${ f == '变更号' ? '' : 'changeable' }" id="filter-field-${ f }" onclick="onFieldsChange_004(this, '${ f }')">${ f }</div>`).join('') }
+        ${ context_004.fields.zhCN.map(f => `<div class="dinglj-filter-fields ${ f == '变更号' ? 'active' : 'changeable' }" id="filter-field-${ f }" onclick="onFieldsChange_004(this, '${ f }')">${ f }</div>`).join('') }
     </div>
     `
 }
@@ -146,26 +146,32 @@ function generateTable_004(tableKey = '', list = []) {
     if (list.length == 0) {
         return '';
     }
-    console.log(1);
-    let thead = generateTableHead_004(tableKey);
-    let tbody = generateTableData_004(tableKey, list);
+    let selectedFields = getFieldsFilter();
+    let finalDisplayFields = ['变更号'];
+    if (selectedFields.length > 0) {
+        finalDisplayFields.push(...selectedFields);
+    } else {
+        finalDisplayFields = context_004.fields.zhCN;
+    }
+    let thead = generateTableHead_004(tableKey, finalDisplayFields);
+    let tbody = generateTableData_004(tableKey, finalDisplayFields, list);
     return `<div id="table-of-${ tableKey }" class="dinglj-table-container">${ thead }${ tbody }</div>`;
 }
 
-function generateTableHead_004(tableKey = '') {
+function generateTableHead_004(tableKey = '', finalDisplayFields) {
     let html = `<div class="dinglj-cell dinglj-column-id">
         <input id="check-all-${ tableKey }" type="checkbox" style="margin-right: 20px" onclick="onTableCheckAll('${ tableKey }')"/>
         <div>变更号</div>
     </div>`;
-    for (let i = 1; i < context_004.fields.display.length; i++) {
-        let key = context_004.fields.display[i];
+    for (let i = 1; i < finalDisplayFields.length; i++) {
+        let key = finalDisplayFields[i];
         let caption = context_004.fields.zhCN[i];
         html += `<div class="dinglj-cell dinglj-column-${ key }">${ caption }</div>`
     }
     return `<div class="dinglj-tr dinglj-thead">${ html }</div>`;
 }
 
-function generateTableData_004(tableKey = '', list) {
+function generateTableData_004(tableKey = '', finalDisplayFields, list) {
     let html = [];
     for (let line of list) {
         let ticketID = /.*#(\d+).*/.exec(line.id)[1];
@@ -173,8 +179,8 @@ function generateTableData_004(tableKey = '', list) {
             <input class="check-${ tableKey }" id="check-${ ticketID }" type="checkbox"/>
             <div onclick="getById('check-${ ticketID }').checked = true; window.open('${ context_004.config.ticket_url }/${ ticketID }');">${ line.id }</div>
         </div>`;
-        for (let i = 1; i < context_004.fields.display.length; i++) {
-            let key = context_004.fields.display[i];
+        for (let i = 1; i < finalDisplayFields.length; i++) {
+            let key = finalDisplayFields[i];
             lineHTML += `<div class="dinglj-cell dinglj-column-${ key }" ${ key == 'summary' ?  `onmouseenter="onMouseIn(this,'${ ticketID }')"` : '' }>${ line[key] }</div>`;
         }
         html.push(`<div class="dinglj-tr dinglj-data">${ lineHTML }</div>`);
