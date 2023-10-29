@@ -5,6 +5,7 @@ const context_004 = {
         encodeUID: {},
         decodeUID: {},
         filteredData: [],
+        lastIdx: 0,
     },
     fields: {
         origin: ['id', 'priority', 'owner', 'create_time', 'modify_time', 'from_create', 'to_end', 'component', 'summary', 'status'], /* 变更报表原字段顺序 */
