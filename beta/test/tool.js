@@ -132,3 +132,7 @@ function addNewOwner() {
     let theNewSelect = getById(`dinglj-owner-filter-${ size + 1 }-select-container`);
     addDeleteIcon([theNewSelect]);
 }
+
+functoin onFieldsChange_004(ele, fieldName) {
+    console.log(ele);
+}
