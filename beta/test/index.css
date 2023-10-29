@@ -23,16 +23,19 @@
     user-select: none;
 }
 .to-next {
-    right:  0px;
+    right:  3px;
 }
 .to-prev {
-    left: 0px;
+    left: 3px;
 }
 .dinglj-nav-item:nth-child(1) {
     margin-top: 0;
 }
 .dinglj-tr:hover .ticket-menu {
     background: var(--table-hover-color);
+}
+.dinglj-filter-fields {
+    padding: 0 18px;
 }
 #dinglj-navigator {
     height: 100%;
