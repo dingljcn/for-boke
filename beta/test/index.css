@@ -57,9 +57,6 @@
     position: relative;
     transition: var(--default-transition);
 }
-.dinglj-tdata .dinglj-column-summary:hover {
-    color: var(--table-hover-color);
-}
 .dinglj-cell {
     margin: 0 8px;
 }
@@ -74,10 +71,10 @@
     opacity: 1;
     transition: var(--default-transition);
 }
-.dinglj-tr:hover .dinglj-summary-text {
+.dinglj-column-summary:hover .dinglj-summary-text {
     opacity: 0;
 }
-.dinglj-tr:hover .ticket-menu {
+.dinglj-column-summary:hover .ticket-menu {
     opacity: 1;
 }
 .ticket-menu {
@@ -107,7 +104,7 @@
     overflow: hidden;
 }
 .dinglj-tdata {
-    height: 100%;
+    height: calc(100% - 40px);
     overflow-y: scroll;
 }
 .dinglj-nav-item {
