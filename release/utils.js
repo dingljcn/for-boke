@@ -353,3 +353,31 @@ function groupBy(list = [], prop, callback = null) {
     }
     return result;
 }
+
+/** 绘制选择控件 */
+function generateSelect(id, list = [], config = {}) {
+    let callback = config.callback || '';
+    let defaultValue = config.defaultValue || '请选择';
+    let className = config.className || '';
+    return `<div class="dinglj-select-container ${ className }" id="${ id }-select-container">
+        <div class="select-value" id="${ id }-select-value">${ defaultValue }</div>
+        <div class="select-items" id="${ id }-select-items">
+            ${ list.map(val => `<div class="select-item" id="${ id }-select-${ val }" onclick="onSelectionClicked('${ callback }', '${ id }-select-${ val }')">${ val }</div>`).join('') }
+        </div>
+    </div>`;
+}
+
+/** 选择控件的选项被点击时调用 */
+function onSelectionClicked(callback, id) {
+    let click = getById(id);
+    let val = click.parentNode.previousElementSibling;
+    val.innerText = click.innerText.trim();
+    if (callback.trim()) {
+        eval(`${ callback }('${ val.innerText }')`);
+    }
+}
+
+/** 获取选择控件的值 */
+function getSelectValue(id) {
+    return getById(`${ id }-select-container`).children[0].innerText
+}
