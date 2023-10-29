@@ -63,7 +63,8 @@ function getTicketFieldValues(field = 'component') {
     return Array.from(new Set(context_004.rt.tickets.map(t => t[field])));
 }
 
-function onNavChange_004(name) {
+function onNavChange_004(idx, name) {
+    context_004.rt.lastIdx = idx;
     let last = getByClass('dinglj-nav-item active-nav');
     if (last && last.length > 0) {
         last.forEach(ele => ele.classList.remove('active-nav'));
