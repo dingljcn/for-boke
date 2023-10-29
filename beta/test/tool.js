@@ -12,7 +12,9 @@ const context_004 = {
         zhCN: ['变更号', '概述', '状态', '优先级', '模块', '属主', '创建时间', '修改时间', '已创建天数', '上次处理天数'], /* 要显示的字段顺序名称 */
     }
 }
-
+function getFieldsFilter() {
+    return Array.from(new Set(getByClass('dinglj-filter-fields changeable active').map(e => e.innerHTML)));
+}
 /** 选择了组件, 如果已经激活, 则取消激活, 未激活则激活 */
 function doSelectComponents(id) {
     let element = getById(id);
@@ -133,6 +135,14 @@ function addNewOwner() {
     addDeleteIcon([theNewSelect]);
 }
 
-functoin onFieldsChange_004(ele, fieldName) {
-    console.log(ele);
+function onFieldsChange_004(ele, fieldName) {
+    if (fieldName == '变更号') {
+        return;
+    }
+    if (ele.classList.contains('active')) {
+        ele.classList.remove('active');
+    } else {
+        ele.classList.add('active');
+    }
+    invokeRefresh_004();
 }
