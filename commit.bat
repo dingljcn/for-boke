@@ -1,4 +1,4 @@
 @echo off
 git add .
-git commit -m 'upgrade'
+git commit -m 'test-report'
 git push
