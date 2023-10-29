@@ -121,6 +121,12 @@
     margin: 0 3px;
     padding: 0px 10px;
     cursor: pointer;
+    transition: var(--default-transition);
+}
+.dinglj-filter-component:not(.active):hover,
+.dinglj-filter-fields:not(.active):hover,
+.dinglj-filter-mode:not(.active):hover {
+    background: #EEE;
 }
 .active {
     background: var(--theme-color);
