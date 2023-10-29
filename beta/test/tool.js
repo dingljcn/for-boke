@@ -14,7 +14,7 @@ const context_004 = {
     }
 }
 function getFieldsFilter() {
-    return Array.from(new Set(getByClass('dinglj-filter-fields changeable active').map(e => e.children[1].innerHTML)));
+    return Array.from(new Set(getByClass('dinglj-filter-column changeable active').map(e => e.children[1].innerHTML)));
 }
 /** 选择了组件, 如果已经激活, 则取消激活, 未激活则激活 */
 function doSelectComponents(id) {
