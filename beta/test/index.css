@@ -114,6 +114,7 @@
     display: none;
 }
 .dinglj-filter-component,
+.dinglj-filter-fields,
 .dinglj-filter-mode {
     border-radius: 5px;
     display: inline-block;
