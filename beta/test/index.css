@@ -8,6 +8,26 @@
 * {
     outline: none
 }
+.changeable:hover .change-order {
+    opacity: 1;
+}
+.change-order {
+    position: absolute;
+    top: -1px;
+    opacity: 0;
+    transition: var(--default-transition);
+}
+.dinglj-filter-fields {
+    position: relative;
+    padding: 0 16px;
+    user-select: none;
+}
+.to-next {
+    right:  0px;
+}
+.to-prev {
+    left: 0px;
+}
 .dinglj-nav-item:nth-child(1) {
     margin-top: 0;
 }
