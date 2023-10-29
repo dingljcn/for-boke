@@ -138,7 +138,7 @@ function displayTickets_NavigatorMode(data) {
     context_004.rt.filteredData = data;
     let navigators = getByClass('dinglj-nav-item');
     if (navigators && navigators.length > 0) {
-        navigators[0].click();
+        navigators[context_004.rt.lastIdx].click();
     }
 }
 
