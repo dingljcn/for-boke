@@ -200,7 +200,7 @@ function generateTableData_004(tableKey = '', finalDisplayFields, list) {
                 key == 'summary'
                     ? `<div class="dinglj-summary-text">${ line[key] }</div>
                         <div class="ticket-menu" id="menu-for-${ ticketID }">
-                            <div class="menu-item" onclick="menuOperation_Copy('#${ ticketID }')">复制</div>
+                            <div class="menu-item" onclick="copyText('#${ ticketID } ${ line.status } ${ line.summary }')">复制</div>
                         </div>`
                     : line[key]
             }</div>`;
