@@ -196,7 +196,14 @@ function generateTableData_004(tableKey = '', finalDisplayFields, list) {
         for (let i = 1; i < finalDisplayFields.length; i++) {
             let zhIdx = context_004.fields.zhCN.indexOf(finalDisplayFields[i]);
             let key = context_004.fields.display[zhIdx];
-            lineHTML += `<div class="dinglj-cell dinglj-column-${ key }" ${ key == 'summary' ?  `onmouseenter="onMouseIn(this,'${ ticketID }')"` : '' }>${ line[key] }</div>`;
+            lineHTML += `<div class="dinglj-cell dinglj-column-${ key }" ${ key == 'summary' ?  `onmouseenter="onMouseIn(this,'${ ticketID }')"` : '' }>${ 
+                key == 'summary'
+                    ? `<div class="dinglj-summary-text">${ line[key] }</div>
+                        <div class="'ticket-menu" id="menu-for-${ ticketID }">
+                            <div class="menu-item" onclick="menuOperation_Copy('#${ ticket }')">复制</div>
+                        </div>`
+                    : line[key]
+            }</div>`;
         }
         html.push(`<div class="dinglj-tr dinglj-data">${ lineHTML }</div>`);
     }
