@@ -54,7 +54,7 @@ class Order {
     resolve(pageName, pageData, tableName, tableData, ticket1, ticket2) {
         if (this.regex.page.test(pageName) && this.regex.table.test(tableName)) {
             if (this.callback) {
-                let n1 = this.callback(pageName, pageData, tableName, tableData, ticket1);
+                let n1 = this.callback(pageName, pageData, tableName, tableData, ticket2);
                 let n2 = this.callback(pageName, pageData, tableName, tableData, ticket1);
                 return n1 - n2;
             } else {
