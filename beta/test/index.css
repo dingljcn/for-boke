@@ -5,6 +5,9 @@
     --default-transition: 0.3s;
     --table-hover-color: #A0C5E8;
 }
+html {
+    overflow-y: hidden;
+}
 * {
     outline: none
 }
