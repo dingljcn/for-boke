@@ -6,45 +6,60 @@ const dev = 'dev';
 const deploy = 'deploy';
 /** 脚本 */
 class D_Script {
-    name; version; starter; scripts; css;
+    name; version; starter; scripts; css; success = [];
     constructor(name = '', version = 0.1, starter = '', scripts = [], css = []) {
         this.name = name;
         this.version = version;
         this.starter = starter;
         this.scripts = scripts;
         this.css = css;
+        for (let script of this.scripts) {
+            this.success.push(false);
+        }
     }
     loadScripts(env = dev, config = {}) {
-        this.loadScript(this.scripts, env, config, 'script'); // load 所有脚本
-        this.loadScript(this.css, env, config, 'link'); // load 所有样式
+        this.loadScript(this.scripts, 0, env, config, 'script'); // load 所有脚本
+        this.loadScript(this.css, 0, env, config, 'link'); // load 所有样式
     }
-    loadScript(elements = [], env, config, type) {
+    loadScript(elements = [], idx = 0, env, config, type) {
         let that = this;
-        for (let item of elements) {
-            let newElement = document.createElement(type);
-            document.head.appendChild(newElement);
-            if (type == 'script') {
-                let url = `${ baseURL }/${ env }/${ item.url }`;
-                let fullUrl = `${ url }?version=${ this.version }`;
-                newElement.type = 'text/javascript';
-                newElement.src = fullUrl;
-                newElement.onload = function () {
-                    localStorage.setItem(url, fullUrl);
-                    that.loadScript(item.subs, env, config, type); // 加载后续脚本
+        let item = elements[idx];
+        let url = '', fullUrl = '';
+        let newElement = document.createElement(type);
+        document.head.appendChild(newElement);
+        if (type == 'script') {
+            url = `${ baseURL }/${ env }/${ item.url }`;
+            fullUrl = `${ url }?version=${ this.version }`;
+            newElement.type = 'text/javascript';
+            newElement.src = fullUrl;
+            newElement.onerror = function () {
+                let lastUrl = localStorage.getItem(url);
+                if (lastUrl && lastUrl != fullUrl) { // 取上一个成功的缓存版本
+                    newElement.src = lastUrl;
                 }
-                newElement.onerror = function () {
-                    let lastUrl = localStorage.getItem(url);
-                    if (lastUrl && lastUrl != fullUrl) { // 取上一个成功的缓存版本
-                        that.loadScript([ lastUrl ], env, config, type);
-                    }
-                }
-            } else if (type == 'link') {
-                newElement.rel = 'stylesheet';
-                newElement.type = 'text/css';
-                newElement.href = `${ baseURL }/${ env }/${ item.url }?version=${ this.version }`;
             }
-            document.head.appendChild(newElement);
+        } else if (type == 'link') {
+            url = fullUrl = `${ baseURL }/${ env }/${ item.url }?version=${ this.version }`;
+            newElement.rel = 'stylesheet';
+            newElement.type = 'text/css';
+            newElement.href = fullUrl;
+            newElement.onerror = function () {
+                let lastUrl = localStorage.getItem(url);
+                if (lastUrl && lastUrl != fullUrl) { // 取上一个成功的缓存版本
+                    newElement.href = lastUrl;
+                }
+            }
         }
+        newElement.onload = function () {
+            localStorage.setItem(url, fullUrl);
+            if (type == 'script') {
+                this.success[idx] = true;
+            }
+            if (idx < elements.length) {
+                that.loadScript(elements, idx + 1, env, config, type); // 加载后续脚本
+            }
+        }
+        document.head.appendChild(newElement);
     }
 }
 /** 脚本/样式 */
@@ -88,7 +103,15 @@ function loadScript(name, env, config = {
     customStyle.innerHTML = config.customStyle;
     document.head.appendChild(customStyle);
     // 最后调用启动函数
-    window[scripts[name].starter](config.configBuilder());
+    let timer = setInterval(() => {
+        for (let flag of scripts[name].success) {
+            if (!flag) {
+                return; // 任何一个脚本没 load 完成, 都不继续执行
+            }
+        }
+        clearInterval(timer);
+        window[scripts[name].starter](config.configBuilder());
+    }, 500);
 }
 
 /** 判断当前网址是否启用脚本 */
