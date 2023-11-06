@@ -85,7 +85,7 @@ function loadScript(name, env, config = {
     scripts[name].loadScripts(env, config);
     // 如果用户自定义了样式, 则将其添加到 style 标签中
     let customStyle = document.createElement('style');
-    customStyle.innerHTML = config.matchList;
+    customStyle.innerHTML = config.customStyle;
     document.head.appendChild(customStyle);
     // 最后调用启动函数
     window[scripts[name].starter](config.configBuilder());
