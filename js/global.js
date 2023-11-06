@@ -36,7 +36,7 @@ export function getLocalStorage(key) {
     if (json) {
         let obj = LocalStorage.byJson(parseJson(json));
         let now = Date.now();
-        if (obj.timeout != -1 && (now - obj.saveTime > obj.timeout)) {
+        if (obj.timeout && (now - obj.saveTime > obj.timeout.getMilliSecond())) {
             console.error('data is timeout: ', obj);
             return {};
         }
@@ -45,7 +45,7 @@ export function getLocalStorage(key) {
     return {};
 }
 
-export function setLocalStorage(key, data, timeout = -1) {
+export function setLocalStorage(key, data, timeout = null) {
     let obj = LocalStorage.createNew(data, timeout);
     localStorage.setItem(key, stringify(obj));
 }

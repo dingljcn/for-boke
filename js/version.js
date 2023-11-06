@@ -13,7 +13,8 @@ document.getElementById('click-me').addEventListener('click', e => {
     } else {
         testData.arr = [ 1 ];
     }
-    setLocalStorage('dinglj-test', testData, TimeUnit.Second(10).getMilliSecond());
+    console.log(testData);
+    setLocalStorage('dinglj-test', testData, TimeUnit.Second(10));
     clickedBtn();
 });
 

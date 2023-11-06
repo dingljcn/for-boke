@@ -1,9 +1,11 @@
+import { TimeUnit } from './TimeUnit.js'
+
 export class LocalStorage {
-    /** 数据 */
+    /** @type { any } 数据 */
     data;
-    /** 保存时间 */
+    /** @type { number } 保存时间 */
     saveTime; 
-    /** 有效时长 */
+    /** @type { TimeUnit } 有效时长 */
     timeout;
     /** 构造器, 将 json 解析出的对象封装为 LocalStorage */
     static byJson(object) {
@@ -14,7 +16,7 @@ export class LocalStorage {
         return result;
     }
     /** 构造器, 新对象封装为 LocalStorage */
-    static createNew(object, timeout = -1) {
+    static createNew(object, timeout = null) {
         let result = new LocalStorage();
         result.data = object;
         result.saveTime = Date.now();
