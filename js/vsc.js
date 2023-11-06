@@ -41,7 +41,7 @@ class D_Script {
             } else if (type == 'link') {
                 newElement.rel = 'stylesheet';
                 newElement.type = 'text/css';
-                newElement.href = `${ baseURL }/${ env }/${ item.url }?version= ${ this.version }`;
+                newElement.href = `${ baseURL }/${ env }/${ item.url }?version=${ this.version }`;
             }
             document.head.appendChild(newElement);
         }
@@ -88,7 +88,7 @@ function loadScript(name, env, config = {
     customStyle.innerHTML = config.matchList;
     document.head.appendChild(customStyle);
     // 最后调用启动函数
-    window[this.starter](config.configBuilder());
+    window[scripts[name].starter](config.configBuilder());
 }
 
 /** 判断当前网址是否启用脚本 */
