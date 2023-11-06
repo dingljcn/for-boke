@@ -4,11 +4,12 @@ let map = new Map();
 computeIfAbsent(map, 'id', '#12345');
 console.log(map);
 
+document.getElementById('click-me').addEventListener(e => {
+    console.log('clicked');
+    clickedBtn();
+});
+
 function clickedBtn() {
     console.log(map);
     alert(111);
-}
-
-export function clickBtn2() {
-    alert(222);
 }
