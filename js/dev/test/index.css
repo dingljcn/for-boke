@@ -1,0 +1,306 @@
+:root {
+    --theme-color: #0078d7;
+    --filter-line-height: 28px;
+    --selector-height: 28px;
+    --default-transition: 0.3s;
+    --table-hover-color: #A0C5E8;
+}
+* {
+    outline: none
+}
+.changeable:hover .change-order {
+    opacity: 1;
+}
+.menu-item {
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 10px;
+}
+.change-order {
+    position: absolute;
+    top: -1px;
+    opacity: 0;
+    transition: var(--default-transition);
+}
+.dinglj-filter-fields {
+    position: relative;
+    padding: 0 16px;
+}
+.to-next {
+    right:  3px;
+}
+.to-prev {
+    left: 3px;
+}
+.dinglj-nav-item:nth-child(1) {
+    margin-top: 0;
+}
+#dinglj-navigator {
+    height: 100%;
+    width: 200px;
+    overflow-y: scroll;
+}
+.dinglj-tr {
+    display: flex;
+    line-height: 36px;
+    transition: var(--default-transition);
+}
+.dinglj-cell {
+    text-align: center;
+}
+.dinglj-column-id div {
+    display: inline;
+}
+.dinglj-column-summary {
+    flex: 1;
+    text-align: left;
+    position: relative;
+    transition: var(--default-transition);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+    white-space: nowrap;
+}
+.dinglj-cell {
+    margin: 0 8px;
+}
+.dinglj-thead {
+    text-align: center;
+    background: #223;
+    color: white;
+    font-weight: bolder;
+    margin-right: 15px;
+}
+.dinglj-summary-text {
+    opacity: 1;
+    transition: var(--default-transition);
+}
+.dinglj-column-summary:hover .dinglj-summary-text {
+    opacity: 0;
+}
+.dinglj-column-summary:hover .ticket-menu {
+    opacity: 1;
+}
+.ticket-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+    color: white;
+    font-weight: bold;
+    opacity: 0;
+    transition: var(--default-transition);
+}
+#ticket-list-view {
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+}
+#dinglj-navigator-display-mode {
+    height: 100%;
+    display: flex;
+    overflow: hidden;
+}
+.dinglj-table-container {
+    height: 100%;
+    overflow: hidden;
+}
+.dinglj-tdata {
+    height: calc(100% - 40px);
+    overflow-y: scroll;
+}
+.dinglj-nav-item {
+    text-align: center;
+    margin: 5px;
+    border-radius: 5px;
+    padding: 5px;
+    position: relative;
+    overflow: hidden;
+    transition: var(--default-transition);
+    cursor: pointer;
+}
+.dinglj-nav-item:hover {
+    background: #EEE;
+}
+.nav-name {
+    position: relative;
+    z-index: 9;
+    transition: var(--default-transition);
+}
+.active-nav .nav-name {
+    color: white;
+    font-weight: bold;
+}
+.nav-mask {
+    position: absolute;
+    width: 0%;
+    height: 100%;
+    background: var(--theme-color);
+    top: 0;
+    left: 0;
+    transition: var(--default-transition);
+}
+.active-nav .nav-mask {
+    width: 100%;
+}
+#footer {
+    display: none;
+}
+.dinglj-filter-component,
+.dinglj-filter-fields,
+.dinglj-filter-column,
+.dinglj-filter-mode {
+    border-radius: 5px;
+    display: inline-block;
+    margin: 0 3px;
+    padding: 0px 10px;
+    cursor: pointer;
+    transition: var(--default-transition);
+    user-select: none;
+}
+.dinglj-filter-component:not(.active):hover,
+.dinglj-filter-fields:not(.active):hover,
+.dinglj-filter-column:not(.active):hover,
+.dinglj-filter-mode:not(.active):hover {
+    background: #EEE;
+}
+.active {
+    background: var(--theme-color);
+    color: white;
+}
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    
+}
+#main {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+#dinglj-main {
+    flex: 1;
+    padding: 10px;
+    line-height: var(--selector-height);
+    overflow: hidden;
+}
+#dinglj-filter {
+    border-bottom: 1px solid #DDD;
+    padding: 10px;
+}
+.dinglj-select-container { /* 选择器容器 */
+    font-size: 14px;
+    line-height: var(--selector-height);
+    width: 200px;
+    height: var(--selector-height);
+    position: relative;
+    border-radius: 5px;
+    border: 1px solid #DDD;
+    display: inline-block;
+    margin: 0 3px;
+}
+.select-value { /* 选择器的值 */
+    padding: 0 5px;
+}
+.select-items { /* 选择器的选项 */
+    position: absolute;
+    top: var(--selector-height);
+    left: 0px;
+    transition: 0.3s;
+    overflow: hidden;
+    height: 0px;
+    width: 200px;
+    background: white;
+    border: 1px solid #DDD;
+    display: none;
+    z-index: 99;
+}
+.select-item { /* 选择器的选项 */
+    transition: 0.3s;
+    line-height: 24px;
+    width: 200px;
+    cursor: pointer;
+    padding: 0 5px;
+    background: white;
+}
+.select-item:hover {
+    color: var(--theme-color);
+    background: #EEE;
+}
+.dinglj-select-container:hover .select-items {
+    height: 150px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: block;
+}
+.filter-line {
+    line-height: var(--filter-line-height);
+    margin: 7px 0;
+}
+.filter-name,
+.filter-value {
+    display: inline-block;
+}
+.filter-name {
+    width: 80px;
+}
+.dinglj-tdata .dinglj-column-id {
+    cursor: pointer;
+    color: var(--theme-color);
+    font-weight: bold;
+}
+.dinglj-tdata .dinglj-tr:nth-child(even) {
+    background: #EEE;
+}
+.dinglj-tdata .dinglj-tr:hover {
+    background: var(--table-hover-color);
+}
+.dinglj-btn {
+    display: inline-block;
+    color: var(--theme-color);
+    border: 1px solid #DDD;
+    padding: 0 10px;
+    border-radius: 5px;
+    margin: 0 3px;
+    transition: var(--default-transition);
+    cursor: pointer;
+}
+.dinglj-btn:active {
+    background: #DDD;
+}
+.dinglj-btn:hover {
+    background: #EEE;
+}
+.dinglj-owner-filter-selector {
+    margin-right: 5px;
+}
+.dinglj-delete {
+    position: absolute;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    line-height: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    top: -7px;
+    right: -7px;
+    display: none;
+}
+.dinglj-owner-filter-selector:hover .dinglj-delete {
+    display: block;
+}
+
+.dinglj-filter-column {
+    position: relative;
+    padding: 0 18px;
+}
