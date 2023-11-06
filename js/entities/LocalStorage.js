@@ -12,7 +12,7 @@ export class LocalStorage {
         let result = new LocalStorage();
         result.data = object.data;
         result.saveTime = object.saveTime;
-        result.timeout = object.timeout;
+        result.timeout = TimeUnit.copy(object.timeout);
         return result;
     }
     /** 构造器, 新对象封装为 LocalStorage */

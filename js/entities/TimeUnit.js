@@ -2,7 +2,7 @@ export class TimeUnit {
     /** 单位: second */
     unit = 'second';
     /** 数量 */
-    second;
+    second = 0;
     /** 构造器 */
     constructor(second) {
         this.second = second;
@@ -14,6 +14,9 @@ export class TimeUnit {
     /** 获取秒 */
     getSecond() {
         return this.second;
+    }
+    static copy(object) {
+        return new TimeUnit(object.second);
     }
     static Second(n = 0) {
         return new TimeUnit(n);
