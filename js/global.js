@@ -1,4 +1,4 @@
-import { LocalStorage } from "./entities/LocalStorage";
+import { LocalStorage } from "./entities/LocalStorage.js";
 
 export function computeIfAbsent(map, key, value) {
     if (map.has(key)) {
