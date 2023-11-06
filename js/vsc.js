@@ -15,8 +15,8 @@ class D_Script {
         this.css = css;
     }
     loadScripts(env = dev, config = {}) {
-        this.loadScript(scripts, env, config, 'script'); // load 所有脚本
-        this.loadScript(css, env, config, 'link'); // load 所有样式
+        this.loadScript(this.scripts, env, config, 'script'); // load 所有脚本
+        this.loadScript(this.css, env, config, 'link'); // load 所有样式
     }
     loadScript(elements = [], env, config, type) {
         for (let item of elements) {
