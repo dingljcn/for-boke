@@ -19,22 +19,23 @@ class D_Script {
         this.loadScript(this.css, env, config, 'link'); // load 所有样式
     }
     loadScript(elements = [], env, config, type) {
+        let that = this;
         for (let item of elements) {
             let newElement = document.createElement(type);
             document.head.appendChild(newElement);
             if (type == 'script') {
                 let url = `${ baseURL }/${ env }/${ item.url }`;
-                let fullUrl = `${ url }?version=${ this.versoin }`;
+                let fullUrl = `${ url }?version=${ this.version }`;
                 newElement.type = 'text/javascript';
                 newElement.src = fullUrl;
                 newElement.onload = function () {
                     localStorage.setItem(url, fullUrl);
-                    this.loadScript(item.subs, env, config, type); // 加载后续脚本
+                    that.loadScript(item.subs, env, config, type); // 加载后续脚本
                 }
                 newElement.onerror = function () {
                     let lastUrl = localStorage.getItem(url);
                     if (lastUrl && lastUrl != fullUrl) { // 取上一个成功的缓存版本
-                        this.loadScript([ lastUrl ], env, config, type);
+                        that.loadScript([ lastUrl ], env, config, type);
                     }
                 }
             } else if (type == 'link') {
