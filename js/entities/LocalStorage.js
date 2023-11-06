@@ -17,7 +17,7 @@ export class LocalStorage {
     static createNew(object, timeout = -1) {
         let result = new LocalStorage();
         result.data = object;
-        result.saveTime = new Date().now();
+        result.saveTime = Date.now();
         result.timeout = timeout;
         return result;
     }

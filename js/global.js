@@ -35,7 +35,7 @@ export function getLocalStorage(key) {
     let json = localStorage.getItem(key);
     if (json) {
         obj = LocalStorage.byJson(parseJson(json));
-        let now = new Date().now();
+        let now = Date.now();
         if (obj.timeout != -1 && (now - obj.saveTime > obj.timeout)) {
             console.error('data is timeout: ', obj);
             return {};
