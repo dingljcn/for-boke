@@ -9,6 +9,6 @@ function clickedBtn() {
     alert(111);
 }
 
-function clickBtn2() {
+export function clickBtn2() {
     alert(222);
 }
