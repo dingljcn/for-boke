@@ -1,7 +1,7 @@
-import '../extension.js';
+import '../js/dev/extension.js';
 import './register.js';
-import { addCssLink, generateSelect, groupBy, parseJson, stringify } from '../global.js';
-import { LangItem } from '../entities/LangItem.js';
+import { addCssLink, generateSelect, groupBy, parseJson, stringify } from '../js/dev/global.js';
+import { LangItem } from '../js/dev/entities/LangItem.js';
 import { encodeUID, getFieldsFilter, getTicketFieldValues } from './scope.js';
 
 addCssLink('https://dingljcn.github.io/for-boke/js/dev/test/index.css');

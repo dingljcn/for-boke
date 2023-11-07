@@ -1,4 +1,4 @@
-import { uuid } from "../global.js";
+import { uuid } from "../js/dev/global.js";
 
 /** 获取启用的字段名称 */
 export function getFieldsFilter() {
