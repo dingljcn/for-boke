@@ -1,15 +1,24 @@
 import '../../extension.js';
-import { computeIfAbsent, remById } from '../../global.js';
+import { addCssLink, computeIfAbsent, remById } from '../../global.js';
 import { createApp, ref } from "../../../vue.js";
 import './register.js';
 
 /***************** 界面优化 *****************/
+addCssLink('https://dingljcn.github.io/for-boke/js/dev/src/test/index.css');
 for (let i = 0; i < document.head.children.length; i++) {
     if (document.head.children[i].tagName == 'TITLE') {
         document.head.children[i].innerText = '回归测试变更 - by dinglj';
         break;
     }
 }
+getById('main').innerHTML = `<div id="dinglj-hidden-blocks" style="display: none"></div>
+<div id="dinglj-filter"></div>
+<div id="dinglj-main">
+    <div id="dinglj-loading-data">
+        <img src="https://dingljcn.github.io/for-boke/js/assets/loading.gif"/>
+        <div>loading...</div>
+    </div>
+</div>`;
 remById('footer');
 /***************** 请求数据 *****************/
 await loadRptData_004();
@@ -21,7 +30,7 @@ getById('dinglj-main').innerHTML = `<div>
     <h1>{{ message }}</h1>
     <input type="button" value="click" @click="printRt"/>
 </div>`
-
+/***************** 构建 Vue 程序 *****************/
 createApp({
     setup() {
         const message = ref('hello, vue');
@@ -40,11 +49,7 @@ async function loadRptData_004() {
     let htmlText = await $.get(context_004.config.report_url);
     htmlText = htmlText.substring(htmlText.indexOf('<div id="banner">'), htmlText.indexOf('</body>') + '</body>'.length);
     htmlText = htmlText.replaceAll(/id="/g, 'id="dinglj-rpt-');
-    getById('main').innerHTML = `
-        <div id="dinglj-hidden-blocks" style="display: none">${ htmlText }</div>
-        <div id="dinglj-filter"></div>
-        <div id="dinglj-main"></div>
-    `
+    getById('dinglj-hidden-blocks').innerHTML = htmlText;
 }
 
 /** 解析数据 */
