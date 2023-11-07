@@ -38,7 +38,7 @@ export function decodeUID(m) {
     return context_004.rt.decodeUID[m];
 }
 
-/** 交换顺序事件 */
+/** 交换元素顺序 */
 export function prepareExchange(currentElement, step = 1) {
     let even = window.event || arguments.callee.caller.arguments[0];
     even.preventDefault();
@@ -49,7 +49,7 @@ export function prepareExchange(currentElement, step = 1) {
     exchange(currentElement, list[nextIdx]);
 }
 
-/** 交换顺序事件 */
+/** 交换元素顺序 */
 export function exchange(element1, element2){
     let newNode = document.createElement('div');
     let parentNode = element1.parentNode;

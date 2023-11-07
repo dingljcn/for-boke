@@ -1,6 +1,6 @@
-import { generateTable_004, refreshTickets_004 } from ".";
-import { generateSelect, getSelectValue } from "../global";
-import { addDeleteIcon, decodeUID, getOwnerFilters, getTicketFieldValues, prepareExchange } from "./scope";
+import { generateTable_004, refreshTickets_004 } from "./index.js";
+import { generateSelect, getSelectValue } from "../global.js";
+import { addDeleteIcon, decodeUID, getOwnerFilters, getTicketFieldValues, prepareExchange } from "./scope.js";
 
 window.context_004 = {
     config: {},
