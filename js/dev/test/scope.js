@@ -1,3 +1,5 @@
+import { uuid } from "../global";
+
 /** 获取启用的字段名称 */
 export function getFieldsFilter() {
     return Array.from(new Set(getByClass('dinglj-filter-column changeable active').map(e => e.children[1].innerHTML)));
