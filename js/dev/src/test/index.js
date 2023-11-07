@@ -43,7 +43,7 @@ createApp({
             console.log(runtime);
         }
         return {
-            message, runtime, printRt
+            message, runtime, inited, printRt
         }
     }
 }).mount('#dinglj-main');
