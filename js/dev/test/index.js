@@ -1,7 +1,8 @@
 import '../extension.js';
-import './scope.js';
+import './register.js';
 import { addCssLink, generateSelect, groupBy, parseJson, stringify } from '../global.js';
 import { LangItem } from '../entities/LangItem.js';
+import { encodeUID, getTicketFieldValues } from './scope.js';
 
 addCssLink('https://dingljcn.github.io/for-boke/js/dev/test/index.css');
 context_004.config = configBuilder_004();
@@ -94,7 +95,7 @@ function drawFilter() {
 }
 
 /** 刷新界面数据 */
-function refreshTickets_004(ownerList = [], components = [], mode = '导航显示', groupByName = '模块') {
+export function refreshTickets_004(ownerList = [], components = [], mode = '导航显示', groupByName = '模块') {
     console.log(`显示模式: ${ mode }`);
     let data = parseJson(stringify(context_004.rt.tickets));
     /************************** 组件过滤 *********************/
@@ -147,7 +148,7 @@ function displayTickets_NavigatorMode(data) {
 }
 
 /** 生成 Table */
-function generateTable_004(tableKey = '', list = []) {
+export function generateTable_004(tableKey = '', list = []) {
     if (list.length == 0) {
         return '';
     }
