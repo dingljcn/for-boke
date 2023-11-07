@@ -4,12 +4,25 @@ addCssLink('https://dingljcn.github.io/for-boke/js/dev/css/base.css');
 
 /******************************** 导出的函数 start ********************************/
 
+/** 添加 CSS 引用 */
 export function addCssLink(href) {
     let css = document.createElement('link');
     css.type = 'text/css';
     css.rel = 'stylesheet';
     css.href = href;
     document.head.appendChild(css);
+}
+
+/** 重命名标签 */
+export function renameTitle(title = '') {
+    if (title) {
+        for (let i = 0; i < document.head.children.length; i++) {
+            if (document.head.children[i].tagName == 'TITLE') {
+                document.head.children[i].innerText = title;
+                break;
+            }
+        }
+    }
 }
 
 /** 获取属性, 没有则创建 */
