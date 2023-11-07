@@ -7,7 +7,7 @@ import './register.js';
 getById('main').innerHTML = `<div id="dinglj-hidden-blocks" style="display: none"></div>
 <div id="dinglj-filter"></div>
 <div id="dinglj-main">
-    <div v-if="runtime.rt.tickets.length > 0">
+    <div v-if="inited">
         <h1>{{ message }}</h1>
         <div v-for="(item, idx) in runtime.rt.tickets">
             {{ item }} - {{ idx }}
@@ -24,6 +24,7 @@ createApp({
     setup() {
         const message = ref('hello, vue');
         const runtime = ref(window.context_004);
+        const inited = ref(false);
         onBeforeMount(async () => {
             /***************** 界面优化 *****************/
             addCssLink('https://dingljcn.github.io/for-boke/js/dev/src/test/index.css');
@@ -35,6 +36,8 @@ createApp({
             readTickets_004();
             /***************** 初始化界面 *****************/
             remById('dinglj-hidden-blocks');
+            inited.value = true;
+            console.log(inited)
         });
         function printRt() {
             console.log(runtime);

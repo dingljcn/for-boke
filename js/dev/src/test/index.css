@@ -45,3 +45,11 @@ body {
     transform: translate(-50%, -50%);
     text-align: center;
 }
+
+#dinglj-loading-data img {
+    max-width: 100px;
+}
+
+#dinglj-loading-data div {
+    font-weight: bold;
+}
