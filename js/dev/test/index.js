@@ -125,7 +125,7 @@ function displayTickets_NavigatorMode(data) {
     let navHTML = '';
     let keyList = Object.keys(data);
     for (let i = 0; i < keyList.length; i++) {
-        m = keyList[i];
+        let m = keyList[i];
         navHTML += `<div class="dinglj-nav-item" onclick="onNavChange_004('${ m }', '${ encodeUID(m) }')" id="mode-${ encodeUID(m) }">
             <div class="nav-name">${ m }(${ data[m].length })</div>
             <div class="nav-mask"></div>

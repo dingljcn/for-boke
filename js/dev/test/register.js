@@ -69,7 +69,7 @@ window.addNewOwner = function() {
     });
     let insertIdx = parentNode.innerHTML.indexOf(btnText);
     parentNode.innerHTML = parentNode.innerHTML.replace(btnText, selectOwner + btnText);
-    let theNewSelect = getById(`dinglj-owner-filter-${ size + 1 }-select-container`);
+    let theNewSelect = getById(`dinglj-owner-filter-${ size + 1 }`);
     addDeleteIcon([theNewSelect]);
 }
 
