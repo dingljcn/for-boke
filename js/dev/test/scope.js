@@ -1,4 +1,4 @@
-export const context_004 = {
+window.context_004 = {
     config: {},
     rt: {
         tickets: [],
