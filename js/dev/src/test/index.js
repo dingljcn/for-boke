@@ -1,11 +1,8 @@
 import '../../extension.js';
 import { computeIfAbsent } from '../../global.js';
 import { createApp, ref } from "../../../vue.js";
+import './register.js';
 
-/***************** 获取配置 *****************/
-window.context_004 = {
-    config: configBuilder_004()
-};
 /***************** 界面优化 *****************/
 for (let i = 0; i < document.head.children.length; i++) {
     if (document.head.children[i].tagName == 'TITLE') {
