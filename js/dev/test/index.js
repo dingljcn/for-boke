@@ -2,7 +2,7 @@ import '../extension.js';
 import './register.js';
 import { addCssLink, generateSelect, groupBy, parseJson, stringify } from '../global.js';
 import { LangItem } from '../entities/LangItem.js';
-import { encodeUID, getTicketFieldValues } from './scope.js';
+import { encodeUID, getFieldsFilter, getTicketFieldValues } from './scope.js';
 
 addCssLink('https://dingljcn.github.io/for-boke/js/dev/test/index.css');
 context_004.config = configBuilder_004();
@@ -142,7 +142,7 @@ function displayTickets_NavigatorMode(data) {
         if (array.length == 1) {
             array[0].click();
         } else {
-            navigators[0].click();;
+            navigators[0].click();
         }
     }
 }
