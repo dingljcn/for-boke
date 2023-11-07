@@ -1,4 +1,4 @@
-import { createApp, ref } from "../../../vue";
+import { createApp, ref } from "../../../vue.js";
 
 /***************** 获取配置 *****************/
 window.context_004 = {
