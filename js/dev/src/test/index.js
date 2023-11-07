@@ -9,8 +9,8 @@ getById('main').innerHTML = `<div id="dinglj-hidden-blocks" style="display: none
 <div id="dinglj-main">
     <div v-if="runtime.rt.tickets.length > 0">
         <h1>{{ message }}</h1>
-        <div v-for="(item, idx) in runtime.rt.tickets" :key="ticket-${ idx }">
-            {{ item }}
+        <div v-for="(item, idx) in runtime.rt.tickets">
+            {{ item }} - {{ idx }}
         </div>
         <input type="button" value="click" @click="printRt"/>
     </div>
