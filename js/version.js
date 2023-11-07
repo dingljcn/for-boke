@@ -8,11 +8,8 @@ document.getElementById('click-me').addEventListener('click', e => {
     console.log('clicked');
     let testData = getLocalStorage('dinglj-test');
     testData.id = '1231231';
-    if (testData.arr) {
-        testData.arr.push(testData.arr.length + 1);
-    } else {
-        testData.arr = [ 1 ];
-    }
+    let arr = computeIfAbsent(testData, 'array', []);
+    arr.push(arr.length + 1);
     console.log(testData);
     setLocalStorage('dinglj-test', testData, TimeUnit.Second(10));
     clickedBtn();

@@ -1,10 +1,19 @@
 import { LocalStorage } from "./entities/LocalStorage.js";
 
+/** 获取属性, 没有则创建 */
 export function computeIfAbsent(map, key, value) {
-    if (map.has(key)) {
-        return map.get(key);
+    if (map instanceof Map) {
+        if (map.has(key)) {
+            return map.get(key);
+        } else {
+            map.set(key, value);
+        }
     } else {
-        map.set(key, value);
+        if (Object.keys().includes(key)) {
+            return map[key];
+        } else {
+            map[key] = value;
+        }
     }
     return value;
 }
@@ -12,9 +21,8 @@ export function computeIfAbsent(map, key, value) {
 /** 对象转 json 字符串 */
 export function stringify(data) {
     return JSON.stringify(data, (k, v) => {
-        // 正则表达式特殊处理
-        if (v instanceof RegExp) {
-            return v.toString();
+        if (v instanceof RegExp) { // 正则表达式
+            return `#(dinglj-regex){${ v.toString() }}`;
         }
         return v;
     })
@@ -22,10 +30,11 @@ export function stringify(data) {
 
 /** json 字符串转对象 */
 export function parseJson(jsonString) {
+    let forRegExp = /^#\(dinglj-regex\){(.*)}$/;
     return JSON.parse(jsonString, (k, v) => {
-        if (eval(v) instanceof RegExp) {
-            return eval(v);
-        };
+        if (forRegExp.test(v)) {
+            return eval(forRegExp.exec(v)[1]);
+        }
         return v;
     });
 }
