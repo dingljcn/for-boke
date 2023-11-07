@@ -1,13 +1,18 @@
-async function run_test_report(config) {
-    context_004.config = config;
-    beforeLoadData();
-    await loadRptData_004();
-    readTickets_004();
-    drawFilter();
-    invokeRefresh_004();
-}
+import '../extension.js';
+import './scope.js';
+import { addCssLink, generateSelect, groupBy, parseJson, stringify } from '../global.js';
+import { LangItem } from '../entities/LangItem.js';
 
-function beforeLoadData() {
+addCssLink('https://dingljcn.github.io/for-boke/js/dev/test/index.css');
+context_004.config = configBuilder_004();
+beforeLoadData_004();
+await loadRptData_004();
+readTickets_004();
+drawFilter();
+invokeRefresh_004();
+
+/** 加载数据前, 修改标题, 优化界面显示 */
+function beforeLoadData_004() {
     for (let i = 0; i < document.head.children.length; i++) {
         if (document.head.children[i].tagName == 'TITLE') {
             document.head.children[i].innerText = '回归测试变更 - by dinglj';
@@ -16,6 +21,7 @@ function beforeLoadData() {
     }
 }
 
+/** 请求数据 */
 async function loadRptData_004() {
     let htmlText = await $.get(context_004.config.report_url);
     htmlText = htmlText.substring(htmlText.indexOf('<div id="banner">'), htmlText.indexOf('</body>') + '</body>'.length);
@@ -27,6 +33,7 @@ async function loadRptData_004() {
     `
 }
 
+/** 解析数据 */
 function readTickets_004() {
     let func = (list) => {
         for (let i = 0; i < list.length; i++) {
@@ -43,17 +50,19 @@ function readTickets_004() {
     func($('.odd'));
 }
 
+/** 绘制界面上的过滤条件 */
 function drawFilter() {
     /********************** 模块过滤器 ************************/
     let components = getTicketFieldValues('component');
     /********************** 显示方式切换 ************************/
-    let modeList = [new LangItem('nav', '导航显示'), new LangItem('tab', '分页显示'), new LangItem('noti', '分栏显示')]
+    let modeList = [new LangItem('nav', '导航显示'), new LangItem('tab', '分页显示'), new LangItem('noti', '分栏显示')];
     /********************** 分组方式切换 ************************/
     let groupByMethods =  context_004.fields.zhCN.filter(n => !(['变更号', '概述', '修改时间'].includes(n))); // 不允许以这几个进行分组, 因为可分组性太低了, 基本上都是唯一的
     let groupBy = generateSelect('dinglj-filter-group-by', groupByMethods, {
         callback: 'onGroupByChange',
         defaultValue: '模块'
     });
+    /********************** 界面绘制 ************************/
     $('#dinglj-filter')[0].innerHTML = `
     <div class="filter-line">
         <div class="filter-name">分组模式: </div>
@@ -84,9 +93,10 @@ function drawFilter() {
     `
 }
 
+/** 刷新界面数据 */
 function refreshTickets_004(ownerList = [], components = [], mode = '导航显示', groupByName = '模块') {
     console.log(`显示模式: ${ mode }`);
-    let data = JSON.parse(JSON.stringify(context_004.rt.tickets));
+    let data = parseJson(stringify(context_004.rt.tickets));
     /************************** 组件过滤 *********************/
     if (components.length > 0) {
         data = data.filter(t => components.includes(t.component));
@@ -109,6 +119,7 @@ function refreshTickets_004(ownerList = [], components = [], mode = '导航显�
     }
 }
 
+/** 导航显示 */
 function displayTickets_NavigatorMode(data) {
     let navHTML = '';
     let keyList = Object.keys(data);
@@ -135,6 +146,7 @@ function displayTickets_NavigatorMode(data) {
     }
 }
 
+/** 生成 Table */
 function generateTable_004(tableKey = '', list = []) {
     if (list.length == 0) {
         return '';
@@ -152,6 +164,7 @@ function generateTable_004(tableKey = '', list = []) {
     return `<div id="table-of-${ tableKey }" class="dinglj-table-container">${ thead }${ tbody }</div>`;
 }
 
+/** 生成表头 */
 function generateTableHead_004(tableKey = '', finalDisplayFields) {
     let html = `<div class="dinglj-cell dinglj-column-id">
         <input id="check-all-${ tableKey }" type="checkbox" style="margin-right: 20px" onclick="onTableCheckAll('${ tableKey }')"/>
@@ -166,6 +179,7 @@ function generateTableHead_004(tableKey = '', finalDisplayFields) {
     return `<div class="dinglj-tr dinglj-thead">${ html }</div>`;
 }
 
+/** 生成表体 */
 function generateTableData_004(tableKey = '', finalDisplayFields, list) {
     let html = [];
     for (let line of list) {

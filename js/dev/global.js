@@ -1,6 +1,15 @@
 import { LocalStorage } from "./entities/LocalStorage.js";
 
+addCssLink('https://dingljcn.github.io/for-boke/js/dev/css/base.css');
+
 /******************************** 导出的函数 start ********************************/
+
+export function addCssLink(href) {
+    let css = document.createElement('link');
+    css.type = 'text/css';
+    css.ref = href;
+    document.head.appendChild(css);
+}
 
 /** 获取属性, 没有则创建 */
 export function computeIfAbsent(map, key, value) {
@@ -11,7 +20,7 @@ export function computeIfAbsent(map, key, value) {
             map.set(key, value);
         }
     } else {
-        if (Object.keys().includes(key)) {
+        if (Object.keys(map).includes(key)) {
             return map[key];
         } else {
             map[key] = value;

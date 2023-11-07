@@ -197,51 +197,7 @@ body {
     border-bottom: 1px solid #DDD;
     padding: 10px;
 }
-.dinglj-select-container { /* 选择器容器 */
-    font-size: 14px;
-    line-height: var(--selector-height);
-    width: 200px;
-    height: var(--selector-height);
-    position: relative;
-    border-radius: 5px;
-    border: 1px solid #DDD;
-    display: inline-block;
-    margin: 0 3px;
-}
-.select-value { /* 选择器的值 */
-    padding: 0 5px;
-}
-.select-items { /* 选择器的选项 */
-    position: absolute;
-    top: var(--selector-height);
-    left: 0px;
-    transition: 0.3s;
-    overflow: hidden;
-    height: 0px;
-    width: 200px;
-    background: white;
-    border: 1px solid #DDD;
-    display: none;
-    z-index: 99;
-}
-.select-item { /* 选择器的选项 */
-    transition: 0.3s;
-    line-height: 24px;
-    width: 200px;
-    cursor: pointer;
-    padding: 0 5px;
-    background: white;
-}
-.select-item:hover {
-    color: var(--theme-color);
-    background: #EEE;
-}
-.dinglj-select-container:hover .select-items {
-    height: 150px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    display: block;
-}
+
 .filter-line {
     line-height: var(--filter-line-height);
     margin: 7px 0;
