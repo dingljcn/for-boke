@@ -1,3 +1,5 @@
+import '../../extension.js';
+import { computeIfAbsent } from '../../global.js';
 import { createApp, ref } from "../../../vue.js";
 
 /***************** 获取配置 *****************/
