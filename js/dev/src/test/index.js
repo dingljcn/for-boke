@@ -1,5 +1,5 @@
 import '../../extension.js';
-import { computeIfAbsent } from '../../global.js';
+import { computeIfAbsent, remById } from '../../global.js';
 import { createApp, ref } from "../../../vue.js";
 import './register.js';
 
@@ -10,20 +10,27 @@ for (let i = 0; i < document.head.children.length; i++) {
         break;
     }
 }
+remById('footer');
 /***************** 请求数据 *****************/
 await loadRptData_004();
 /***************** 解析数据 *****************/
 readTickets_004();
 /***************** 初始化界面 *****************/
+remById('dinglj-hidden-blocks');
 getById('dinglj-main').innerHTML = `<div>
     <h1>{{ message }}</h1>
+    <input type="button" value="click" @click="printRt"/>
 </div>`
 
 createApp({
     setup() {
         const message = ref('hello, vue');
+        const runtime = ref(window.context_004);
+        function printRt() {
+            console.log(runtime);
+        }
         return {
-            message
+            message, runtime, printRt
         }
     }
 }).mount('#dinglj-main');

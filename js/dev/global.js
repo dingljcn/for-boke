@@ -202,6 +202,19 @@ export function getTime() {
     return `${ date.getHours() }:${ date.getMinutes() }:${ date.getSeconds() }, ${ date.getMilliseconds() }`
 }
 
+/** 根据 id 移除元素, 不存在则不移除 */
+export function remById(idList = []) {
+    if (typeof idList == 'string') {
+        idList = [ idList ];
+    }
+    idList.forEach(id => {
+        let element = getById(id);
+        if (element) {
+            element.remove();
+        }
+    });
+}
+
 /******************************** 导出的函数 end ********************************/
 
 /******************************** 全局的函数 start ********************************/
