@@ -1,4 +1,3 @@
-import '../js/dev/extension.js';
 import { createApp, ref } from "../../../vue";
 
 /***************** 获取配置 *****************/
