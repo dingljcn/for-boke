@@ -7,7 +7,8 @@ addCssLink('https://dingljcn.github.io/for-boke/js/dev/css/base.css');
 export function addCssLink(href) {
     let css = document.createElement('link');
     css.type = 'text/css';
-    css.ref = href;
+    css.rel = 'stylesheet';
+    css.href = href;
     document.head.appendChild(css);
 }
 
