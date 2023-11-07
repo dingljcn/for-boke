@@ -1,4 +1,3 @@
-import './vue.js';
 import { TimeUnit } from './entities/TimeUnit.js';
 import { computeIfAbsent, getLocalStorage, setLocalStorage } from './global.js';
 
