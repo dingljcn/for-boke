@@ -1,5 +1,6 @@
-import { TimeUnit } from './entities/TimeUnit.js';
-import { computeIfAbsent, getLocalStorage, setLocalStorage } from './global.js';
+import '../extension.js';
+import { TimeUnit } from '../entities/TimeUnit.js';
+import { computeIfAbsent, getLocalStorage, setLocalStorage } from '../global.js';
 
 let map = new Map();
 computeIfAbsent(map, 'id', '#12345');

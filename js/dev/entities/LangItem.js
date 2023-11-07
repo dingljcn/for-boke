@@ -1,4 +1,4 @@
-class LangItem {
+export class LangItem {
     en; zh;
     constructor(en = '', zh = '') {
         this.en = en;

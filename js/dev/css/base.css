@@ -1,0 +1,40 @@
+/*************************** 复制弹窗 start ***************************/
+
+#dinglj-copy-container {
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 7px -2px grey;
+    font-size: 12px;
+    text-indent: 10px;
+    position: fixed;
+    right: 20px;
+    word-wrap: word-break;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.9);
+    top: 20px;
+    font-weight: bold
+}
+
+#dinglj-copy-success {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 10px;
+}
+
+#dinglj-copy-content {
+    text-indent: 0px;
+    display: inline-block;
+    word-break: break-word;
+    padding-right: 20px;
+}
+
+#dinglj-copy-nav {
+    width: 5px;
+    height: calc(100% - 10px);
+    background: #4DAFF9;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+/*************************** 复制弹窗 end ***************************/

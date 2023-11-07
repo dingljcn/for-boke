@@ -8,7 +8,11 @@
         window.onload = () => {
             let element = document.createElement('script');
             element.type = 'module';
-            element.src = `https://dingljcn.github.io/for-boke/js/version.js?timestamp=${ Date.now() }`
+            element.src = `https://dingljcn.github.io/for-boke/js/dev/test/entry.js?timestamp=${ Date.now() }`
+            element.onload = function() {
+                console.log(getById);
+                copyText('12313131')
+            }
             document.head.appendChild(element);
         }
     </script>
