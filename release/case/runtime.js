@@ -20,6 +20,10 @@ class Case {
                     this.status = context_003.const.TICKET;
                 } else if (origin.result == 'SUCCESS') {
                     this.status = context_003.const.SUCCESS;
+                } else if (origin.result == 'ERROR') {
+                    this.status = context_003.const.ERROR
+                } else {
+                    console.error(`未知的状态 {${ origin.stats }}, 结果 {${ origin.result }}, 请联系 dinglj 补充`);
                 }
             } else if (origin.stats == '执行中') {
                 this.status = context_003.const.RUNNING;
@@ -29,12 +33,16 @@ class Case {
                 this.status = context_003.const.FAILED;
             } else if (origin.stats == '已发送') {
                 this.status = context_003.const.SENDED;
+            } else {
+                console.error(`未知的状态 {${ origin.stats }}, 请联系 dinglj 补充`);
             }
         } else {
             if (origin.result == 'TICKET') {
                 this.status = context_003.const.TICKET;
             } else if (origin.result == 'SUCCESS') {
                 this.status = context_003.const.SUCCESS;
+            } else {
+                console.error(`未知的结果 {${ origin.result }}, 请联系 dinglj 补充`);
             }
         }
         if (!this.status) { // 没有状态, 打印原始数据
