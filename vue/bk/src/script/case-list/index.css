@@ -1,0 +1,173 @@
+:root {
+    --transition: 0.3s;
+}
+
+body {
+    text-align: left;
+}
+
+#case-list-dinglj-container {
+    display: flex;
+    height: calc(100% - 20px);
+    padding: 10px;
+}
+
+#right-of-navigator {
+    --padding: 10px;
+    flex: 1;
+    box-shadow: 0 0 10px -4px grey;
+    margin-left: 10px;
+    border-radius: 5px;
+    height: calc(100% - 2 * var(--padding));
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: var(--padding);
+    display: flex;
+    flex-direction: column;
+}
+
+#case-list-view {
+    flex: 1;
+    overflow: hidden;
+}
+
+.every-tab {
+    height: 100%;
+    padding: 0 10px;
+}
+
+#case-filter {
+    margin-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+#case-filter * {
+    font-size: 12px;
+}
+
+.dinglj-v-tbody .dinglj-v-cell.ticket * {
+    font-weight: bold;
+    color: var(--theme-color);
+}
+
+.filter-row {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.case-list-card {
+    --margin: 5px;
+    --padding: 7px;
+    display: inline-block;
+    --real-width: calc(100% / var(--cnt) - var(--margin) * 2 - var(--padding) * 2);
+    margin: var(--margin);
+    width: var(--real-width);
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px -4px grey;
+    transition: var(--transition);
+    padding: var(--padding);
+}
+
+.case-list-card:hover {
+    box-shadow: 0 0 10px -2px grey;
+}
+
+.case-list-status-page > * {
+    vertical-align: top;
+}
+
+.case-list-status-page {
+    overflow-y: scroll;
+}
+
+.card-title {
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.card-ticket {
+    color: var(--theme-color);
+    font-weight: bold;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.card-line {
+    display: flex;
+    overflow: hidden;
+    white-space: nowrap;
+    word-break: keep-all;
+    text-overflow: ellipsis;
+    line-height: 20px;
+}
+
+.card-name {
+    flex: 1;
+}
+
+.card-line > div {
+    display: inline-block;
+}
+
+.card-title .success,
+.card-title .running,
+.card-title .sended,
+.card-title .failed,
+.card-title .notsend,
+.card-title .waitting {
+    color: white;
+    padding: 0 3px;
+    border-radius: 3px;
+    margin-right: 3px;
+    margin-bottom: 1px;
+    font-weight: bold;
+}
+
+.card-title .success {
+    background: rgb(29, 166, 29);
+}
+
+.card-title .running {
+    background: var(--theme-color);
+}
+
+.card-title .sended,
+.card-title .failed,
+.card-title .notsend,
+.card-title .waitting {
+    background: #263238;
+}
+
+.case-list-card.success .card-title,
+.case-list-card.sended .card-title,
+.case-list-card.failed .card-title,
+.case-list-card.notsend .card-title,
+.case-list-card.waitting .card-title {
+    border: none;
+}
+
+.card-percent {
+    flex-direction: column;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.mode-container {
+    display: flex;
+}
+
+.mode-container > * {
+    flex: 1;
+}
+
+.mode-container.card {
+    font-size: 12px;
+}
+
+.card-line-item {
+    margin: 5px 0;
+}
