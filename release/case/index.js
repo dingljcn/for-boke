@@ -1,3 +1,5 @@
+alert('该脚本将于 2024-01-01 彻底删除, 请前往 { 共享文档/工具和脚本/js/vue } 目录, 使用最新的 Vue 版本 { 用例清单 - 脚本.js }, 如有任何技术问题, 请联系 dinglj, 变更报表、截图查看工具等脚本也正在升级成为 Vue 版本, 敬请期待, 谢谢支持!')
+
 function prepare_scripts_003(loadScript, callback) {
     loadScript('utils.js', () => {
         loadScript('case/runtime.js', () => {
