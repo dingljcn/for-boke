@@ -1,3 +1,10 @@
+if (localStorage.getItem('dinglj-dont-tip-ticket-list') == undefined) {
+    const input = prompt('温馨提示: 该脚本(变更报表美化)***************将于 2024-01-01 删除****************, 请前往 { 共享文档/工具和脚本/js/vue } 目录, 使用最新的 Vue 版本 { 变更报表 - 脚本.js }, 如有任何问题, 请联系 dinglj, 用例清单也已升级为 Vue 版本, 另外还有截图查看工具等脚本也正在升级成为 Vue 版本, 敬请期待, 谢谢支持!\n\nVue版本新增了: \n1. 自定义的通用组件, 界面风格更统一\n2. 置顶变更的功能\n3. 当你有新变更时, 提醒你有多少新变更, 并能一次性全部打开(需刷新界面触发提示)\n4. 支持本地给变更写备注等功能\n5. 支持根据关键字或属主、状态等信息过滤变更\n\n输入数字1表示不再弹出此弹窗\n什么都不输, 那么下次还会再次弹窗提醒你切换脚本\n');
+    if (input == 1) {
+        localStorage.setItem('dinglj-dont-tip-ticket-list', 1);
+    }
+}
+
 class Cell {
     key; name; value;
     /**
