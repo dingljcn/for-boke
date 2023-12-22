@@ -6,6 +6,7 @@ function prepare_scripts_002(loadScript, callback) {
         })
     })
 }
+const input = prompt('温馨提示: 该脚本(Wiki)***************将于 2024-01-15 删除****************, 请前往 { 共享文档/工具和脚本/js/vue } 目录, 使用最新的 Vue 版本 { Wiki - 脚本.js }, 如有任何问题, 请联系 dinglj, 谢谢支持!\n\nVue版本主要是有了框架的支持, 实现了自定义的通用组件, 界面风格更统一\n\n输入数字1表示不再弹出此弹窗\n什么都不输, 那么下次还会再次弹窗提醒你切换脚本\n');
 
 function run_002() {
     logln('传入的配置: ', context_002.config);
